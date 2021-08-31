@@ -29,8 +29,9 @@ import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
 
 /**
+ * https://mkyong.com/java/java-date-and-calendar-examples/
  * https://www.codejava.net/java-se/swing/how-to-use-jdatepicker-to-display-calendar-component
- *
+ *https://viettuts.vn/java-swing/lop-jcombobox-trong-java-swing
  * @author traig
  */
 public class InfoGUI extends javax.swing.JFrame {
@@ -54,9 +55,10 @@ private static final int baseSize = 128;
     public InfoGUI(SmartCardWord card, boolean isEmpty) {
         initComponents();
         
-        
-     birthday.setDateFormatString("yyyy-MM-dd");
-     birthday.setCalendar(new GregorianCalendar(2021,8,30));
+        System.out.println(gender_combobox.getItemAt(gender_combobox.getSelectedIndex()));
+        gender_combobox.setSelectedIndex(1);
+        birthday.setDateFormatString("yyyy-MM-dd");
+        birthday.setCalendar(new GregorianCalendar(2021,8,30));
         person = new Person();
         this.card = card;
         this.isEmpty = isEmpty;
@@ -104,7 +106,7 @@ private static final int baseSize = 128;
         jLabel6 = new javax.swing.JLabel();
         text_address2 = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        gender_combobox = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(255, 255, 255));
@@ -178,14 +180,14 @@ private static final int baseSize = 128;
         jLabel7.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel7.setText("PHONG BAN");
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "NAM", "NU" }));
+        gender_combobox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "NAM", "NU" }));
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(35, Short.MAX_VALUE)
+                .addContainerGap(24, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel1)
                     .addComponent(jLabel2)
@@ -202,14 +204,14 @@ private static final int baseSize = 128;
                             .addComponent(text_address)
                             .addComponent(birthday, javax.swing.GroupLayout.DEFAULT_SIZE, 164, Short.MAX_VALUE)
                             .addComponent(text_address2)
-                            .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(gender_combobox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(browser_img, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGap(69, 69, 69)
-                                .addComponent(avatar, javax.swing.GroupLayout.DEFAULT_SIZE, 58, Short.MAX_VALUE)
-                                .addGap(213, 213, 213))))
+                                .addComponent(avatar, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 78, Short.MAX_VALUE))
+                            .addComponent(browser_img, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(118, 118, 118)
                         .addComponent(save_btn)
@@ -249,7 +251,7 @@ private static final int baseSize = 128;
                                 .addGap(33, 33, 33)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                     .addComponent(jLabel4)
-                                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(gender_combobox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(43, 43, 43)))
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel6)
@@ -459,7 +461,7 @@ private void setImage(byte [] img){
     private javax.swing.JLabel avatar;
     private com.toedter.calendar.JDateChooser birthday;
     private javax.swing.JButton browser_img;
-    private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JComboBox<String> gender_combobox;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
