@@ -5,6 +5,7 @@
  */
 package examples;
 
+import examples.data.User;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
@@ -13,6 +14,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
@@ -50,7 +52,7 @@ private static final int baseSize = 128;
      * Creates new form InitInfo
      */
     
-    
+    private DataBaseUtils dbHelper;
     
     public InfoGUI(SmartCardWord card, boolean isEmpty) {
         initComponents();
@@ -62,6 +64,16 @@ private static final int baseSize = 128;
         person = new Person();
         this.card = card;
         this.isEmpty = isEmpty;
+        dbHelper = DataBaseUtils.getInstance();
+        dbHelper.getCol("users");
+        User user = dbHelper.findUser("wertyg");
+        text_id.setText(user.getId());
+        text_name.setText(user.getFullname());
+        birthday.setDate(user.getBirth());
+      //  birthday.setText();
+        text_address.setText(user.getAddress());
+        
+        
 //        if(!this.isEmpty) {
 //            save_btn.setText("EDIT");
 //            String id = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.ID), StandardCharsets.UTF_8);
@@ -104,9 +116,9 @@ private static final int baseSize = 128;
         text_name = new javax.swing.JTextField();
         birthday = new com.toedter.calendar.JDateChooser();
         jLabel6 = new javax.swing.JLabel();
-        text_address2 = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
         gender_combobox = new javax.swing.JComboBox<>();
+        id_department_cb = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(255, 255, 255));
@@ -170,17 +182,12 @@ private static final int baseSize = 128;
         jLabel6.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel6.setText("DIA CHI");
 
-        text_address2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        text_address2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                text_address2ActionPerformed(evt);
-            }
-        });
-
         jLabel7.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel7.setText("PHONG BAN");
 
         gender_combobox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "NAM", "NU" }));
+
+        id_department_cb.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -198,24 +205,25 @@ private static final int baseSize = 128;
                 .addGap(43, 43, 43)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(text_id)
-                            .addComponent(text_name)
-                            .addComponent(text_address)
-                            .addComponent(birthday, javax.swing.GroupLayout.DEFAULT_SIZE, 164, Short.MAX_VALUE)
-                            .addComponent(text_address2)
-                            .addComponent(gender_combobox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(118, 118, 118)
+                        .addComponent(save_btn)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(id_department_cb, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(text_id)
+                                .addComponent(text_name)
+                                .addComponent(text_address)
+                                .addComponent(birthday, javax.swing.GroupLayout.DEFAULT_SIZE, 164, Short.MAX_VALUE)
+                                .addComponent(gender_combobox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGap(69, 69, 69)
                                 .addComponent(avatar, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(0, 78, Short.MAX_VALUE))
-                            .addComponent(browser_img, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(118, 118, 118)
-                        .addComponent(save_btn)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                            .addComponent(browser_img, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -227,7 +235,7 @@ private static final int baseSize = 128;
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addGap(35, 35, 35)
                 .addComponent(jLabel5)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 85, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 88, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -244,11 +252,11 @@ private static final int baseSize = 128;
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                     .addComponent(text_name, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jLabel2))
-                                .addGap(59, 59, 59)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel3)
-                                    .addComponent(birthday, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(33, 33, 33)
+                                .addGap(46, 46, 46)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(birthday, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel3))
+                                .addGap(46, 46, 46)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                     .addComponent(jLabel4)
                                     .addComponent(gender_combobox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -256,10 +264,11 @@ private static final int baseSize = 128;
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel6)
                             .addComponent(text_address, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(31, 31, 31)
-                        .addComponent(text_address2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.TRAILING))
-                .addGap(87, 87, 87)
+                        .addGap(54, 54, 54))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel7)
+                        .addComponent(id_department_cb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(84, 84, 84)
                 .addComponent(save_btn)
                 .addGap(71, 71, 71))
         );
@@ -284,8 +293,22 @@ private static final int baseSize = 128;
         // TODO add your handling code here:
                  
          Date selectedValue =  birthday.getCalendar().getTime();
-        System.out.println(selectedValue.getMonth());
+        System.out.println(selectedValue);
         System.out.println("heloo");
+       
+        User user = new User();
+        user.setId(text_id.getText());
+        user.setFullname(text_name.getText());
+        user.setGender(gender_combobox.getSelectedIndex());
+        user.setId_department(id_department_cb.getSelectedIndex());
+        user.setAddress(text_address.getText());
+        user.setLate_date(new ArrayList<>());
+        user.setPassword("12345");
+        user.setBirth(selectedValue);
+        dbHelper.insert(user);
+        System.out.println("done");
+        System.out.println(dbHelper.updateUser("wertyg", user ).getAddress());
+        
 //       if(isEmpty) {
 //         card.command(new byte[] {0x01,0x01,0x01,0x01,0x01}, (byte)0x01);//set key 
 //
@@ -298,9 +321,9 @@ private static final int baseSize = 128;
 //    //id
 //        System.out.println(new String(card.command(card.command(text_date.getText().getBytes(), Constants.INS_ENCRYPT, Constants.DATE), Constants.INS_DECRYPT, Constants.DATE), StandardCharsets.UTF_8));
 //    //id
-        System.out.println(new String(card.command(card.command(text_address.getText().getBytes(), Constants.INS_ENCRYPT, Constants.ADDRESS), Constants.INS_DECRYPT, Constants.ADDRESS), StandardCharsets.UTF_8));
+        //System.out.println(new String(card.command(card.command(text_address.getText().getBytes(), Constants.INS_ENCRYPT, Constants.ADDRESS), Constants.INS_DECRYPT, Constants.ADDRESS), StandardCharsets.UTF_8));
 //    //id
-System.out.println(text_address.getText());
+//System.out.println(text_address.getText());
 
                  //  String id = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.ADDRESS), StandardCharsets.UTF_8);
 
@@ -339,10 +362,6 @@ System.out.println(text_address.getText());
     private void text_addressActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_text_addressActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_text_addressActionPerformed
-
-    private void text_address2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_text_address2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_text_address2ActionPerformed
 
     private void birthdayMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_birthdayMouseClicked
         // TODO add your handling code here:
@@ -467,6 +486,7 @@ private void setImage(byte [] img){
     private com.toedter.calendar.JDateChooser birthday;
     private javax.swing.JButton browser_img;
     private javax.swing.JComboBox<String> gender_combobox;
+    private javax.swing.JComboBox<String> id_department_cb;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -477,7 +497,6 @@ private void setImage(byte [] img){
     private javax.swing.JPanel jPanel1;
     private javax.swing.JButton save_btn;
     private javax.swing.JTextField text_address;
-    private javax.swing.JTextField text_address2;
     private javax.swing.JTextField text_id;
     private javax.swing.JTextField text_name;
     // End of variables declaration//GEN-END:variables

@@ -22,7 +22,9 @@ package examples;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
+import examples.data.UserKey;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
@@ -46,10 +48,25 @@ public class WelcomeGUI extends javax.swing.JFrame {
           MongoClientURI connectionString = new MongoClientURI("mongodb://localhost:27017");
         MongoClient mongoClient = new MongoClient(connectionString);
         MongoDatabase database = mongoClient.getDatabase("smartcardapi");
-        MongoCollection<Document> collection = database.getCollection("departments");
-        System.out.println(collection.count());
-        System.out.println("hello world");
-         
+        MongoCollection<Document> collection = database.getCollection("users");
+       
+//        Document doc = new Document(UserKey.ID, "AT1234")
+//                .append(UserKey.FULLNAME, "database")
+//                .append(UserKey.BIRTH, DateUtils.parseDate("2014-02-14"))
+//                .append(UserKey.GENDER, 1)
+//                .append(UserKey.ADDRESS, "me linh - ha noi")
+//                .append(UserKey.ID_DEPARTMENT, 1)
+//                .append(UserKey.LATE_DATE, Arrays.asList(DateUtils.parseDate("2014-02-14")))
+//                .append(UserKey.PASSWORD, "12345");//PIN
+//         collection.insertOne(doc);
+         MongoCursor<Document> cursor = collection.find().iterator();
+        try {
+            while (cursor.hasNext()) {
+                System.out.println(cursor.next().toJson());
+            }
+        } finally {
+            cursor.close();
+}
     }
     
     /** This method is called from within the constructor to
