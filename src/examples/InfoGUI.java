@@ -292,13 +292,18 @@ private static final int baseSize = 128;
 //    //id
 //        System.out.println(new String(card.command(card.command(text_id.getText().getBytes(), Constants.INS_ENCRYPT, Constants.ID), Constants.INS_DECRYPT, Constants.ID), StandardCharsets.UTF_8));
 //    //id
+
+
 //        System.out.println(new String(card.command(card.command(text_name.getText().getBytes(), Constants.INS_ENCRYPT, Constants.NAME), Constants.INS_DECRYPT, Constants.NAME), StandardCharsets.UTF_8));
 //    //id
 //        System.out.println(new String(card.command(card.command(text_date.getText().getBytes(), Constants.INS_ENCRYPT, Constants.DATE), Constants.INS_DECRYPT, Constants.DATE), StandardCharsets.UTF_8));
 //    //id
-//        System.out.println(new String(card.command(card.command(text_address.getText().getBytes(), Constants.INS_ENCRYPT, Constants.ADDRESS), Constants.INS_DECRYPT, Constants.ADDRESS), StandardCharsets.UTF_8));
+        System.out.println(new String(card.command(card.command(text_address.getText().getBytes(), Constants.INS_ENCRYPT, Constants.ADDRESS), Constants.INS_DECRYPT, Constants.ADDRESS), StandardCharsets.UTF_8));
 //    //id
-//        
+System.out.println(text_address.getText());
+
+                 //  String id = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.ADDRESS), StandardCharsets.UTF_8);
+
 //     //   System.out.println(new String(card.command(card.command(text_id.getText().getBytes(), (byte)0x02), (byte)0x03), StandardCharsets.UTF_8));
 //     InfoGUI.person = this.person;
 //     new MainApp(card).setVisible(true);

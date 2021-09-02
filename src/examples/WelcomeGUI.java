@@ -19,13 +19,17 @@
 
 package examples;
 
+import com.mongodb.MongoClient;
+import com.mongodb.MongoClientURI;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
-
+import org.bson.Document;
 
 public class WelcomeGUI extends javax.swing.JFrame {
     
@@ -39,6 +43,12 @@ public class WelcomeGUI extends javax.swing.JFrame {
         initComponents();
          card = new SmartCardWord();
          this.setResizable(false);
+          MongoClientURI connectionString = new MongoClientURI("mongodb://localhost:27017");
+        MongoClient mongoClient = new MongoClient(connectionString);
+        MongoDatabase database = mongoClient.getDatabase("smartcardapi");
+        MongoCollection<Document> collection = database.getCollection("departments");
+        System.out.println(collection.count());
+        System.out.println("hello world");
          
     }
     
@@ -147,7 +157,7 @@ public class WelcomeGUI extends javax.swing.JFrame {
             if(card.connectCard()) {
                 isConnected = true;
                 this.setVisible(false);
-             new PINGui(card).setVisible(true);
+             new InfoGUI(card, false).setVisible(true);
                 
                
             }else{

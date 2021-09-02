@@ -39,8 +39,8 @@ public class SmartCardWord {
         try {
             factory = TerminalFactory.getDefault();
             terminals = factory.terminals().list();
-            terminal = terminals.get(0);
-            card = terminal.connect("T=1");
+            terminal = terminals.get(1);
+            card = terminal.connect("T=0");
             channel = card.getBasicChannel();
             System.out.println(channel);
             if(channel == null){
