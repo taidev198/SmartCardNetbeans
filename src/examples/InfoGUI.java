@@ -5,7 +5,9 @@
  */
 package examples;
 
+import examples.utils.DataBaseUtils;
 import examples.data.User;
+import examples.utils.DateUtils;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
@@ -36,28 +38,28 @@ import org.jdatepicker.impl.UtilDateModel;
  *https://viettuts.vn/java-swing/lop-jcombobox-trong-java-swing
  * @author traig
  */
-public class InfoGUI extends javax.swing.JFrame {
+public class InfoGUI extends javax.swing.JFrame implements OnGetUserListener{
     
     static Person person;
     private boolean cardready= false;
     static SmartCardWord smartCardWord;
-private static final String basePath ="/images/fimage";
+    private static final String basePath ="/images/fimage";
     File targetFile;
-BufferedImage targetImg;
-ImageIcon icon;
-private static final int baseSize = 128;
+    BufferedImage targetImg;
+    ImageIcon icon;
+    private static final int baseSize = 128;
     static SmartCardWord card;
     static boolean isEmpty;
+    private static OnGetUserListener mListener;
     /**
      * Creates new form InitInfo
      */
     
     private DataBaseUtils dbHelper;
     
-    public InfoGUI(SmartCardWord card, boolean isEmpty) {
+    public InfoGUI(SmartCardWord card, boolean isEmpty, OnGetUserListener listener) {
         initComponents();
-        
-        System.out.println(gender_combobox.getItemAt(gender_combobox.getSelectedIndex()));
+        mListener = listener;
         gender_combobox.setSelectedIndex(1);
         birthday.setDateFormatString("yyyy-MM-dd");
         birthday.setCalendar(new GregorianCalendar(2021,8,30));
@@ -66,31 +68,29 @@ private static final int baseSize = 128;
         this.isEmpty = isEmpty;
         dbHelper = DataBaseUtils.getInstance();
         dbHelper.getCol("users");
-        User user = dbHelper.findUser("wertyg");
-        text_id.setText(user.getId());
-        text_name.setText(user.getFullname());
-        birthday.setDate(user.getBirth());
-      //  birthday.setText();
-        text_address.setText(user.getAddress());
+//        User user = dbHelper.findUser("wertyg");
+//        text_id.setText(user.getId());
+//        text_name.setText(user.getFullname());
+//        birthday.setDate(user.getBirth());
+//        text_address.setText(user.getAddress());
         
         
-//        if(!this.isEmpty) {
-//            save_btn.setText("EDIT");
-//            String id = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.ID), StandardCharsets.UTF_8);
-//            String name = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.NAME), StandardCharsets.UTF_8);
-//            String date = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.DATE), StandardCharsets.UTF_8);
-//            String address = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.ADDRESS), StandardCharsets.UTF_8);
-//                   text_id.setText(id.substring(0, id.length()-2));
-//                   text_name.setText(name.substring(0, name.length()-2));
-//                   text_date.setText(date.substring(0, date.length()-2));
-//                   text_address.setText(address.substring(0, address.length()-2));
-//                   this.isEmpty = !this.isEmpty;
-//                         
-//            getImage(person.getAvatar());
-//                
-//                          
-//        
-//        }
+        if(!this.isEmpty) {
+            save_btn.setText("EDIT");
+            String id = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.ID), StandardCharsets.UTF_8).replaceAll("[^a-zA-Z0-9]", "");  
+            String name = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.NAME), StandardCharsets.UTF_8).replaceAll("[^a-zA-Z0-9]", "");  
+            String date = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.DATE), StandardCharsets.UTF_8).replaceAll("[^a-zA-Z0-9]", "");  
+            String address = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.ADDRESS), StandardCharsets.UTF_8).replaceAll("[^a-zA-Z0-9]", "");  
+                   text_id.setText(id);
+                   text_name.setText(name);
+                   System.out.println(date + "date");
+                   birthday.setDate(DateUtils.stringToDate(date));
+                   text_address.setText(address);
+                   this.isEmpty = !this.isEmpty;
+                         
+            getImage(person.getAvatar());
+
+        }
     }
 
     /**
@@ -293,46 +293,47 @@ private static final int baseSize = 128;
         // TODO add your handling code here:
                  
          Date selectedValue =  birthday.getCalendar().getTime();
-        System.out.println(selectedValue);
-        System.out.println("heloo");
-       
+        System.out.println(DateUtils.dateToString(selectedValue));
+//        System.out.println("heloo");
+//       
         User user = new User();
-        user.setId(text_id.getText());
-        user.setFullname(text_name.getText());
+        user.setId(text_id.getText().trim());
+        user.setFullname(text_name.getText().trim());
         user.setGender(gender_combobox.getSelectedIndex());
         user.setId_department(id_department_cb.getSelectedIndex());
-        user.setAddress(text_address.getText());
+        user.setAddress(text_address.getText().trim());
         user.setLate_date(new ArrayList<>());
         user.setPassword("12345");
         user.setBirth(selectedValue);
-        dbHelper.insert(user);
+       
         System.out.println("done");
         System.out.println(dbHelper.updateUser("wertyg", user ).getAddress());
         
-//       if(isEmpty) {
-//         card.command(new byte[] {0x01,0x01,0x01,0x01,0x01}, (byte)0x01);//set key 
-//
-//    //id
-//        System.out.println(new String(card.command(card.command(text_id.getText().getBytes(), Constants.INS_ENCRYPT, Constants.ID), Constants.INS_DECRYPT, Constants.ID), StandardCharsets.UTF_8));
-//    //id
+    //   if(isEmpty) {
+        // card.command(new byte[] {0x01,0x01,0x01,0x01,0x01}, (byte)0x01);//set key 
 
+   // id
+        System.out.println(new String(card.command(card.command(text_id.getText().trim().getBytes(), Constants.INS_ENCRYPT, Constants.ID), Constants.INS_DECRYPT, Constants.ID), StandardCharsets.UTF_8));
+    //id
+        System.out.println(new String(card.command(card.command(text_name.getText().trim().getBytes(), Constants.INS_ENCRYPT, Constants.NAME), Constants.INS_DECRYPT, Constants.NAME), StandardCharsets.UTF_8));
+    //id
+        System.out.println(new String(card.command(card.command(DateUtils.dateToString(birthday.getCalendar().getTime()).getBytes(), Constants.INS_ENCRYPT, Constants.DATE), Constants.INS_DECRYPT, Constants.DATE), StandardCharsets.UTF_8));
+    //id
+        System.out.println(new String(card.command(card.command(text_address.getText().trim().getBytes(), Constants.INS_ENCRYPT, Constants.ADDRESS), Constants.INS_DECRYPT, Constants.ADDRESS), StandardCharsets.UTF_8));
+    //id
+        String id = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.ADDRESS), StandardCharsets.UTF_8);
 
-//        System.out.println(new String(card.command(card.command(text_name.getText().getBytes(), Constants.INS_ENCRYPT, Constants.NAME), Constants.INS_DECRYPT, Constants.NAME), StandardCharsets.UTF_8));
-//    //id
-//        System.out.println(new String(card.command(card.command(text_date.getText().getBytes(), Constants.INS_ENCRYPT, Constants.DATE), Constants.INS_DECRYPT, Constants.DATE), StandardCharsets.UTF_8));
-//    //id
-        //System.out.println(new String(card.command(card.command(text_address.getText().getBytes(), Constants.INS_ENCRYPT, Constants.ADDRESS), Constants.INS_DECRYPT, Constants.ADDRESS), StandardCharsets.UTF_8));
-//    //id
-//System.out.println(text_address.getText());
+     //   System.out.println(new String(card.command(card.command(text_id.getText().getBytes(), (byte)0x02), (byte)0x03), StandardCharsets.UTF_8));
+    
+     InfoGUI.person = this.person;
 
-                 //  String id = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.ADDRESS), StandardCharsets.UTF_8);
-
-//     //   System.out.println(new String(card.command(card.command(text_id.getText().getBytes(), (byte)0x02), (byte)0x03), StandardCharsets.UTF_8));
-//     InfoGUI.person = this.person;
-//     new MainApp(card).setVisible(true);
-//     this.setVisible(false);
-     
- //      } 
+     if(isEmpty)
+          dbHelper.insert(user);
+     else {
+         dbHelper.updateUser(text_id.getText(), user);
+     }
+      mListener.onGetUserSuccess(user);
+      this.setVisible(false);
     }//GEN-LAST:event_save_btnActionPerformed
 
     private void browser_imgActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_browser_imgActionPerformed
@@ -476,7 +477,7 @@ private void setImage(byte [] img){
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new InfoGUI(card, isEmpty).setVisible(true);
+                new InfoGUI(card, isEmpty, mListener).setVisible(true);
             }
         });
     }
@@ -500,4 +501,16 @@ private void setImage(byte [] img){
     private javax.swing.JTextField text_id;
     private javax.swing.JTextField text_name;
     // End of variables declaration//GEN-END:variables
+
+    public void setCallback(OnGetUserListener listener) {
+        
+        mListener = listener;
+    }
+    
+    @Override
+    public void onGetUserSuccess(User user) {
+        
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
+    }
 }

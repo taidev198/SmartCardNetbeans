@@ -45,28 +45,7 @@ public class WelcomeGUI extends javax.swing.JFrame {
         initComponents();
          card = new SmartCardWord();
          this.setResizable(false);
-          MongoClientURI connectionString = new MongoClientURI("mongodb://localhost:27017");
-        MongoClient mongoClient = new MongoClient(connectionString);
-        MongoDatabase database = mongoClient.getDatabase("smartcardapi");
-        MongoCollection<Document> collection = database.getCollection("users");
-       
-//        Document doc = new Document(UserKey.ID, "AT1234")
-//                .append(UserKey.FULLNAME, "database")
-//                .append(UserKey.BIRTH, DateUtils.parseDate("2014-02-14"))
-//                .append(UserKey.GENDER, 1)
-//                .append(UserKey.ADDRESS, "me linh - ha noi")
-//                .append(UserKey.ID_DEPARTMENT, 1)
-//                .append(UserKey.LATE_DATE, Arrays.asList(DateUtils.parseDate("2014-02-14")))
-//                .append(UserKey.PASSWORD, "12345");//PIN
-//         collection.insertOne(doc);
-         MongoCursor<Document> cursor = collection.find().iterator();
-        try {
-            while (cursor.hasNext()) {
-                System.out.println(cursor.next().toJson());
-            }
-        } finally {
-            cursor.close();
-}
+         
     }
     
     /** This method is called from within the constructor to
@@ -174,7 +153,7 @@ public class WelcomeGUI extends javax.swing.JFrame {
             if(card.connectCard()) {
                 isConnected = true;
                 this.setVisible(false);
-             new InfoGUI(card, false).setVisible(true);
+             new MainApp(card).setVisible(true);
                 
                
             }else{
