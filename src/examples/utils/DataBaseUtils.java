@@ -14,6 +14,9 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
 import static com.mongodb.client.model.Filters.eq;
+import static com.mongodb.client.model.Updates.combine;
+import static com.mongodb.client.model.Updates.set;
+import com.mongodb.client.result.DeleteResult;
 import com.mongodb.connection.ConnectionPoolSettings;
 import com.mongodb.connection.SocketSettings;
 import examples.data.User;
@@ -120,9 +123,22 @@ public class DataBaseUtils {
     }
     
     public User updateUser(String id, User user) {
-        
-        col.replaceOne(eq(UserKey.ID, id), user);
+        col.updateOne(eq("id", id), combine(set(UserKey.ADDRESS, user.getAddress()),
+                                            set(UserKey.BIRTH, user.getBirth()),
+                                            set(UserKey.FULLNAME, user.getFullname()),
+                                            set(UserKey.GENDER, user.getGender()),
+                                            set(UserKey.ID_DEPARTMENT, user.getId_department())
+                                            ));
+
+        //deleteUser(id);
+        //insert(user);
 
         return user;
+    }
+    
+    public void deleteUser(String id) {
+        
+       DeleteResult deleteResult = col.deleteOne(eq("_id", "6139bcbca9b2edeac3bf105d"));
+        System.out.println(deleteResult.getDeletedCount()+"delete");
     }
 }

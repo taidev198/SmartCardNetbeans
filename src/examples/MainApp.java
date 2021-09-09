@@ -20,6 +20,7 @@
 package examples;
 
 import examples.data.User;
+import examples.utils.DateUtils;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.time.DayOfWeek;
@@ -408,21 +409,31 @@ public class MainApp extends javax.swing.JFrame implements OnGetUserListener{
 
     @Override
     public void onGetUserSuccess(User user) {
-        
-       text_id.setText(user.getId());
-       text_name.setText(user.getFullname());
-       
+ 
+        text_id.setText(user.getId());
+        text_name.setText(user.getFullname());
+        text_address.setText(user.getAddress());
+        text_birth.setText(user.getBirth().toString());
+        text_gender.setText(String.valueOf(user.getGender()));
+        text_department.setText(String.valueOf(user.getId_department()));
     }
 
     private void initData() {
 
         String id = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.ID), StandardCharsets.UTF_8).replaceAll("[^a-zA-Z0-9]", "");  
-            String name = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.NAME), StandardCharsets.UTF_8).replaceAll("[^a-zA-Z0-9]", "");  
-            String date = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.DATE), StandardCharsets.UTF_8).replaceAll("[^a-zA-Z0-9]", "");  
-            String address = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.ADDRESS), StandardCharsets.UTF_8).replaceAll("[^a-zA-Z0-9]", "");  
+            String name = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.NAME), StandardCharsets.UTF_8).replaceAll("[^a-zA-Z0-9 ]", "");  
+            String date = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.DATE), StandardCharsets.UTF_8).replaceAll("[^a-zA-Z0-9,-]", "");  
+            String address = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.ADDRESS), StandardCharsets.UTF_8).replaceAll("[^a-zA-Z0-9, ]", ""); 
+            String gender = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.GENDER), StandardCharsets.UTF_8).replaceAll("[^a-zA-Z0-9]", ""); 
+            String id_department = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.ID_DEPARTMENT), StandardCharsets.UTF_8).replaceAll("[^a-zA-Z0-9]", ""); 
         if(!id.isEmpty()) {
             text_id.setText(id);
-       text_name.setText(name);
+            text_name.setText(name);
+            text_address.setText(address);
+            System.out.println(date);
+            text_birth.setText(DateUtils.stringToDate(date).toString());
+            text_gender.setText(gender);
+            text_department.setText(id_department);
         }
 
     }

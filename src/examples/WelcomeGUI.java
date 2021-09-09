@@ -126,29 +126,6 @@ public class WelcomeGUI extends javax.swing.JFrame {
 
     private void btn_connectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_connectActionPerformed
         // TODO add your handling code here:
-//        byte a = (byte)0x82;
-//        int b = (int)a;
-//        a = (byte)b;
-//        System.out.println(a);
-//        MessageDigest md;
-//          try {
-//              md = MessageDigest.getInstance("MD5");
-//              md.update("12345".getBytes());
-//               byte[] digest = md.digest();
-//               System.out.println(Arrays.toString(digest));
-//                String myHash = DatatypeConverter
-//      .printHexBinary(digest).toUpperCase();
-//                System.out.println(myHash);
-//                System.out.println(Arrays.toString(DatatypeConverter.parseHexBinary(myHash)));
-//                
-//                int x = Integer.decode("0x103E");
-//                byte y = Byte.parseByte("09", 16);
-//System.out.println(y);
-////byte b = 1A;
-//int i= 9&0xff;
-//          } catch (NoSuchAlgorithmException ex) {
-//              Logger.getLogger(WelcomeGUI.class.getName()).log(Level.SEVERE, null, ex);
-//          }
          if(!isConnected) {
             if(card.connectCard()) {
                 isConnected = true;

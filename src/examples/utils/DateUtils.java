@@ -34,7 +34,7 @@ public class DateUtils {
      
      public static Date stringToDate(String input) {
         try {
-            return  new SimpleDateFormat("yyyyMMdd").parse(input);
+            return  new SimpleDateFormat("yyyy-MM-dd").parse(input);
         } catch (ParseException ex) {
             Logger.getLogger(DateUtils.class.getName()).log(Level.SEVERE, null, ex);
         }

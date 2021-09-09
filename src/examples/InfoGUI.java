@@ -78,15 +78,20 @@ public class InfoGUI extends javax.swing.JFrame implements OnGetUserListener{
         if(!this.isEmpty) {
             save_btn.setText("EDIT");
             String id = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.ID), StandardCharsets.UTF_8).replaceAll("[^a-zA-Z0-9]", "");  
-            String name = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.NAME), StandardCharsets.UTF_8).replaceAll("[^a-zA-Z0-9]", "");  
-            String date = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.DATE), StandardCharsets.UTF_8).replaceAll("[^a-zA-Z0-9]", "");  
-            String address = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.ADDRESS), StandardCharsets.UTF_8).replaceAll("[^a-zA-Z0-9]", "");  
+            String name = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.NAME), StandardCharsets.UTF_8).replaceAll("[^a-zA-Z0-9 ]", "");  
+            String date = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.DATE), StandardCharsets.UTF_8).replaceAll("[^a-zA-Z0-9,-]", ""); 
+            System.out.println(date);
+            String address = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.ADDRESS), StandardCharsets.UTF_8).replaceAll("[^a-zA-Z0-9, ]", "");
+            String gender = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.GENDER), StandardCharsets.UTF_8).replaceAll("[^a-zA-Z0-9]", "");
+            String id_department = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.ID_DEPARTMENT), StandardCharsets.UTF_8).replaceAll("[^a-zA-Z0-9]", "");
                    text_id.setText(id);
                    text_name.setText(name);
-                   System.out.println(date + "date");
+                   //System.out.println(date + "date");
                    birthday.setDate(DateUtils.stringToDate(date));
                    text_address.setText(address);
-                   this.isEmpty = !this.isEmpty;
+                   gender_combobox.setSelectedIndex(Integer.valueOf(gender));
+                   id_department_cb.setSelectedIndex(Integer.valueOf(id_department));
+                   //this.isEmpty = !this.isEmpty;
                          
             getImage(person.getAvatar());
 
@@ -306,8 +311,8 @@ public class InfoGUI extends javax.swing.JFrame implements OnGetUserListener{
         user.setPassword("12345");
         user.setBirth(selectedValue);
        
-        System.out.println("done");
-        System.out.println(dbHelper.updateUser("wertyg", user ).getAddress());
+        //System.out.println("done");
+       // System.out.println(dbHelper.updateUser("wertyg", user ).getAddress());
         
     //   if(isEmpty) {
         // card.command(new byte[] {0x01,0x01,0x01,0x01,0x01}, (byte)0x01);//set key 
@@ -321,6 +326,11 @@ public class InfoGUI extends javax.swing.JFrame implements OnGetUserListener{
     //id
         System.out.println(new String(card.command(card.command(text_address.getText().trim().getBytes(), Constants.INS_ENCRYPT, Constants.ADDRESS), Constants.INS_DECRYPT, Constants.ADDRESS), StandardCharsets.UTF_8));
     //id
+    
+        System.out.println(new String(card.command(card.command(String.valueOf(gender_combobox.getSelectedIndex()).getBytes(), Constants.INS_ENCRYPT, Constants.GENDER), Constants.INS_DECRYPT, Constants.GENDER), StandardCharsets.UTF_8));
+
+        System.out.println(new String(card.command(card.command(String.valueOf(id_department_cb.getSelectedIndex()).getBytes(), Constants.INS_ENCRYPT, Constants.ID_DEPARTMENT), Constants.INS_DECRYPT, Constants.ID_DEPARTMENT), StandardCharsets.UTF_8));
+    
         String id = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.ADDRESS), StandardCharsets.UTF_8);
 
      //   System.out.println(new String(card.command(card.command(text_id.getText().getBytes(), (byte)0x02), (byte)0x03), StandardCharsets.UTF_8));
@@ -330,10 +340,11 @@ public class InfoGUI extends javax.swing.JFrame implements OnGetUserListener{
      if(isEmpty)
           dbHelper.insert(user);
      else {
-         dbHelper.updateUser(text_id.getText(), user);
+         dbHelper.updateUser(text_id.getText().trim(), user);
      }
       mListener.onGetUserSuccess(user);
       this.setVisible(false);
+      //  System.out.println(text_id.getText().trim());
     }//GEN-LAST:event_save_btnActionPerformed
 
     private void browser_imgActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_browser_imgActionPerformed
