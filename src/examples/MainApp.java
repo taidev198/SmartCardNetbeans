@@ -19,12 +19,14 @@
 
 package examples;
 
+import examples.data.Constants;
 import examples.data.User;
 import examples.utils.DateUtils;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.YearMonth;
 import java.time.temporal.WeekFields;
 import java.util.Arrays;
@@ -33,16 +35,17 @@ import javax.smartcardio.Card;
 import javax.swing.AbstractListModel;
 
 
-public class MainApp extends javax.swing.JFrame implements OnGetUserListener{
+public class MainApp extends javax.swing.JFrame implements OnGetUserListener, OnGetRuleListener{
     
     private static SmartCardWord card;
+    private Checkin mCheckIn;
     
     /** Creates new form Antenna */
     public MainApp(SmartCardWord card) {
         initComponents();
         
         this.card = card;
-        initData();
+        //initData();
         calendarPanel.setLayout(new java.awt.BorderLayout());
         calendarPanel.add(new CalendarPanel());
         calendarPanel.revalidate();
@@ -62,9 +65,9 @@ public class MainApp extends javax.swing.JFrame implements OnGetUserListener{
         jPanel2 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        checkinBtn = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
+        changePinBtn = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
@@ -114,12 +117,12 @@ public class MainApp extends javax.swing.JFrame implements OnGetUserListener{
             }
         });
 
-        jButton3.setBackground(new java.awt.Color(236, 236, 255));
-        jButton3.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jButton3.setText("ĐIỂM DANH");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        checkinBtn.setBackground(new java.awt.Color(236, 236, 255));
+        checkinBtn.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        checkinBtn.setText("ĐIỂM DANH");
+        checkinBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                checkinBtnActionPerformed(evt);
             }
         });
 
@@ -132,12 +135,12 @@ public class MainApp extends javax.swing.JFrame implements OnGetUserListener{
             }
         });
 
-        jButton5.setBackground(new java.awt.Color(236, 236, 255));
-        jButton5.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jButton5.setText("ĐỔI MÃ PIN");
-        jButton5.addActionListener(new java.awt.event.ActionListener() {
+        changePinBtn.setBackground(new java.awt.Color(236, 236, 255));
+        changePinBtn.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        changePinBtn.setText("ĐỔI MÃ PIN");
+        changePinBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton5ActionPerformed(evt);
+                changePinBtnActionPerformed(evt);
             }
         });
 
@@ -150,9 +153,9 @@ public class MainApp extends javax.swing.JFrame implements OnGetUserListener{
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(checkinBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(changePinBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(36, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
@@ -163,11 +166,11 @@ public class MainApp extends javax.swing.JFrame implements OnGetUserListener{
                 .addGap(63, 63, 63)
                 .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(64, 64, 64)
-                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(checkinBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(64, 64, 64)
                 .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(64, 64, 64)
-                .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(changePinBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(42, Short.MAX_VALUE))
         );
 
@@ -298,14 +301,14 @@ public class MainApp extends javax.swing.JFrame implements OnGetUserListener{
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel1)
-                .addGap(247, 247, 247))
+                .addGap(96, 96, 96))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(7, 7, 7)
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -393,19 +396,28 @@ public class MainApp extends javax.swing.JFrame implements OnGetUserListener{
 //        this.setVisible(false);
     }//GEN-LAST:event_jButton2ActionPerformed
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void checkinBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkinBtnActionPerformed
         // TODO add your handling code here:
-        new changePINGui(card).setVisible(true);
-        this.setVisible(false);
-    }//GEN-LAST:event_jButton3ActionPerformed
+        
+        
+        if(!mCheckIn.isIsCheckedIn()) {
+            String s = mCheckIn.checkIn();
+            System.out.println(s);
+        }
+       
+    }//GEN-LAST:event_checkinBtnActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
+         new RuleFrame(this).setVisible(true);
+       
     }//GEN-LAST:event_jButton4ActionPerformed
 
-    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+    private void changePinBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changePinBtnActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton5ActionPerformed
+         new changePINGui(card).setVisible(true);
+        //this.setVisible(false);
+    }//GEN-LAST:event_changePinBtnActionPerformed
 
     @Override
     public void onGetUserSuccess(User user) {
@@ -423,7 +435,7 @@ public class MainApp extends javax.swing.JFrame implements OnGetUserListener{
         String id = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.ID), StandardCharsets.UTF_8).replaceAll("[^a-zA-Z0-9]", "");  
             String name = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.NAME), StandardCharsets.UTF_8).replaceAll("[^a-zA-Z0-9 ]", "");  
             String date = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.DATE), StandardCharsets.UTF_8).replaceAll("[^a-zA-Z0-9,-]", "");  
-            String address = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.ADDRESS), StandardCharsets.UTF_8).replaceAll("[^a-zA-Z0-9, ]", ""); 
+            String address = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.ADDRESS), StandardCharsets.UTF_8).replaceAll("[^a-zA-Z0-9, -]", ""); 
             String gender = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.GENDER), StandardCharsets.UTF_8).replaceAll("[^a-zA-Z0-9]", ""); 
             String id_department = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.ID_DEPARTMENT), StandardCharsets.UTF_8).replaceAll("[^a-zA-Z0-9]", ""); 
         if(!id.isEmpty()) {
@@ -431,11 +443,16 @@ public class MainApp extends javax.swing.JFrame implements OnGetUserListener{
             text_name.setText(name);
             text_address.setText(address);
             System.out.println(date);
-            text_birth.setText(DateUtils.stringToDate(date).toString());
+            text_birth.setText(date);
             text_gender.setText(gender);
             text_department.setText(id_department);
         }
 
+    }
+
+    @Override
+    public void onGetRuleSuccess(LocalTime inTime, LocalTime outTime, int inDate, int outDate) {
+        mCheckIn = new Checkin(inTime, outTime, inDate, outDate);
     }
     
     
@@ -525,11 +542,11 @@ public class MainApp extends javax.swing.JFrame implements OnGetUserListener{
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel calendarPanel;
+    private javax.swing.JButton changePinBtn;
+    private javax.swing.JButton checkinBtn;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;

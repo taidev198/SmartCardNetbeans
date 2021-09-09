@@ -5,6 +5,7 @@
  */
 package examples;
 
+import examples.data.Constants;
 import examples.utils.DataBaseUtils;
 import examples.data.User;
 import examples.utils.DateUtils;
@@ -67,13 +68,7 @@ public class InfoGUI extends javax.swing.JFrame implements OnGetUserListener{
         this.card = card;
         this.isEmpty = isEmpty;
         dbHelper = DataBaseUtils.getInstance();
-        dbHelper.getCol("users");
-//        User user = dbHelper.findUser("wertyg");
-//        text_id.setText(user.getId());
-//        text_name.setText(user.getFullname());
-//        birthday.setDate(user.getBirth());
-//        text_address.setText(user.getAddress());
-        
+        dbHelper.getCol("users");        
         
         if(!this.isEmpty) {
             save_btn.setText("EDIT");
@@ -86,7 +81,6 @@ public class InfoGUI extends javax.swing.JFrame implements OnGetUserListener{
             String id_department = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.ID_DEPARTMENT), StandardCharsets.UTF_8).replaceAll("[^a-zA-Z0-9]", "");
                    text_id.setText(id);
                    text_name.setText(name);
-                   //System.out.println(date + "date");
                    birthday.setDate(DateUtils.stringToDate(date));
                    text_address.setText(address);
                    gender_combobox.setSelectedIndex(Integer.valueOf(gender));

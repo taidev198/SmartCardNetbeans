@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package examples;
+package examples.data;
 
 /**
  *
@@ -24,5 +24,16 @@ public class Constants {
     public final static  byte INS_DECRYPT = (byte)0x03;
     public final static byte VERIFY = (byte)0x06;
     public final static byte CLA = (byte) 0xA0;
+    
+    public final static String LATE_TIME = "YOU ARE LATE";
+    public final static String ON_TIME = "YOU ARE ON TIME";
+    public final static String NOT_WORKING_DAY = "OPPS TODAY IS NOT WORKING DAY";
+    
+    public final static String NOT_TIME_UP = "OH NOW IS WORKING TIME";
+    public final static String TIME_UP = "SEE YOU TOMORROW";
+    public final static String STAY_HOME = "OPPS NOW IS NOT TIME WORKING";
+    
+    
+    public final static String NOTIFICATION = "NOTIF";
     
 }

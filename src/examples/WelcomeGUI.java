@@ -40,6 +40,7 @@ public class WelcomeGUI extends javax.swing.JFrame {
     private SmartCardWord card;
     /**
      * Creates new form ContactEditor
+     * https://www.baeldung.com/java-8-date-time-intro
      */
     public WelcomeGUI() {
         initComponents();
