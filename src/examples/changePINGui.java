@@ -155,7 +155,7 @@ public class changePINGui extends javax.swing.JFrame {
                 md.update(toHex(new_pass.getText()));
                 digest = md.digest();
                 if(new String(card.Open(digest, (byte)5)).contains("9000")){
-                 new PINGui(card).setVisible(true);
+                 //new PINGui(card).setVisible(true);
                  this.setVisible(false);
                 }
               

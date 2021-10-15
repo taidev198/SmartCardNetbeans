@@ -23,7 +23,8 @@ public class User {
     @BsonProperty("id_department") int id_department;
     @BsonProperty("late_date") List<Date> late_date;
     @BsonProperty("password") String password;
-
+    @BsonProperty("pub_key") byte[] pub_key;
+    
     public String getId() {
         return id;
     }
@@ -87,8 +88,14 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
-    
-    
+
+    public byte[] getPub_key() {
+        return pub_key;
+    }
+
+    public void setPub_key(byte[] pub_key) {
+        this.pub_key = pub_key;
+    }
     
     
 }

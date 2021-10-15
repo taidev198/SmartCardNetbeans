@@ -16,16 +16,16 @@ import java.time.LocalTime;
  */
 public class Checkin {
     
-    
+    private int id;
     private LocalTime mInTime;
     private LocalTime mOutTime;
     private int mInDate;
     private int mOutDate;
     private boolean isCheckedIn;
-    
+
     //set up
     public Checkin(LocalTime inTime, LocalTime outTime, int inDate, int outDate) {
-        
+        id = 1 ;
         mInTime = inTime;
         mOutTime = outTime;
         mInDate = inDate;
@@ -105,6 +105,9 @@ public class Checkin {
         this.isCheckedIn = isCheckedIn;
     }
     
+    public int getId() {
+        return id;
+    }
     
     
 }

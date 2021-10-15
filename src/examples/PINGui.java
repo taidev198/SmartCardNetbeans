@@ -29,13 +29,15 @@ import javax.swing.JOptionPane;
 
 
 public class PINGui extends javax.swing.JFrame {
-    
+    private static OnGetPinStatusListener mGetPinStatusListener;
     private String text = "";
     private boolean isConnected = false;
+    private boolean isSuccess;
     private static SmartCardWord card;
     /** Creates new form Find */
-    public PINGui(SmartCardWord cardWord) {
+    public PINGui(SmartCardWord cardWord, OnGetPinStatusListener listener) {
         initComponents();
+        mGetPinStatusListener = listener;
         this.setResizable(false);
         card = cardWord;
     }
@@ -296,10 +298,12 @@ public class PINGui extends javax.swing.JFrame {
         if(result.equals("9000")){
                 JOptionPane.showMessageDialog(null, "THANH CONG");
                 this.setVisible(false);
-                new MainApp(card).setVisible(true);
+                mGetPinStatusListener.onGetPinStatusSuccessful();
+                isSuccess = true;
             }
             else if(result.equals("6300")) {
                 JOptionPane.showMessageDialog(null, "THU LAI");
+                isSuccess = false;
                 
             } 
           } catch (NoSuchAlgorithmException ex) {
@@ -309,6 +313,10 @@ public class PINGui extends javax.swing.JFrame {
       
     }//GEN-LAST:event_PINActionPerformed
 
+    public boolean getStatus() {
+        return isSuccess;
+    }
+    
     public  byte[] toHex(String arg) {
  
         byte[] result = new byte[arg.length()];
@@ -424,7 +432,7 @@ public class PINGui extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new PINGui(card).setVisible(true);
+                new PINGui(card, mGetPinStatusListener).setVisible(true);
             }
         });
     }

@@ -5,14 +5,10 @@
  */
 package examples;
 
-import java.time.LocalTime;
-
 /**
  *
  * @author traig
  */
-public interface OnGetRuleListener {
-    
-    void onGetRuleSuccess(Checkin checkin);
-    
+public interface OnGetPinStatusListener {
+    void onGetPinStatusSuccessful();
 }

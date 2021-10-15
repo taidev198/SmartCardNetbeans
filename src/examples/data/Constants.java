@@ -22,6 +22,7 @@ public class Constants {
     public final  static  byte INS_SET_KEY = (byte)0x01;
     public final static  byte INS_ENCRYPT = (byte)0x02;
     public final static  byte INS_DECRYPT = (byte)0x03;
+    public final static  byte INS_VER = (byte)0x03;
     public final static byte VERIFY = (byte)0x06;
     public final static byte CLA = (byte) 0xA0;
     

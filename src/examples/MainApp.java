@@ -19,8 +19,10 @@
 
 package examples;
 
+import static examples.InfoGUI.card;
 import examples.data.Constants;
 import examples.data.User;
+import examples.utils.DataBaseUtils;
 import examples.utils.DateUtils;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
@@ -33,19 +35,23 @@ import java.util.Arrays;
 import java.util.Locale;
 import javax.smartcardio.Card;
 import javax.swing.AbstractListModel;
+import javax.swing.JOptionPane;
 
 
-public class MainApp extends javax.swing.JFrame implements OnGetUserListener, OnGetRuleListener{
+public class MainApp extends javax.swing.JFrame implements OnGetUserListener, OnGetRuleListener, OnGetPinStatusListener{
     
     private static SmartCardWord card;
+     private boolean isConnected = false;
+     private User mUser;
     private Checkin mCheckIn;
-    
+    private DataBaseUtils dbHelper = DataBaseUtils.getInstance();
+
     /** Creates new form Antenna */
-    public MainApp(SmartCardWord card) {
+    public MainApp() {
         initComponents();
         
-        this.card = card;
-        //initData();
+        card = new SmartCardWord();
+        initData();
         calendarPanel.setLayout(new java.awt.BorderLayout());
         calendarPanel.add(new CalendarPanel());
         calendarPanel.revalidate();
@@ -66,8 +72,9 @@ public class MainApp extends javax.swing.JFrame implements OnGetUserListener, On
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         checkinBtn = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
         changePinBtn = new javax.swing.JButton();
+        connect_btn = new javax.swing.JButton();
+        delete_btn = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
@@ -85,8 +92,8 @@ public class MainApp extends javax.swing.JFrame implements OnGetUserListener, On
         text_address = new javax.swing.JLabel();
         text_department = new javax.swing.JLabel();
         calendarPanel = new javax.swing.JPanel();
-        jPanel5 = new javax.swing.JPanel();
         jLabel10 = new javax.swing.JLabel();
+        jButton4 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Antenna");
@@ -126,21 +133,29 @@ public class MainApp extends javax.swing.JFrame implements OnGetUserListener, On
             }
         });
 
-        jButton4.setBackground(new java.awt.Color(236, 236, 255));
-        jButton4.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jButton4.setText("CÀI ĐẶT LUẬT");
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
-            }
-        });
-
         changePinBtn.setBackground(new java.awt.Color(236, 236, 255));
         changePinBtn.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         changePinBtn.setText("ĐỔI MÃ PIN");
         changePinBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 changePinBtnActionPerformed(evt);
+            }
+        });
+
+        connect_btn.setBackground(new java.awt.Color(0, 255, 51));
+        connect_btn.setText("CONNECT");
+        connect_btn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                connect_btnActionPerformed(evt);
+            }
+        });
+
+        delete_btn.setBackground(new java.awt.Color(236, 236, 255));
+        delete_btn.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        delete_btn.setText("XOA THE");
+        delete_btn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                delete_btnActionPerformed(evt);
             }
         });
 
@@ -151,27 +166,30 @@ public class MainApp extends javax.swing.JFrame implements OnGetUserListener, On
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(32, 32, 32)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(connect_btn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(checkinBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(changePinBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(changePinBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(delete_btn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(36, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(74, 74, 74)
+                .addContainerGap()
+                .addComponent(connect_btn)
+                .addGap(36, 36, 36)
                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(63, 63, 63)
                 .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(64, 64, 64)
-                .addComponent(checkinBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(64, 64, 64)
-                .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(64, 64, 64)
+                .addGap(51, 51, 51)
                 .addComponent(changePinBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(42, Short.MAX_VALUE))
+                .addGap(59, 59, 59)
+                .addComponent(checkinBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(61, 61, 61)
+                .addComponent(delete_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(96, Short.MAX_VALUE))
         );
 
         jLabel2.setText("AVATAR");
@@ -326,28 +344,17 @@ public class MainApp extends javax.swing.JFrame implements OnGetUserListener, On
             .addGap(0, 332, Short.MAX_VALUE)
         );
 
-        jPanel5.setBackground(new java.awt.Color(121, 200, 232));
-        jPanel5.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED, null, java.awt.Color.lightGray, null, null));
-
         jLabel10.setFont(new java.awt.Font("Times New Roman", 1, 36)); // NOI18N
-        jLabel10.setText("ANALYSIC");
+        jLabel10.setText("THONG KE");
 
-        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
-        jPanel5.setLayout(jPanel5Layout);
-        jPanel5Layout.setHorizontalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel5Layout.createSequentialGroup()
-                .addGap(48, 48, 48)
-                .addComponent(jLabel10)
-                .addContainerGap(55, Short.MAX_VALUE))
-        );
-        jPanel5Layout.setVerticalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel5Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(15, Short.MAX_VALUE))
-        );
+        jButton4.setBackground(new java.awt.Color(236, 236, 255));
+        jButton4.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jButton4.setText("CÀI ĐẶT LUẬT");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -357,12 +364,18 @@ public class MainApp extends javax.swing.JFrame implements OnGetUserListener, On
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(calendarPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(84, 84, 84)
+                                .addComponent(jLabel10)))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(calendarPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(45, 45, 45)
-                        .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(0, 0, Short.MAX_VALUE))
+                        .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(30, 30, 30))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -370,11 +383,13 @@ public class MainApp extends javax.swing.JFrame implements OnGetUserListener, On
                 .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(66, 66, 66)
-                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(101, 101, 101)
+                .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addComponent(calendarPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(60, 60, 60))
+                .addGap(29, 29, 29))
         );
 
         pack();
@@ -382,63 +397,142 @@ public class MainApp extends javax.swing.JFrame implements OnGetUserListener, On
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        InfoGUI infoGUI = new InfoGUI(card, true, this);
+        if(isConnected) {
+              InfoGUI infoGUI = new InfoGUI(card, true, this);
      //   infoGUI.setCallback(this);
         infoGUI.setVisible(true);
         
        // this.setVisible(false);
+        }
+      
         
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
-         new InfoGUI(card, false, this).setVisible(true);
+        if(isConnected) {
+           new InfoGUI(card, false, this).setVisible(true);
+
+        }
 //        this.setVisible(false);
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void checkinBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkinBtnActionPerformed
         // TODO add your handling code here:
-        
-        
-        if(!mCheckIn.isIsCheckedIn()) {
+       PINGui pin =  new PINGui(card, this);
+       pin.setVisible(true);
+       if(pin.getStatus()) {
+           System.out.println("done");
+            if(isConnected) {
+                if(card.VerifyRsa(mUser.getPub_key())) {
+                    System.out.println("done");
+                }
+                
+             if(!mCheckIn.isIsCheckedIn()) {
             String s = mCheckIn.checkIn();
             System.out.println(s);
         }
+       }  
+        }
+       
        
     }//GEN-LAST:event_checkinBtnActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
-         new RuleFrame(this).setVisible(true);
+         new RuleFrame(this, dbHelper.getRule()).setVisible(true);
        
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void changePinBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changePinBtnActionPerformed
         // TODO add your handling code here:
-         new changePINGui(card).setVisible(true);
+        if(isConnected) {
+            new changePINGui(card).setVisible(true);
+
+        }
         //this.setVisible(false);
     }//GEN-LAST:event_changePinBtnActionPerformed
 
+    private void connect_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_connect_btnActionPerformed
+        // TODO add your handling code here:
+        
+          if(!isConnected) {
+            if(card.connectCard()) {
+                isConnected = true;
+                JOptionPane.showMessageDialog(this, "ket noi thanh cong");
+                connect_btn.setText("DISCONNECT");
+                initData();               
+            }else{
+                JOptionPane.showMessageDialog(this, "chua ket noi applet");
+                isConnected = false;
+                
+            }
+        }else {
+            if(card.disconnect()){
+                isConnected = false;
+                connect_btn.setText("CONNECT");
+            }
+        }
+        
+    }//GEN-LAST:event_connect_btnActionPerformed
+
+    private void delete_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_delete_btnActionPerformed
+        // TODO add your handling code here:
+        if(isConnected) {
+        JOptionPane.showMessageDialog(this, "XOA THE THANH CONG");
+        
+        //XOA THONG TIN TREN THE
+         // id
+        System.out.println(new String(card.command(card.command(" ".getBytes(), Constants.INS_ENCRYPT, Constants.ID), Constants.INS_DECRYPT, Constants.ID), StandardCharsets.UTF_8));
+    //id
+        System.out.println(new String(card.command(card.command(" ".getBytes(), Constants.INS_ENCRYPT, Constants.NAME), Constants.INS_DECRYPT, Constants.NAME), StandardCharsets.UTF_8));
+    //id
+        System.out.println(new String(card.command(card.command(" ".getBytes(), Constants.INS_ENCRYPT, Constants.DATE), Constants.INS_DECRYPT, Constants.DATE), StandardCharsets.UTF_8));
+    //id
+        System.out.println(new String(card.command(card.command(" ".getBytes(), Constants.INS_ENCRYPT, Constants.ADDRESS), Constants.INS_DECRYPT, Constants.ADDRESS), StandardCharsets.UTF_8));
+    //id
+    
+        System.out.println(new String(card.command(card.command(" ".getBytes(), Constants.INS_ENCRYPT, Constants.GENDER), Constants.INS_DECRYPT, Constants.GENDER), StandardCharsets.UTF_8));
+
+        System.out.println(new String(card.command(card.command(" ".getBytes(), Constants.INS_ENCRYPT, Constants.ID_DEPARTMENT), Constants.INS_DECRYPT, Constants.ID_DEPARTMENT), StandardCharsets.UTF_8));
+
+        //xoa thong tin tren db
+        dbHelper.getCol("users"); 
+        dbHelper.deleteUser(text_id.getText());
+        System.out.println(text_id.getText());
+        text_id.setText("N/A");
+            text_name.setText("N/A");
+            text_address.setText("N/A");
+            System.out.println("N/A");
+            text_birth.setText("N/A");
+            text_gender.setText("N/A");
+            text_department.setText("N/A");      
+        }
+        
+      
+    }//GEN-LAST:event_delete_btnActionPerformed
+
     @Override
     public void onGetUserSuccess(User user) {
- 
+        mUser = user;
         text_id.setText(user.getId());
         text_name.setText(user.getFullname());
         text_address.setText(user.getAddress());
-        text_birth.setText(user.getBirth().toString());
+        text_birth.setText(DateUtils.dateToString(user.getBirth()));
         text_gender.setText(String.valueOf(user.getGender()));
         text_department.setText(String.valueOf(user.getId_department()));
     }
 
     private void initData() {
-
-        String id = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.ID), StandardCharsets.UTF_8).replaceAll("[^a-zA-Z0-9]", "");  
+        dbHelper.setRuleCol("rule");
+        if(isConnected) {
+            String id = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.ID), StandardCharsets.UTF_8).replaceAll("[^a-zA-Z0-9]", "");  
             String name = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.NAME), StandardCharsets.UTF_8).replaceAll("[^a-zA-Z0-9 ]", "");  
             String date = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.DATE), StandardCharsets.UTF_8).replaceAll("[^a-zA-Z0-9,-]", "");  
             String address = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.ADDRESS), StandardCharsets.UTF_8).replaceAll("[^a-zA-Z0-9, -]", ""); 
             String gender = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.GENDER), StandardCharsets.UTF_8).replaceAll("[^a-zA-Z0-9]", ""); 
             String id_department = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.ID_DEPARTMENT), StandardCharsets.UTF_8).replaceAll("[^a-zA-Z0-9]", ""); 
-        if(!id.isEmpty()) {
+        if(!id.equals("p3")) {
             text_id.setText(id);
             text_name.setText(name);
             text_address.setText(address);
@@ -447,12 +541,29 @@ public class MainApp extends javax.swing.JFrame implements OnGetUserListener, On
             text_gender.setText(gender);
             text_department.setText(id_department);
         }
+        }
 
     }
 
     @Override
-    public void onGetRuleSuccess(LocalTime inTime, LocalTime outTime, int inDate, int outDate) {
-        mCheckIn = new Checkin(inTime, outTime, inDate, outDate);
+    public void onGetRuleSuccess(Checkin checkin) {
+        mCheckIn = checkin;
+        dbHelper.addRule(mCheckIn);
+    }
+
+    @Override
+    public void onGetPinStatusSuccessful() {
+
+        if(mUser == null) {
+             dbHelper.getCol("users"); 
+           mUser = dbHelper.findUser(text_id.getText());
+            System.out.println(mUser.getPub_key());
+        }
+       
+        if(card.VerifyRsa(mUser.getPub_key())) {
+            System.out.println("done");
+        }
+
     }
     
     
@@ -535,7 +646,7 @@ public class MainApp extends javax.swing.JFrame implements OnGetUserListener, On
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new MainApp(card).setVisible(true);
+                new MainApp().setVisible(true);
             }
         });
     }
@@ -544,6 +655,8 @@ public class MainApp extends javax.swing.JFrame implements OnGetUserListener, On
     private javax.swing.JPanel calendarPanel;
     private javax.swing.JButton changePinBtn;
     private javax.swing.JButton checkinBtn;
+    private javax.swing.JButton connect_btn;
+    private javax.swing.JButton delete_btn;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton4;
@@ -561,7 +674,6 @@ public class MainApp extends javax.swing.JFrame implements OnGetUserListener, On
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
-    private javax.swing.JPanel jPanel5;
     private javax.swing.JLabel text_address;
     private javax.swing.JLabel text_birth;
     private javax.swing.JLabel text_department;

@@ -292,9 +292,7 @@ public class InfoGUI extends javax.swing.JFrame implements OnGetUserListener{
         // TODO add your handling code here:
                  
          Date selectedValue =  birthday.getCalendar().getTime();
-        System.out.println(DateUtils.dateToString(selectedValue));
-//        System.out.println("heloo");
-//       
+        System.out.println(DateUtils.dateToString(selectedValue));  
         User user = new User();
         user.setId(text_id.getText().trim());
         user.setFullname(text_name.getText().trim());
@@ -304,12 +302,7 @@ public class InfoGUI extends javax.swing.JFrame implements OnGetUserListener{
         user.setLate_date(new ArrayList<>());
         user.setPassword("12345");
         user.setBirth(selectedValue);
-       
-        //System.out.println("done");
-       // System.out.println(dbHelper.updateUser("wertyg", user ).getAddress());
-        
-    //   if(isEmpty) {
-        // card.command(new byte[] {0x01,0x01,0x01,0x01,0x01}, (byte)0x01);//set key 
+        user.setPub_key(card.pubkeyRsa());
 
    // id
         System.out.println(new String(card.command(card.command(text_id.getText().trim().getBytes(), Constants.INS_ENCRYPT, Constants.ID), Constants.INS_DECRYPT, Constants.ID), StandardCharsets.UTF_8));
@@ -324,17 +317,13 @@ public class InfoGUI extends javax.swing.JFrame implements OnGetUserListener{
         System.out.println(new String(card.command(card.command(String.valueOf(gender_combobox.getSelectedIndex()).getBytes(), Constants.INS_ENCRYPT, Constants.GENDER), Constants.INS_DECRYPT, Constants.GENDER), StandardCharsets.UTF_8));
 
         System.out.println(new String(card.command(card.command(String.valueOf(id_department_cb.getSelectedIndex()).getBytes(), Constants.INS_ENCRYPT, Constants.ID_DEPARTMENT), Constants.INS_DECRYPT, Constants.ID_DEPARTMENT), StandardCharsets.UTF_8));
-    
-        String id = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.ADDRESS), StandardCharsets.UTF_8);
-
-     //   System.out.println(new String(card.command(card.command(text_id.getText().getBytes(), (byte)0x02), (byte)0x03), StandardCharsets.UTF_8));
-    
+        
      InfoGUI.person = this.person;
 
      if(isEmpty)
-          dbHelper.insert(user);
+          dbHelper.insert(user, card);
      else {
-         dbHelper.updateUser(text_id.getText().trim(), user);
+         dbHelper.updateUser(text_id.getText().trim(), user, card);
      }
       mListener.onGetUserSuccess(user);
       this.setVisible(false);
@@ -354,11 +343,10 @@ public class InfoGUI extends javax.swing.JFrame implements OnGetUserListener{
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
                 ImageIO.write(bimage, "jpg", baos);
                 byte[] img = baos.toByteArray();
+                System.out.println(img.length);
                 ImageIcon icon= new ImageIcon(bimage.getScaledInstance(avatar.getWidth(), avatar.getHeight(), Image.SCALE_SMOOTH));
                 icon.getImage();
                 avatar.setIcon(icon);
-                
-                
             }catch(IOException e){
                 e.printStackTrace();
             }

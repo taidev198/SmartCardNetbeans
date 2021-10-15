@@ -19,6 +19,9 @@ import static com.mongodb.client.model.Updates.set;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.connection.ConnectionPoolSettings;
 import com.mongodb.connection.SocketSettings;
+import examples.Checkin;
+import examples.SmartCardWord;
+import examples.data.RuleKey;
 import examples.data.User;
 import examples.data.UserKey;
 import java.security.MessageDigest;
@@ -34,6 +37,7 @@ import static org.bson.codecs.configuration.CodecRegistries.fromProviders;
 import static org.bson.codecs.configuration.CodecRegistries.fromRegistries;
 import org.bson.codecs.configuration.CodecRegistry;
 import org.bson.codecs.pojo.PojoCodecProvider;
+import org.junit.Rule;
 /**
  *
  * @author traig
@@ -44,6 +48,7 @@ public class DataBaseUtils {
     private MongoDatabase database;
     private com.mongodb.client.MongoClient mongoClient;
     private MongoCollection<User> col;
+    private MongoCollection<Checkin> ruleCol;
     
     private DataBaseUtils() {
        
@@ -90,7 +95,11 @@ public class DataBaseUtils {
         return col;
     }
     
-    public void insert(User user) {
+    public void setRuleCol(String name) {
+        ruleCol = database.getCollection(name, Checkin.class);
+    }
+    
+    public void insert(User user, SmartCardWord card) {
         
         Document doc = new Document(UserKey.ID, user.getId())
                 .append(UserKey.FULLNAME, user.getFullname())
@@ -122,7 +131,7 @@ public class DataBaseUtils {
         
     }
     
-    public User updateUser(String id, User user) {
+    public User updateUser(String id, User user, SmartCardWord card) {
         col.updateOne(eq("id", id), combine(set(UserKey.ADDRESS, user.getAddress()),
                                             set(UserKey.BIRTH, user.getBirth()),
                                             set(UserKey.FULLNAME, user.getFullname()),
@@ -130,15 +139,35 @@ public class DataBaseUtils {
                                             set(UserKey.ID_DEPARTMENT, user.getId_department())
                                             ));
 
-        //deleteUser(id);
-        //insert(user);
-
         return user;
     }
     
     public void deleteUser(String id) {
         
-       DeleteResult deleteResult = col.deleteOne(eq("_id", "6139bcbca9b2edeac3bf105d"));
+       DeleteResult deleteResult = col.deleteOne(eq("id", id));
         System.out.println(deleteResult.getDeletedCount()+"delete");
     }
+    
+    public void addRule(Checkin checkin) {
+         Document doc = new Document(RuleKey.ID, checkin.getId())
+                 .append(RuleKey.START_TIME, checkin.getmInTime())   
+                .append(RuleKey.END_TIME, checkin.getmOutTime())
+                .append(RuleKey.START_DATE, checkin.getmInDate())
+                .append(RuleKey.END_DATE, checkin.getmOutDate());//PIN
+         ruleCol.insertOne(checkin);
+    }
+    
+    public Checkin getRule() {
+        return ruleCol.find(eq(RuleKey.ID, 1)).first();
+    }
+    
+    public void updateRule(Checkin checkin) {
+        col.updateOne(eq("id", 1), combine(set(RuleKey.START_TIME, checkin.getmInTime()),
+                                            set(RuleKey.END_TIME, checkin.getmOutTime()),
+                                            set(RuleKey.END_TIME, checkin.getmOutTime()),
+                                            set(RuleKey.START_DATE, checkin.getmInDate()),
+                                            set(RuleKey.END_DATE, checkin.getmOutDate())
+                                            ));
+    }
+    
 }
