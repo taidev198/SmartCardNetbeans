@@ -25,6 +25,7 @@ public class Constants {
     public final static  byte INS_VER = (byte)0x03;
     public final static byte VERIFY = (byte)0x06;
     public final static byte CLA = (byte) 0xA0;
+    public final static byte RESET_PIN = (byte)0x04;
     
     public final static String LATE_TIME = "YOU ARE LATE";
     public final static String ON_TIME = "YOU ARE ON TIME";

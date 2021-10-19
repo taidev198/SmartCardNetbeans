@@ -18,6 +18,7 @@
  */
 
 package examples;
+import examples.data.Constants;
 import java.awt.Color;
 import java.math.BigInteger;
 import java.security.MessageDigest;
@@ -98,7 +99,7 @@ public class PINGui extends javax.swing.JFrame {
         clear_btn.setBackground(new java.awt.Color(255, 255, 255));
         clear_btn.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         clear_btn.setForeground(new java.awt.Color(255, 102, 51));
-        clear_btn.setText("XOA");
+        clear_btn.setText("UNLOCK");
         clear_btn.setToolTipText("");
         clear_btn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -220,16 +221,14 @@ public class PINGui extends javax.swing.JFrame {
                     .addComponent(btn_zero, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btn_three))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGap(57, 57, 57)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btn_siz, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(btn_nine, javax.swing.GroupLayout.Alignment.TRAILING)))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(6, 6, 6)
-                        .addComponent(PIN, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(PIN, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btn_three, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(btn_siz, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(btn_nine, javax.swing.GroupLayout.Alignment.TRAILING))))
                 .addGap(81, 81, 81))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -305,7 +304,10 @@ public class PINGui extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "THU LAI");
                 isSuccess = false;
                 
-            } 
+            }  else if(result.equals("6303")) {
+                JOptionPane.showMessageDialog(null, "THE BI KHOA");
+                isSuccess = false;
+            }
           } catch (NoSuchAlgorithmException ex) {
               Logger.getLogger(WelcomeGUI.class.getName()).log(Level.SEVERE, null, ex);
           }
@@ -397,8 +399,8 @@ public class PINGui extends javax.swing.JFrame {
 
     private void clear_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clear_btnActionPerformed
         // TODO add your handling code here:
-        text = "";
-        text_input.setText("");
+        card.Open(new byte[]{(byte)0x00}, Constants.RESET_PIN);
+        JOptionPane.showMessageDialog(null, "THE DA DUOC MO LAI");
     }//GEN-LAST:event_clear_btnActionPerformed
     
     /**

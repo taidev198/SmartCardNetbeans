@@ -19,6 +19,7 @@
 
 package examples;
 
+import examples.data.Checkin;
 import static examples.InfoGUI.card;
 import examples.data.Constants;
 import examples.data.User;
@@ -428,10 +429,10 @@ public class MainApp extends javax.swing.JFrame implements OnGetUserListener, On
                     System.out.println("done");
                 }
                 
-             if(!mCheckIn.isIsCheckedIn()) {
-            String s = mCheckIn.checkIn();
-            System.out.println(s);
-        }
+//             if(!mCheckIn.isIsCheckedIn()) {
+//            String s = mCheckIn.doCheckIn();
+//            System.out.println(s);
+//        }
        }  
         }
        
@@ -440,7 +441,8 @@ public class MainApp extends javax.swing.JFrame implements OnGetUserListener, On
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
-         new RuleFrame(this, dbHelper.getRule()).setVisible(true);
+        dbHelper.setRuleCol("rule");
+         new RuleFrame(this).setVisible(true);
        
     }//GEN-LAST:event_jButton4ActionPerformed
 
@@ -448,9 +450,8 @@ public class MainApp extends javax.swing.JFrame implements OnGetUserListener, On
         // TODO add your handling code here:
         if(isConnected) {
             new changePINGui(card).setVisible(true);
-
         }
-        //this.setVisible(false);
+
     }//GEN-LAST:event_changePinBtnActionPerformed
 
     private void connect_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_connect_btnActionPerformed
@@ -548,7 +549,12 @@ public class MainApp extends javax.swing.JFrame implements OnGetUserListener, On
     @Override
     public void onGetRuleSuccess(Checkin checkin) {
         mCheckIn = checkin;
-        dbHelper.addRule(mCheckIn);
+        //if(dbHelper.getRule() == null)
+        //System.out.println(checkin.getmInTime());
+       DataBaseUtils db = DataBaseUtils.getInstance();
+       db.setRuleCol("rule");
+        db.addRule(checkin);
+       // else dbHelper.updateRule(mCheckIn);
     }
 
     @Override
@@ -557,7 +563,7 @@ public class MainApp extends javax.swing.JFrame implements OnGetUserListener, On
         if(mUser == null) {
              dbHelper.getCol("users"); 
            mUser = dbHelper.findUser(text_id.getText());
-            System.out.println(mUser.getPub_key());
+            System.out.println(Arrays.toString(mUser.getPub_key()));
         }
        
         if(card.VerifyRsa(mUser.getPub_key())) {

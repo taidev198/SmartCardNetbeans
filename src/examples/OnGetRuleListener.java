@@ -5,6 +5,7 @@
  */
 package examples;
 
+import examples.data.Checkin;
 import java.time.LocalTime;
 
 /**

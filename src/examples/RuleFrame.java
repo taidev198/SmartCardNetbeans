@@ -5,6 +5,7 @@
  */
 package examples;
 
+import examples.data.Checkin;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
@@ -14,21 +15,20 @@ import java.time.format.DateTimeFormatter;
  */
 public class RuleFrame extends javax.swing.JFrame {
 
-   private static Checkin mCheckIn;
     private static OnGetRuleListener mListener;
     /**
      * Creates new form RuleFrame
      */
-    public RuleFrame(OnGetRuleListener listener, Checkin checkin) {
+    public RuleFrame(OnGetRuleListener listener) {
         mListener = listener;
-        mCheckIn = checkin;
+      
         initComponents();
         initData();
     }
 
     private void initData() {
-        if(mCheckIn != null)
-        System.out.println(mCheckIn.getmInTime().toString());
+      //  if(mCheckIn != null)
+      //  System.out.println(mCheckIn.getmInTime().toString());
         
     } 
     
@@ -54,8 +54,6 @@ public class RuleFrame extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         saveBtn = new javax.swing.JButton();
-        editBtn = new javax.swing.JButton();
-        resetBtn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -90,10 +88,6 @@ public class RuleFrame extends javax.swing.JFrame {
             }
         });
 
-        editBtn.setText("SỬA");
-
-        resetBtn.setText("XÓA");
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -108,36 +102,30 @@ public class RuleFrame extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jComboBox7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(startDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(54, 54, 54)
+                                .addComponent(jLabel5))
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(startDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(54, 54, 54)
-                                        .addComponent(jLabel5))
+                                    .addComponent(saveBtn)
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(startTimeHour, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(startTimeMin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(jLabel4)))
-                                .addGap(17, 17, 17))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(editBtn)
-                                .addGap(39, 39, 39)))
+                                        .addComponent(startTimeMin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jLabel4)))
+                        .addGap(17, 17, 17)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addComponent(endTimeHour, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(endTimeMin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(resetBtn)
-                                .addComponent(endDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(endDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(14, 14, 14)))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(73, 73, 73)
-                .addComponent(saveBtn)
-                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -161,10 +149,7 @@ public class RuleFrame extends javax.swing.JFrame {
                     .addComponent(jComboBox7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3))
                 .addGap(31, 31, 31)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(saveBtn)
-                    .addComponent(editBtn)
-                    .addComponent(resetBtn))
+                .addComponent(saveBtn)
                 .addContainerGap(30, Short.MAX_VALUE))
         );
 
@@ -178,27 +163,26 @@ public class RuleFrame extends javax.swing.JFrame {
                                                                     ":" +
                                                    String.valueOf(startTimeMin.getSelectedItem())
                                                     ).toString());
-        Checkin c = getCheckin();
-        
-        
-        mListener.onGetRuleSuccess(c);
-        
+        //Checkin c = getCheckin();
+        mListener.onGetRuleSuccess(getCheckin());
         this.setVisible(false);
     }//GEN-LAST:event_saveBtnActionPerformed
 
     
     private Checkin getCheckin() {
-        return new Checkin(LocalTime.parse(String.valueOf(startTimeHour.getSelectedItem()) + 
-                                                                    ":" +
-                                                   String.valueOf(startTimeMin.getSelectedItem())
-                                                    ),
-                                   LocalTime.parse(String.valueOf(endTimeHour.getSelectedItem()) + 
-                                                                    ":" +
-                                                   String.valueOf(endTimeMin.getSelectedItem())
-                                                    ),
-                                   Integer.valueOf(startDate.getSelectedItem().toString()),
-                                   Integer.valueOf(endDate.getSelectedItem().toString()));
         
+       Checkin c =  new Checkin();
+//       c.setmInTime(LocalTime.parse(String.valueOf(startTimeHour.getSelectedItem()) + 
+//                                                                    ":" +
+//                                                   String.valueOf(startTimeMin.getSelectedItem())
+//                                                    ));
+//       c.setmOutTime(LocalTime.parse(String.valueOf(endTimeHour.getSelectedItem()) + 
+//                                                                    ":" +
+//                                                   String.valueOf(endTimeMin.getSelectedItem())
+//                                                    ));
+       c.setmInDate(Integer.valueOf(startDate.getSelectedItem().toString()));
+       c.setmOutDate(Integer.valueOf(endDate.getSelectedItem().toString()));
+        return c;
     }
     
     private void setRule(Checkin checkin) {
@@ -235,13 +219,12 @@ public class RuleFrame extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new RuleFrame(mListener, mCheckIn).setVisible(true);
+                new RuleFrame(mListener).setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton editBtn;
     private javax.swing.JComboBox<String> endDate;
     private javax.swing.JComboBox<String> endTimeHour;
     private javax.swing.JComboBox<String> endTimeMin;
@@ -251,7 +234,6 @@ public class RuleFrame extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JButton resetBtn;
     private javax.swing.JButton saveBtn;
     private javax.swing.JComboBox<String> startDate;
     private javax.swing.JComboBox<String> startTimeHour;

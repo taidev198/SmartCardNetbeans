@@ -19,7 +19,7 @@ import static com.mongodb.client.model.Updates.set;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.connection.ConnectionPoolSettings;
 import com.mongodb.connection.SocketSettings;
-import examples.Checkin;
+import examples.data.Checkin;
 import examples.SmartCardWord;
 import examples.data.RuleKey;
 import examples.data.User;
@@ -149,11 +149,6 @@ public class DataBaseUtils {
     }
     
     public void addRule(Checkin checkin) {
-         Document doc = new Document(RuleKey.ID, checkin.getId())
-                 .append(RuleKey.START_TIME, checkin.getmInTime())   
-                .append(RuleKey.END_TIME, checkin.getmOutTime())
-                .append(RuleKey.START_DATE, checkin.getmInDate())
-                .append(RuleKey.END_DATE, checkin.getmOutDate());//PIN
          ruleCol.insertOne(checkin);
     }
     
@@ -162,12 +157,12 @@ public class DataBaseUtils {
     }
     
     public void updateRule(Checkin checkin) {
-        col.updateOne(eq("id", 1), combine(set(RuleKey.START_TIME, checkin.getmInTime()),
-                                            set(RuleKey.END_TIME, checkin.getmOutTime()),
-                                            set(RuleKey.END_TIME, checkin.getmOutTime()),
-                                            set(RuleKey.START_DATE, checkin.getmInDate()),
-                                            set(RuleKey.END_DATE, checkin.getmOutDate())
-                                            ));
+//        col.updateOne(eq("id", 1), combine(set(RuleKey.START_TIME, checkin.getmInTime()),
+//                                            set(RuleKey.END_TIME, checkin.getmOutTime()),
+//                                            set(RuleKey.END_TIME, checkin.getmOutTime()),
+//                                            set(RuleKey.START_DATE, checkin.getmInDate()),
+//                                            set(RuleKey.END_DATE, checkin.getmOutDate())
+//                                            ));
     }
     
 }
