@@ -25,6 +25,8 @@ import examples.data.Constants;
 import examples.data.User;
 import examples.utils.DataBaseUtils;
 import examples.utils.DateUtils;
+import examples.utils.ImageUltils;
+import java.io.IOException;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.time.DayOfWeek;
@@ -34,6 +36,8 @@ import java.time.YearMonth;
 import java.time.temporal.WeekFields;
 import java.util.Arrays;
 import java.util.Locale;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.smartcardio.Card;
 import javax.swing.AbstractListModel;
 import javax.swing.JOptionPane;
@@ -77,7 +81,7 @@ public class MainApp extends javax.swing.JFrame implements OnGetUserListener, On
         connect_btn = new javax.swing.JButton();
         delete_btn = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
+        avatar = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
@@ -193,7 +197,7 @@ public class MainApp extends javax.swing.JFrame implements OnGetUserListener, On
                 .addContainerGap(96, Short.MAX_VALUE))
         );
 
-        jLabel2.setText("AVATAR");
+        avatar.setText("AVATAR");
 
         jLabel3.setText("ID");
 
@@ -264,23 +268,24 @@ public class MainApp extends javax.swing.JFrame implements OnGetUserListener, On
                         .addContainerGap(522, Short.MAX_VALUE))))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(text_id, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(text_name)
-                    .addComponent(text_birth)
-                    .addComponent(text_gender)
-                    .addComponent(text_address)
-                    .addComponent(text_department))
-                .addGap(187, 187, 187))
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(avatar, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(text_id, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(text_name)
+                        .addComponent(text_birth)
+                        .addComponent(text_gender)
+                        .addComponent(text_address)
+                        .addComponent(text_department)))
+                .addGap(242, 242, 242))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(32, 32, 32)
-                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(82, 82, 82)
+                .addGap(33, 33, 33)
+                .addComponent(avatar, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(81, 81, 81)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
                     .addComponent(text_id))
@@ -481,7 +486,7 @@ public class MainApp extends javax.swing.JFrame implements OnGetUserListener, On
         // TODO add your handling code here:
         if(isConnected) {
         JOptionPane.showMessageDialog(this, "XOA THE THANH CONG");
-        
+        avatar.setIcon(null);
         //XOA THONG TIN TREN THE
          // id
         System.out.println(new String(card.command(card.command(" ".getBytes(), Constants.INS_ENCRYPT, Constants.ID), Constants.INS_DECRYPT, Constants.ID), StandardCharsets.UTF_8));
@@ -525,7 +530,7 @@ public class MainApp extends javax.swing.JFrame implements OnGetUserListener, On
     }
 
     private void initData() {
-        dbHelper.setRuleCol("rule");
+      //  dbHelper.setRuleCol("rule");
         if(isConnected) {
             String id = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.ID), StandardCharsets.UTF_8).replaceAll("[^a-zA-Z0-9]", "");  
             String name = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.NAME), StandardCharsets.UTF_8).replaceAll("[^a-zA-Z0-9 ]", "");  
@@ -533,6 +538,19 @@ public class MainApp extends javax.swing.JFrame implements OnGetUserListener, On
             String address = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.ADDRESS), StandardCharsets.UTF_8).replaceAll("[^a-zA-Z0-9, -]", ""); 
             String gender = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.GENDER), StandardCharsets.UTF_8).replaceAll("[^a-zA-Z0-9]", ""); 
             String id_department = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.ID_DEPARTMENT), StandardCharsets.UTF_8).replaceAll("[^a-zA-Z0-9]", ""); 
+            dbHelper.getCol("users");
+            User user = dbHelper.findUser(id);
+            ImageUltils iU = ImageUltils.getInstance();
+            if(user != null) {
+                  try {
+                avatar.setIcon(iU.bufferImageToII(iU.byteToBufferImage(user.getAvatar()), avatar));
+            } catch (IOException ex) {
+                Logger.getLogger(MainApp.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            }
+          
+            
         if(!id.equals("p3")) {
             text_id.setText(id);
             text_name.setText(name);
@@ -658,6 +676,7 @@ public class MainApp extends javax.swing.JFrame implements OnGetUserListener, On
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel avatar;
     private javax.swing.JPanel calendarPanel;
     private javax.swing.JButton changePinBtn;
     private javax.swing.JButton checkinBtn;
@@ -668,7 +687,6 @@ public class MainApp extends javax.swing.JFrame implements OnGetUserListener, On
     private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;

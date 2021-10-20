@@ -16,6 +16,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -52,6 +53,7 @@ public class InfoGUI extends javax.swing.JFrame implements OnGetUserListener{
     static SmartCardWord card;
     static boolean isEmpty;
     private static OnGetUserListener mListener;
+    private byte[] imgBytes;
     /**
      * Creates new form InitInfo
      */
@@ -304,7 +306,7 @@ public class InfoGUI extends javax.swing.JFrame implements OnGetUserListener{
         user.setPassword("12345");
         user.setBirth(selectedValue);
         user.setPub_key(card.pubkeyRsa());
-
+        user.setAvatar(imgBytes);
    // id
         System.out.println(new String(card.command(card.command(text_id.getText().trim().getBytes(), Constants.INS_ENCRYPT, Constants.ID), Constants.INS_DECRYPT, Constants.ID), StandardCharsets.UTF_8));
     //id
@@ -344,6 +346,7 @@ public class InfoGUI extends javax.swing.JFrame implements OnGetUserListener{
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
                 ImageIO.write(bimage, "jpg", baos);
                 byte[] img = baos.toByteArray();
+                imgBytes = img;
                 System.out.println(img.length);
                 ImageIcon icon= new ImageIcon(bimage.getScaledInstance(avatar.getWidth(), avatar.getHeight(), Image.SCALE_SMOOTH));
                 icon.getImage();
@@ -354,6 +357,20 @@ public class InfoGUI extends javax.swing.JFrame implements OnGetUserListener{
         }
     }//GEN-LAST:event_browser_imgActionPerformed
 
+    private BufferedImage byteToBufferImage(byte[] in) throws IOException {
+        
+        InputStream is = new ByteArrayInputStream(in);
+        BufferedImage out =  ImageIO.read(is);  
+        return out;
+        
+    }
+    
+    private ImageIcon bufferImageToII(BufferedImage in) {
+        
+        ImageIcon icon= new ImageIcon(in.getScaledInstance(avatar.getWidth(), avatar.getHeight(), Image.SCALE_SMOOTH));
+        return icon;
+    }
+    
     private void text_addressActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_text_addressActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_text_addressActionPerformed

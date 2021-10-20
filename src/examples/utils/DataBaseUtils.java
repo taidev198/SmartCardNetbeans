@@ -75,9 +75,11 @@ public class DataBaseUtils {
 
    mongoClient =  MongoClients.create(clientSettings);
         // mongoClient = new MongoClient(connectionString);
-        CodecRegistry defaultCodecRegistry = MongoClientSettings.getDefaultCodecRegistry();
-    CodecRegistry fromProvider = CodecRegistries.fromProviders(PojoCodecProvider.builder().automatic(true).build());
-    CodecRegistry pojoCodecRegistry = CodecRegistries.fromRegistries(defaultCodecRegistry, fromProvider);
+      //  CodecRegistry defaultCodecRegistry = MongoClientSettings.getDefaultCodecRegistry();
+//    CodecRegistry fromProvider = CodecRegistries.fromProviders(PojoCodecProvider.builder().automatic(true).build());
+CodecRegistry pojoCodecRegistry = fromRegistries(MongoClientSettings.getDefaultCodecRegistry(),
+                fromProviders(PojoCodecProvider.builder().automatic(true).build()));
+   // CodecRegistry pojoCodecRegistry = CodecRegistries.fromRegistries(defaultCodecRegistry, fromProvider);
     
          database = mongoClient.getDatabase("smartcardapi").withCodecRegistry(pojoCodecRegistry);
     }
@@ -127,7 +129,7 @@ public class DataBaseUtils {
     
     public User findUser(String id) {
         
-        return col.find(eq(UserKey.ID, id)).first();
+        return col.find(eq("id", id)).first();
         
     }
     

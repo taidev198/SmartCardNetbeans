@@ -24,6 +24,7 @@ public class User {
     @BsonProperty("late_date") List<Date> late_date;
     @BsonProperty("password") String password;
     @BsonProperty("pub_key") byte[] pub_key;
+     @BsonProperty("avatar") byte[] avatar;
     
     public String getId() {
         return id;
@@ -95,6 +96,14 @@ public class User {
 
     public void setPub_key(byte[] pub_key) {
         this.pub_key = pub_key;
+    }
+
+    public byte[] getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(byte[] avatar) {
+        this.avatar = avatar;
     }
     
     
