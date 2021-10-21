@@ -6,9 +6,7 @@
 package examples.utils;
 
 import com.mongodb.ConnectionString;
-import com.mongodb.MongoClient;
 import com.mongodb.MongoClientSettings;
-import com.mongodb.MongoClientURI;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
@@ -19,38 +17,31 @@ import static com.mongodb.client.model.Updates.set;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.connection.ConnectionPoolSettings;
 import com.mongodb.connection.SocketSettings;
-import examples.data.Checkin;
 import examples.SmartCardWord;
+import examples.data.Checkin;
 import examples.data.Rule;
 import examples.data.RuleKey;
 import examples.data.User;
 import examples.data.UserKey;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.JOptionPane;
 import org.bson.Document;
-import org.bson.codecs.configuration.CodecRegistries;
 import static org.bson.codecs.configuration.CodecRegistries.fromProviders;
 import static org.bson.codecs.configuration.CodecRegistries.fromRegistries;
 import org.bson.codecs.configuration.CodecRegistry;
 import org.bson.codecs.pojo.PojoCodecProvider;
+
 /**
  *
  * @author traig
  */
-public class DataBaseUtils {
+public class RuleDbHelper {
     
-    private static DataBaseUtils sInstance;
+    private static RuleDbHelper sInstance;
     private MongoDatabase database;
     private com.mongodb.client.MongoClient mongoClient;
-    private MongoCollection<User> col;
-    private MongoCollection<Rule> ruleCol;
+    private MongoCollection<Document> ruleCol;
     
-    private DataBaseUtils() {
+    private RuleDbHelper() {
        
          ConnectionString connectionString = new ConnectionString("mongodb://localhost:27017");
          
@@ -81,82 +72,42 @@ CodecRegistry pojoCodecRegistry = fromRegistries(MongoClientSettings.getDefaultC
                 fromProviders(PojoCodecProvider.builder().automatic(true).build()));
    // CodecRegistry pojoCodecRegistry = CodecRegistries.fromRegistries(defaultCodecRegistry, fromProvider);
     
-         database = mongoClient.getDatabase("smartcardapi").withCodecRegistry(pojoCodecRegistry);
-    }
-    
-    
-    public static DataBaseUtils getInstance() {
-        if(sInstance == null)
-            sInstance = new DataBaseUtils();
-        return sInstance;
-    }
-    
-    
-    public  MongoCollection<User> getCol(String name) {
-        col = database.getCollection(name, User.class);
-        return col;
+         database = mongoClient.getDatabase("smartcardapi");
     }
     
     public void setRuleCol(String name) {
-        ruleCol = database.getCollection(name, Rule.class);
+        ruleCol = database.getCollection(name);
     }
     
-    public void insert(User user, SmartCardWord card) {
-       
-         col.insertOne(user);
-        
-    }
-    
-    public void printAll() {
-        MongoCursor<User> cursor = col.find().iterator();
-        try {
-            while (cursor.hasNext()) {
-                
-                System.out.println(cursor.next());
-            }
-        } finally {
-            cursor.close();
-        }
-    }
-    
-    public User findUser(String id) {
-        
-        return col.find(eq("id", id)).first();
-        
-    }
-    
-    public User updateUser(String id, User user, SmartCardWord card) {
-        col.updateOne(eq("id", id), combine(set(UserKey.ADDRESS, user.getAddress()),
-                                            set(UserKey.BIRTH, user.getBirth()),
-                                            set(UserKey.FULLNAME, user.getFullname()),
-                                            set(UserKey.GENDER, user.getGender()),
-                                            set(UserKey.ID_DEPARTMENT, user.getId_department())
-                                            ));
-
-        return user;
-    }
-    
-    public void deleteUser(String id) {
-        
-       DeleteResult deleteResult = col.deleteOne(eq("id", id));
-        System.out.println(deleteResult.getDeletedCount()+"delete");
+    public static RuleDbHelper getInstance() {
+        if(sInstance == null)
+            sInstance = new RuleDbHelper();
+        return sInstance;
     }
     
     public void addRule(Rule rule) {
-         ruleCol.insertOne(rule);
+        
+        Document d = new Document();
+        d.append("id", 1)
+                .append(RuleKey.START_DATE, rule.getmInDate())
+                .append(RuleKey.END_DATE, rule.getmOutDate())
+                .append(RuleKey.FINES, rule.getmFines())
+                .append(RuleKey.START_TIME, rule.getmInTime().toString())
+                .append(RuleKey.END_TIME, rule.getmOutTime().toString());
+         ruleCol.insertOne(d);
     }
     
-    public Rule getRule() {
+    public Document getRule() {
         return ruleCol.find(eq(RuleKey.ID, 1)).first();
     }
     
-    public void updateRule(Checkin checkin) {
-//        col.updateOne(eq("id", 1), combine(set(RuleKey.START_TIME, checkin.getmInTime()),
-//                                            set(RuleKey.END_TIME, checkin.getmOutTime()),
-//                                            set(RuleKey.END_TIME, checkin.getmOutTime()),
-//                                            set(RuleKey.START_DATE, checkin.getmInDate()),
-//                                            set(RuleKey.END_DATE, checkin.getmOutDate())
-//                                            ));
+    public void updateRule(Rule rule) {
+        ruleCol.updateOne(eq("id", 1), combine(set(RuleKey.START_TIME, rule.getmInTime().toString()),
+                                            set(RuleKey.END_TIME, rule.getmOutTime().toString()),
+                                            set(RuleKey.FINES, rule.getmFines()),
+                                            set(RuleKey.START_DATE, rule.getmInDate()),
+                                            set(RuleKey.END_DATE, rule.getmOutDate())
+                                            ));
     }
     
 }

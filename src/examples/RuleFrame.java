@@ -6,6 +6,7 @@
 package examples;
 
 import examples.data.Checkin;
+import examples.data.Rule;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
@@ -47,7 +48,7 @@ public class RuleFrame extends javax.swing.JFrame {
         endDate = new javax.swing.JComboBox<>();
         endTimeHour = new javax.swing.JComboBox<>();
         endTimeMin = new javax.swing.JComboBox<>();
-        jComboBox7 = new javax.swing.JComboBox<>();
+        finesCB = new javax.swing.JComboBox<>();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
@@ -69,7 +70,12 @@ public class RuleFrame extends javax.swing.JFrame {
 
         endTimeMin.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45", "46", "47", "48", "49", "50", "51", "52", "53", "54", "55", "56", "57", "58", "59" }));
 
-        jComboBox7.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1", "2", "3", "4" }));
+        finesCB.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1", "2", "3", "4" }));
+        finesCB.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                finesCBActionPerformed(evt);
+            }
+        });
 
         jLabel1.setText("GIỜ LÀM VIỆC");
 
@@ -100,7 +106,7 @@ public class RuleFrame extends javax.swing.JFrame {
                     .addComponent(jLabel3))
                 .addGap(48, 48, 48)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jComboBox7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(finesCB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(layout.createSequentialGroup()
@@ -146,7 +152,7 @@ public class RuleFrame extends javax.swing.JFrame {
                     .addComponent(jLabel5))
                 .addGap(52, 52, 52)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jComboBox7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(finesCB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3))
                 .addGap(31, 31, 31)
                 .addComponent(saveBtn)
@@ -168,20 +174,26 @@ public class RuleFrame extends javax.swing.JFrame {
         this.setVisible(false);
     }//GEN-LAST:event_saveBtnActionPerformed
 
+    private void finesCBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_finesCBActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_finesCBActionPerformed
+
     
-    private Checkin getCheckin() {
+    private Rule getCheckin() {
         
-       Checkin c =  new Checkin();
-//       c.setmInTime(LocalTime.parse(String.valueOf(startTimeHour.getSelectedItem()) + 
-//                                                                    ":" +
-//                                                   String.valueOf(startTimeMin.getSelectedItem())
-//                                                    ));
-//       c.setmOutTime(LocalTime.parse(String.valueOf(endTimeHour.getSelectedItem()) + 
-//                                                                    ":" +
-//                                                   String.valueOf(endTimeMin.getSelectedItem())
-//                                                    ));
+       Rule c =  new Rule();
+       c.setmInTime(LocalTime.parse(String.valueOf(startTimeHour.getSelectedItem()) + 
+                                                                    ":" +
+                                                   String.valueOf(startTimeMin.getSelectedItem())
+                                                    ));
+       c.setmOutTime(LocalTime.parse(String.valueOf(endTimeHour.getSelectedItem()) + 
+                                                                    ":" +
+                                                   String.valueOf(endTimeMin.getSelectedItem())
+                                                    ));
        c.setmInDate(Integer.valueOf(startDate.getSelectedItem().toString()));
        c.setmOutDate(Integer.valueOf(endDate.getSelectedItem().toString()));
+      c.setmFines(finesCB.getSelectedIndex()+1);
+       c.setId(1);
         return c;
     }
     
@@ -228,7 +240,7 @@ public class RuleFrame extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> endDate;
     private javax.swing.JComboBox<String> endTimeHour;
     private javax.swing.JComboBox<String> endTimeMin;
-    private javax.swing.JComboBox<String> jComboBox7;
+    private javax.swing.JComboBox<String> finesCB;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

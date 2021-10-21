@@ -22,10 +22,13 @@ package examples;
 import examples.data.Checkin;
 import static examples.InfoGUI.card;
 import examples.data.Constants;
+import examples.data.Rule;
 import examples.data.User;
 import examples.utils.DataBaseUtils;
 import examples.utils.DateUtils;
 import examples.utils.ImageUltils;
+import examples.utils.JsonParser;
+import examples.utils.RuleDbHelper;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
@@ -41,6 +44,7 @@ import java.util.logging.Logger;
 import javax.smartcardio.Card;
 import javax.swing.AbstractListModel;
 import javax.swing.JOptionPane;
+import org.json.JSONException;
 
 
 public class MainApp extends javax.swing.JFrame implements OnGetUserListener, OnGetRuleListener, OnGetPinStatusListener{
@@ -50,11 +54,12 @@ public class MainApp extends javax.swing.JFrame implements OnGetUserListener, On
      private User mUser;
     private Checkin mCheckIn;
     private DataBaseUtils dbHelper = DataBaseUtils.getInstance();
+     RuleDbHelper db = RuleDbHelper.getInstance();
 
     /** Creates new form Antenna */
     public MainApp() {
         initComponents();
-        
+        db.setRuleCol("rule");
         card = new SmartCardWord();
         initData();
         calendarPanel.setLayout(new java.awt.BorderLayout());
@@ -99,6 +104,8 @@ public class MainApp extends javax.swing.JFrame implements OnGetUserListener, On
         calendarPanel = new javax.swing.JPanel();
         jLabel10 = new javax.swing.JLabel();
         jButton4 = new javax.swing.JButton();
+        workingTime = new javax.swing.JLabel();
+        workingDay = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Antenna");
@@ -362,6 +369,10 @@ public class MainApp extends javax.swing.JFrame implements OnGetUserListener, On
             }
         });
 
+        workingTime.setText("GIỜ LÀM VIỆC");
+
+        workingDay.setText("NGÀY LÀM VIỆC");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -370,18 +381,21 @@ public class MainApp extends javax.swing.JFrame implements OnGetUserListener, On
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(calendarPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(calendarPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(76, 76, 76)
+                                .addComponent(jLabel10))
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(84, 84, 84)
-                                .addComponent(jLabel10)))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGap(30, 30, 30))))
+                                .addGap(31, 31, 31)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(workingDay)
+                                    .addComponent(workingTime))))
+                        .addGap(0, 0, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -389,13 +403,17 @@ public class MainApp extends javax.swing.JFrame implements OnGetUserListener, On
                 .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap()
+                .addComponent(workingTime)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(workingDay)
+                .addGap(38, 38, 38)
                 .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(101, 101, 101)
+                .addGap(73, 73, 73)
                 .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addGap(33, 33, 33)
                 .addComponent(calendarPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(29, 29, 29))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -530,7 +548,15 @@ public class MainApp extends javax.swing.JFrame implements OnGetUserListener, On
     }
 
     private void initData() {
-      //  dbHelper.setRuleCol("rule");
+      
+        try {
+            Rule r = JsonParser.jsonToRule(db.getRule().toJson());
+            
+            updateTime(r);
+        } catch (JSONException ex) {
+            Logger.getLogger(MainApp.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
         if(isConnected) {
             String id = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.ID), StandardCharsets.UTF_8).replaceAll("[^a-zA-Z0-9]", "");  
             String name = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.NAME), StandardCharsets.UTF_8).replaceAll("[^a-zA-Z0-9 ]", "");  
@@ -564,15 +590,25 @@ public class MainApp extends javax.swing.JFrame implements OnGetUserListener, On
 
     }
 
+    
+    private void setRule(Rule rule) {
+        
+    }
+    
+    private void updateTime(Rule r) {
+        workingTime.setText("GIO LAM VIEC: TU " + r.getmInTime() + " DEN " + r.getmOutTime());
+        workingDay.setText("NGAY LAM VIEC: TU THU " + r.getmInDate()+ " DEN THU " + r.getmOutDate());
+    }
+    
     @Override
-    public void onGetRuleSuccess(Checkin checkin) {
-        mCheckIn = checkin;
-        //if(dbHelper.getRule() == null)
-        //System.out.println(checkin.getmInTime());
-       DataBaseUtils db = DataBaseUtils.getInstance();
-       db.setRuleCol("rule");
-        db.addRule(checkin);
-       // else dbHelper.updateRule(mCheckIn);
+    public void onGetRuleSuccess(Rule rule) {
+        if(db.getRule() == null)
+        db.addRule(rule);
+       
+        else 
+            db.updateRule(rule);
+      
+        updateTime(rule);
     }
 
     @Override
@@ -704,6 +740,8 @@ public class MainApp extends javax.swing.JFrame implements OnGetUserListener, On
     private javax.swing.JLabel text_gender;
     private javax.swing.JLabel text_id;
     private javax.swing.JLabel text_name;
+    private javax.swing.JLabel workingDay;
+    private javax.swing.JLabel workingTime;
     // End of variables declaration//GEN-END:variables
     
 }

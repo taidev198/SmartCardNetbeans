@@ -6,6 +6,7 @@
 package examples;
 
 import examples.data.Checkin;
+import examples.data.Rule;
 import java.time.LocalTime;
 
 /**
@@ -14,6 +15,6 @@ import java.time.LocalTime;
  */
 public interface OnGetRuleListener {
     
-    void onGetRuleSuccess(Checkin checkin);
+    void onGetRuleSuccess(Rule rule);
     
 }

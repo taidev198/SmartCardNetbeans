@@ -19,5 +19,6 @@ public @interface RuleKey {
     String END_TIME = "end_time";
     String START_DATE = "start_date";
     String END_DATE = "end_date";
+    String FINES = "fines";
     
 }
