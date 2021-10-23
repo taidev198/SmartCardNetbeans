@@ -55,7 +55,10 @@ public class MainApp extends javax.swing.JFrame implements OnGetUserListener, On
     private Checkin mCheckIn;
     private DataBaseUtils dbHelper = DataBaseUtils.getInstance();
      RuleDbHelper db = RuleDbHelper.getInstance();
-
+     private Rule mRule;
+    Checkin c ;
+    
+    
     /** Creates new form Antenna */
     public MainApp() {
         initComponents();
@@ -443,22 +446,25 @@ public class MainApp extends javax.swing.JFrame implements OnGetUserListener, On
 
     private void checkinBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkinBtnActionPerformed
         // TODO add your handling code here:
-       PINGui pin =  new PINGui(card, this);
-       pin.setVisible(true);
-       if(pin.getStatus()) {
-           System.out.println("done");
-            if(isConnected) {
-                if(card.VerifyRsa(mUser.getPub_key())) {
-                    System.out.println("done");
-                }
-                
-//             if(!mCheckIn.isIsCheckedIn()) {
-//            String s = mCheckIn.doCheckIn();
-//            System.out.println(s);
+//       PINGui pin =  new PINGui(card, this);
+//       pin.setVisible(true);
+//       if(pin.getStatus()) {
+//           System.out.println("done");
+//            if(isConnected) {
+//                if(card.VerifyRsa(mUser.getPub_key())) {
+//                    System.out.println("done");
+//                }
+//                
+////             if(!mCheckIn.isIsCheckedIn()) {
+////            String s = mCheckIn.doCheckIn();
+////            System.out.println(s);
+////        }
+//       }  
 //        }
-       }  
-        }
-       
+
+    
+     System.out.println(c.doCjheckin(LocalDate.now(), LocalTime.now()));
+
        
     }//GEN-LAST:event_checkinBtnActionPerformed
 
@@ -551,7 +557,7 @@ public class MainApp extends javax.swing.JFrame implements OnGetUserListener, On
       
         try {
             Rule r = JsonParser.jsonToRule(db.getRule().toJson());
-            
+          c  = new Checkin(mRule);
             updateTime(r);
         } catch (JSONException ex) {
             Logger.getLogger(MainApp.class.getName()).log(Level.SEVERE, null, ex);
@@ -596,6 +602,9 @@ public class MainApp extends javax.swing.JFrame implements OnGetUserListener, On
     }
     
     private void updateTime(Rule r) {
+        
+        mRule = r;
+        c.setmRule(r);
         workingTime.setText("GIO LAM VIEC: TU " + r.getmInTime() + " DEN " + r.getmOutTime());
         workingDay.setText("NGAY LAM VIEC: TU THU " + r.getmInDate()+ " DEN THU " + r.getmOutDate());
     }

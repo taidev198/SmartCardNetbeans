@@ -30,6 +30,7 @@ public class Constants {
     public final static String LATE_TIME = "YOU ARE LATE";
     public final static String ON_TIME = "YOU ARE ON TIME";
     public final static String NOT_WORKING_DAY = "OPPS TODAY IS NOT WORKING DAY";
+    public final static String DONT_WORK_TODAY = "OPPS YOU DONT WORK TODAY";
     
     public final static String NOT_TIME_UP = "OH NOW IS WORKING TIME";
     public final static String TIME_UP = "SEE YOU TOMORROW";

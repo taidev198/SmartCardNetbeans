@@ -17,108 +17,76 @@ import org.bson.codecs.pojo.annotations.BsonProperty;
  */
 public class Checkin {
     
-    @BsonProperty("id") private int id ;
-//    @BsonProperty("start_time") private LocalTime mInTime;
-//    @BsonProperty("end_time") private LocalTime mOutTime;
-    @BsonProperty("start_date") private int mInDate;
-    @BsonProperty("end_date") private int mOutDate;
-//    private boolean isCheckedIn;
-//    private boolean isCheckedOut;
+   private Rule mRule;
+   private LocalDate dateNow;
+   private LocalTime timeNow;
+   private boolean isCheckin;
+   private boolean isCheckout;
+   
+   public Checkin(Rule rule) {
+       
+       mRule = rule;
+   }
+   
+   public String doCjheckin( LocalDate date, LocalTime time) {
+        dateNow = date;
+       timeNow  = time;
+       LocalTime startTime = mRule.getmInTime();
+       LocalTime endTime = mRule.getmOutTime();
+       int inDate = mRule.getmInDate();
+       int outDate = mRule.getmOutDate();
+        int dayOfWeekNow = date.getDayOfWeek().getValue();
+       if(dayOfWeekNow >= inDate && dayOfWeekNow <= outDate) {
+            if(time.isBefore(startTime)) {
+                setIsCheckin(true);
+               return Constants.ON_TIME;
+            }
+            if(time.isBefore(endTime)) {
+              if(!isCheckin) {
+                  System.out.println(isCheckin);
+                  setIsCheckin(true);
+                  return Constants.LATE_TIME;
+              }else {
+                  if(!isCheckout) {
+                     return Constants.NOT_TIME_UP;
+                  }
+              }
+            } else {
+             if(!isCheckin) {
+                 return Constants.DONT_WORK_TODAY;
+             }else{
+                 setIsCheckout(true);
+                 return Constants.STAY_HOME;
+             }
+         }
+         } 
+       return Constants.NOT_WORKING_DAY;
+   }
 
-//    //set up
-//    public Checkin(LocalTime inTime, LocalTime outTime, int inDate, int outDate) {
-//        id = 1 ;
-//        mInTime = inTime;
-//        mOutTime = outTime;
-//        mInDate = inDate;
-//        mOutDate = outDate;
-//    }
+    public boolean isIsCheckin() {
+        return isCheckin;
+    }
+
+    public void setIsCheckin(boolean isCheckin) {
+        this.isCheckin = isCheckin;
+    }
+
+    public boolean isIsCheckout() {
+        return isCheckout;
+    }
+
+    public void setIsCheckout(boolean isCheckout) {
+        this.isCheckout = isCheckout;
+    }
+
+    public Rule getmRule() {
+        return mRule;
+    }
+
+    public void setmRule(Rule mRule) {
+        this.mRule = mRule;
+    }
     
-//    public String doCheckIn() {
-//        
-////        int dayOfWeekNow = LocalDate.now().getDayOfWeek().getValue();
-////        LocalTime checkinTime = LocalTime.now();
-////        
-////         if(dayOfWeekNow >= mInDate && dayOfWeekNow <= mOutDate) {
-////               setIsCheckedIn(true);
-////            if(mOutTime.isBefore(checkinTime)) {
-////               return Constants.STAY_HOME;
-////                
-////            }
-////             
-////            if(mInTime.isAfter(checkinTime)) {
-////               return Constants.ON_TIME;
-////            }else {
-////                return Constants.LATE_TIME;
-////            }
-////         } else {
-////           return Constants.NOT_WORKING_DAY;
-////       }
-//return "";
-//        
-//    }
-    
-//    public String checkOut(LocalTime outTime) {
-//        
-//        if(mInTime.isBefore(outTime)) {
-//           return Constants.NOT_TIME_UP;
-//        }else {
-//            return Constants.TIME_UP;
-//        }
-//      
-//    }
-
-//    public LocalTime getmInTime() {
-//        return mInTime;
-//    }
-//
-//    public void setmInTime(LocalTime mInTime) {
-//        this.mInTime = mInTime;
-//    }
-//
-//    public LocalTime getmOutTime() {
-//        return mOutTime;
-//    }
-//
-//    public void setmOutTime(LocalTime mOutTime) {
-//        this.mOutTime = mOutTime;
-//    }
-
-    public int getmInDate() {
-        return mInDate;
-    }
-
-    public void setmInDate(int mInDate) {
-        this.mInDate = mInDate;
-    }
-
-    public int getmOutDate() {
-        return mOutDate;
-    }
-
-    public void setmOutDate(int mOutDate) {
-        this.mOutDate = mOutDate;
-    }
-
-//    public boolean isIsCheckedIn() {
-//        return isCheckedIn;
-//    }
-//
-//    public void setIsCheckedIn(boolean isCheckedIn) {
-//        this.isCheckedIn = isCheckedIn;
-//    }
-    
-    public int getId() {
-        return id;
-    }
-
-//    public boolean isIsCheckedOut() {
-//        return isCheckedOut;
-//    }
-//
-//    public void setIsCheckedOut(boolean isCheckedOut) {
-//        this.isCheckedOut = isCheckedOut;
-//    }
     
     
 }
