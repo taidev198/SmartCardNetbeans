@@ -5,6 +5,7 @@
  */
 package examples.data;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import org.bson.codecs.pojo.annotations.BsonProperty;
@@ -21,7 +22,7 @@ public class User {
     @BsonProperty("gender") int gender;
     @BsonProperty("address") String address;
     @BsonProperty("id_department") int id_department;
-    @BsonProperty("late_date") List<Date> late_date;
+    @BsonProperty("late_date") List<LocalDate> late_date;
     @BsonProperty("password") String password;
     @BsonProperty("pub_key") byte[] pub_key;
      @BsonProperty("avatar") byte[] avatar;
@@ -74,11 +75,11 @@ public class User {
         this.id_department = id_department;
     }
 
-    public List<Date> getLate_date() {
+    public List<LocalDate> getLate_date() {
         return late_date;
     }
 
-    public void setLate_date(List<Date> late_date) {
+    public void setLate_date(List<LocalDate> late_date) {
         this.late_date = late_date;
     }
 

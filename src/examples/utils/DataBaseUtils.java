@@ -27,7 +27,11 @@ import examples.data.User;
 import examples.data.UserKey;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -136,6 +140,17 @@ CodecRegistry pojoCodecRegistry = fromRegistries(MongoClientSettings.getDefaultC
         return user;
     }
     
+    public void updateCheckinUser(String id, LocalDate now) {
+        User user = findUser(id);
+        List<LocalDate> dates = user.getLate_date();
+        if (dates == null)
+            dates = new ArrayList<>();
+        else {
+            dates.add(now);
+        }
+        col.updateOne(eq("id", id), combine(set(UserKey.LATE_DATE, dates)
+                                            ));
+    }
     public void deleteUser(String id) {
         
        DeleteResult deleteResult = col.deleteOne(eq("id", id));

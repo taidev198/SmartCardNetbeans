@@ -34,10 +34,12 @@ import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.YearMonth;
 import java.time.temporal.WeekFields;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -463,9 +465,9 @@ public class MainApp extends javax.swing.JFrame implements OnGetUserListener, On
 //        }
 
     
-     System.out.println(c.doCjheckin(LocalDate.now(), LocalTime.now()));
-
-       
+    // System.out.println(c.doCjheckin(LocalDate.now(), LocalTime.now()));
+      dbHelper.updateCheckinUser(mUser.getId(), LocalDate.now());
+        
     }//GEN-LAST:event_checkinBtnActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
@@ -527,10 +529,9 @@ public class MainApp extends javax.swing.JFrame implements OnGetUserListener, On
         System.out.println(new String(card.command(card.command(" ".getBytes(), Constants.INS_ENCRYPT, Constants.ID_DEPARTMENT), Constants.INS_DECRYPT, Constants.ID_DEPARTMENT), StandardCharsets.UTF_8));
 
         //xoa thong tin tren db
-        dbHelper.getCol("users"); 
         dbHelper.deleteUser(text_id.getText());
         System.out.println(text_id.getText());
-        text_id.setText("N/A");
+            text_id.setText("N/A");
             text_name.setText("N/A");
             text_address.setText("N/A");
             System.out.println("N/A");
@@ -551,6 +552,12 @@ public class MainApp extends javax.swing.JFrame implements OnGetUserListener, On
         text_birth.setText(DateUtils.dateToString(user.getBirth()));
         text_gender.setText(String.valueOf(user.getGender()));
         text_department.setText(String.valueOf(user.getId_department()));
+        ImageUltils iU = ImageUltils.getInstance();
+        try {
+                avatar.setIcon(iU.bufferImageToII(iU.byteToBufferImage(mUser.getAvatar()), avatar));
+            } catch (IOException ex) {
+                Logger.getLogger(MainApp.class.getName()).log(Level.SEVERE, null, ex);
+            }
     }
 
     private void initData() {
@@ -571,17 +578,16 @@ public class MainApp extends javax.swing.JFrame implements OnGetUserListener, On
             String gender = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.GENDER), StandardCharsets.UTF_8).replaceAll("[^a-zA-Z0-9]", ""); 
             String id_department = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.ID_DEPARTMENT), StandardCharsets.UTF_8).replaceAll("[^a-zA-Z0-9]", ""); 
             dbHelper.getCol("users");
-            User user = dbHelper.findUser(id);
+            mUser = dbHelper.findUser(id);
             ImageUltils iU = ImageUltils.getInstance();
-            if(user != null) {
+            if(mUser != null) {
                   try {
-                avatar.setIcon(iU.bufferImageToII(iU.byteToBufferImage(user.getAvatar()), avatar));
+                avatar.setIcon(iU.bufferImageToII(iU.byteToBufferImage(mUser.getAvatar()), avatar));
             } catch (IOException ex) {
                 Logger.getLogger(MainApp.class.getName()).log(Level.SEVERE, null, ex);
             }
             
             }
-          
             
         if(!id.equals("p3")) {
             text_id.setText(id);
