@@ -16,6 +16,7 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
 import java.time.temporal.WeekFields;
+import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Objects;
 import javax.swing.*;
@@ -27,6 +28,8 @@ import javax.swing.*;
 public  class CalendarPanel extends JPanel {
   public final Dimension size = new Dimension(40, 26);
   public final JLabel yearMonthLabel = new JLabel("", SwingConstants.CENTER);
+   private ArrayList<LocalDate> mDates = new ArrayList<>();
+   
   public final JList<LocalDate> monthList = new JList<LocalDate>() {
     @Override public void updateUI() {
       setCellRenderer(null);
@@ -36,6 +39,7 @@ public  class CalendarPanel extends JPanel {
       setFixedCellWidth(size.width);
       setFixedCellHeight(size.height);
       setCellRenderer(new CalendarListRenderer());
+        System.out.println(mDates.size());
       getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
     }
   };
@@ -46,9 +50,10 @@ public  class CalendarPanel extends JPanel {
     return currentLocalDate;
   }
 
- public  CalendarPanel() {
+ public  CalendarPanel(ArrayList<LocalDate> dates) {
+
     super();
-     System.out.println("hello");
+    mDates = dates;
     installActions();
 
     JButton prev = new JButton("<");
@@ -187,26 +192,33 @@ public  class CalendarPanel extends JPanel {
 
   private class CalendarListRenderer implements ListCellRenderer<LocalDate> {
     private final ListCellRenderer<? super LocalDate> renderer = new DefaultListCellRenderer();
-
+    
+    public CalendarListRenderer() {
+        
+    }
+    
+    
     @Override public Component getListCellRendererComponent(JList<? extends LocalDate> list, LocalDate value, int index, boolean isSelected, boolean cellHasFocus) {
       JLabel l = (JLabel) renderer.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
       l.setOpaque(true);
       l.setHorizontalAlignment(SwingConstants.CENTER);
       l.setText(Objects.toString(value.getDayOfMonth()));
       Color fgc = l.getForeground();
+      for(int i =0 ;i < mDates.size(); i++) {
+          LocalDate ld = mDates.get(i);
+           if(value.getDayOfMonth() == ld.getDayOfMonth() && value.getMonth().getValue() == ld.getMonthValue()) {
+           fgc = new Color(Color.RED.getRGB());
+        }
+     }
+                
       if (YearMonth.from(value).equals(YearMonth.from(getCurrentLocalDate()))) {
         DayOfWeek dow = value.getDayOfWeek();
         if (value.isEqual(realLocalDate)) {
           fgc = new Color(0x64_FF_64);
-        } else if (dow == DayOfWeek.SUNDAY) {
-          fgc = new Color(0xFF_64_64);
-        } else if (dow == DayOfWeek.SATURDAY) {
-          fgc = new Color(0x64_64_FF);
-        }
+        } 
       } else {
         fgc = Color.GRAY;
       }
-        System.out.println(realLocalDate.getMonthValue());
       if(value.getDayOfMonth() == 10 && realLocalDate.getMonthValue() == 8) {
           fgc = new Color(0x64_64_FF);
       }

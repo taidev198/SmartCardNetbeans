@@ -38,14 +38,17 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.YearMonth;
 import java.time.temporal.WeekFields;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.smartcardio.Card;
 import javax.swing.AbstractListModel;
 import javax.swing.JOptionPane;
+import org.bson.codecs.jsr310.LocalDateTimeCodec;
 import org.json.JSONException;
 
 
@@ -59,7 +62,7 @@ public class MainApp extends javax.swing.JFrame implements OnGetUserListener, On
      RuleDbHelper db = RuleDbHelper.getInstance();
      private Rule mRule;
     Checkin c ;
-    
+     private ArrayList<LocalDate> mDates = new ArrayList<>();
     
     /** Creates new form Antenna */
     public MainApp() {
@@ -67,10 +70,7 @@ public class MainApp extends javax.swing.JFrame implements OnGetUserListener, On
         db.setRuleCol("rule");
         card = new SmartCardWord();
         initData();
-        calendarPanel.setLayout(new java.awt.BorderLayout());
-        calendarPanel.add(new CalendarPanel());
-        calendarPanel.revalidate();
-        calendarPanel.repaint();
+        
     }
     
     /** This method is called from within the constructor to
@@ -466,8 +466,13 @@ public class MainApp extends javax.swing.JFrame implements OnGetUserListener, On
 
     
     // System.out.println(c.doCjheckin(LocalDate.now(), LocalTime.now()));
-      dbHelper.updateCheckinUser(mUser.getId(), LocalDate.now());
-        
+    //  dbHelper.updateCheckinUser("abcd", LocalDate.now());
+      User u = dbHelper.findUser("abcd");
+      List<LocalDate> dates = u.getLate_date();
+//      for(int i =0; i< dates.size(); i++) {
+//          LocalDate ld = dates.get(i);
+//          System.out.println(ld.toString());
+//      }
     }//GEN-LAST:event_checkinBtnActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
@@ -561,7 +566,7 @@ public class MainApp extends javax.swing.JFrame implements OnGetUserListener, On
     }
 
     private void initData() {
-      
+      dbHelper.getCol("users");
         try {
             Rule r = JsonParser.jsonToRule(db.getRule().toJson());
           c  = new Checkin(mRule);
@@ -577,8 +582,13 @@ public class MainApp extends javax.swing.JFrame implements OnGetUserListener, On
             String address = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.ADDRESS), StandardCharsets.UTF_8).replaceAll("[^a-zA-Z0-9, -]", ""); 
             String gender = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.GENDER), StandardCharsets.UTF_8).replaceAll("[^a-zA-Z0-9]", ""); 
             String id_department = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.ID_DEPARTMENT), StandardCharsets.UTF_8).replaceAll("[^a-zA-Z0-9]", ""); 
-            dbHelper.getCol("users");
-            mUser = dbHelper.findUser(id);
+            
+            mUser = dbHelper.findUser("abcd");
+            mDates = getLateDate(mUser);
+            calendarPanel.setLayout(new java.awt.BorderLayout());
+            calendarPanel.add(new CalendarPanel(mDates));
+            calendarPanel.revalidate();
+            calendarPanel.repaint();
             ImageUltils iU = ImageUltils.getInstance();
             if(mUser != null) {
                   try {
@@ -599,9 +609,24 @@ public class MainApp extends javax.swing.JFrame implements OnGetUserListener, On
             text_department.setText(id_department);
         }
         }
+        
 
     }
 
+    private ArrayList<LocalDate> getLateDate(User user) {
+        ArrayList<LocalDate> rerult = new ArrayList<>();
+        List<LocalDate> lateDate = user.getLate_date();
+        
+        for(int i =0 ; i< lateDate.size(); i++) {
+            LocalDate ld = lateDate.get(i);
+            if(ld.getMonthValue() ==  LocalDate.now().getMonthValue()) {
+                System.out.println("added");
+                rerult.add(ld);
+            }
+        }
+        return rerult;
+    }
+    
     
     private void setRule(Rule rule) {
         
