@@ -6,6 +6,7 @@
 package examples.data;
 
 import examples.data.Constants;
+import examples.utils.DataBaseUtils;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import org.bson.codecs.pojo.annotations.BsonProperty;
@@ -28,7 +29,10 @@ public class Checkin {
        mRule = rule;
    }
    
-   public String doCjheckin( LocalDate date, LocalTime time) {
+   public String doCjheckin( LocalDate date, LocalTime time, User user, DataBaseUtils dbHelper) {
+       
+       isCheckin = user.isIsCheckin();
+       isCheckout = user.isIsCheckout();
         dateNow = date;
        timeNow  = time;
        LocalTime startTime = mRule.getmInTime();
@@ -39,12 +43,13 @@ public class Checkin {
        if(dayOfWeekNow >= inDate && dayOfWeekNow <= outDate) {
             if(time.isBefore(startTime)) {
                 setIsCheckin(true);
+                user.setIsCheckin(isCheckin);
                return Constants.ON_TIME;
             }
             if(time.isBefore(endTime)) {
               if(!isCheckin) {
-                  System.out.println(isCheckin);
                   setIsCheckin(true);
+                  user.setIsCheckin(isCheckin);
                   return Constants.LATE_TIME;
               }else {
                   if(!isCheckout) {
@@ -56,10 +61,12 @@ public class Checkin {
                  return Constants.DONT_WORK_TODAY;
              }else{
                  setIsCheckout(true);
+                 user.setIsCheckout(isCheckout);
                  return Constants.STAY_HOME;
              }
          }
-         } 
+         }
+       dbHelper.updateUser(user.getId(), user);
        return Constants.NOT_WORKING_DAY;
    }
 

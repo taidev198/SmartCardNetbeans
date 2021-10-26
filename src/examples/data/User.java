@@ -24,6 +24,8 @@ public class User {
     @BsonProperty("id_department") int id_department;
     @BsonProperty("late_date") List<LocalDate> late_date;
     @BsonProperty("password") String password;
+     @BsonProperty("isCheckin") private boolean isCheckin ;
+    @BsonProperty("isCheckout") private boolean isCheckout ;
     @BsonProperty("pub_key") byte[] pub_key;
      @BsonProperty("avatar") byte[] avatar;
     
@@ -105,6 +107,22 @@ public class User {
 
     public void setAvatar(byte[] avatar) {
         this.avatar = avatar;
+    }
+
+    public boolean isIsCheckin() {
+        return isCheckin;
+    }
+
+    public void setIsCheckin(boolean isCheckin) {
+        this.isCheckin = isCheckin;
+    }
+
+    public boolean isIsCheckout() {
+        return isCheckout;
+    }
+
+    public void setIsCheckout(boolean isCheckout) {
+        this.isCheckout = isCheckout;
     }
     
     

@@ -448,8 +448,9 @@ public class MainApp extends javax.swing.JFrame implements OnGetUserListener, On
 
     private void checkinBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkinBtnActionPerformed
         // TODO add your handling code here:
-//       PINGui pin =  new PINGui(card, this);
-//       pin.setVisible(true);
+        if(isConnected) {
+       PINGui pin =  new PINGui(card, this);
+       pin.setVisible(true);
 //       if(pin.getStatus()) {
 //           System.out.println("done");
 //            if(isConnected) {
@@ -457,22 +458,19 @@ public class MainApp extends javax.swing.JFrame implements OnGetUserListener, On
 //                    System.out.println("done");
 //                }
 //                
-////             if(!mCheckIn.isIsCheckedIn()) {
-////            String s = mCheckIn.doCheckIn();
-////            System.out.println(s);
-////        }
-//       }  
+//
+//            }  
 //        }
 
     
     // System.out.println(c.doCjheckin(LocalDate.now(), LocalTime.now()));
     //  dbHelper.updateCheckinUser("abcd", LocalDate.now());
-      User u = dbHelper.findUser("abcd");
-      List<LocalDate> dates = u.getLate_date();
-//      for(int i =0; i< dates.size(); i++) {
-//          LocalDate ld = dates.get(i);
-//          System.out.println(ld.toString());
-//      }
+//      User u = dbHelper.findUser("abcd");
+//      List<LocalDate> dates = u.getLate_date();
+            
+        }
+      
+
     }//GEN-LAST:event_checkinBtnActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
@@ -582,8 +580,7 @@ public class MainApp extends javax.swing.JFrame implements OnGetUserListener, On
             String address = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.ADDRESS), StandardCharsets.UTF_8).replaceAll("[^a-zA-Z0-9, -]", ""); 
             String gender = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.GENDER), StandardCharsets.UTF_8).replaceAll("[^a-zA-Z0-9]", ""); 
             String id_department = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.ID_DEPARTMENT), StandardCharsets.UTF_8).replaceAll("[^a-zA-Z0-9]", ""); 
-            
-            mUser = dbHelper.findUser("abcd");
+            mUser = dbHelper.findUser(id);
             mDates = getLateDate(mUser);
             calendarPanel.setLayout(new java.awt.BorderLayout());
             calendarPanel.add(new CalendarPanel(mDates));
@@ -654,14 +651,21 @@ public class MainApp extends javax.swing.JFrame implements OnGetUserListener, On
     @Override
     public void onGetPinStatusSuccessful() {
 
-        if(mUser == null) {
-             dbHelper.getCol("users"); 
-           mUser = dbHelper.findUser(text_id.getText());
-            System.out.println(Arrays.toString(mUser.getPub_key()));
-        }
+//        if(mUser == null) {
+//             dbHelper.getCol("users"); 
+//           mUser = dbHelper.findUser(text_id.getText());
+//            System.out.println(Arrays.toString(mUser.getPub_key()));
+//        }
        
         if(card.VerifyRsa(mUser.getPub_key())) {
-            System.out.println("done");
+            String result = c.doCjheckin(LocalDate.now(), LocalTime.now(), mUser, dbHelper); 
+            if(result.equals(Constants.LATE_TIME) || result.equals(Constants.DONT_WORK_TODAY) )
+                dbHelper.updateCheckinUser(text_id.getText(), LocalDate.now());
+            
+            JOptionPane.showMessageDialog(null, result);
+            
+        } else {
+            
         }
 
     }

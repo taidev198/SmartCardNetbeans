@@ -105,7 +105,7 @@ CodecRegistry pojoCodecRegistry = fromRegistries(MongoClientSettings.getDefaultC
         ruleCol = database.getCollection(name, Rule.class);
     }
     
-    public void insert(User user, SmartCardWord card) {
+    public void insert(User user) {
        
          col.insertOne(user);
         
@@ -129,12 +129,14 @@ CodecRegistry pojoCodecRegistry = fromRegistries(MongoClientSettings.getDefaultC
         
     }
     
-    public User updateUser(String id, User user, SmartCardWord card) {
+    public User updateUser(String id, User user) {
         col.updateOne(eq("id", id), combine(set(UserKey.ADDRESS, user.getAddress()),
                                             set(UserKey.BIRTH, user.getBirth()),
                                             set(UserKey.FULLNAME, user.getFullname()),
                                             set(UserKey.GENDER, user.getGender()),
-                                            set(UserKey.ID_DEPARTMENT, user.getId_department())
+                                            set(UserKey.ID_DEPARTMENT, user.getId_department()),
+                                            set(UserKey.IS_CHECKIN, user.isIsCheckin()),
+                                            set(UserKey.IS_CHECKOUT, user.isIsCheckout())
                                             ));
 
         return user;

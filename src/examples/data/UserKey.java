@@ -24,5 +24,6 @@ public @interface UserKey {
     String FINES = "fines";
     String PASSWORD = "password";
     String GENDER = "gender";
-   
+   String IS_CHECKIN = "isCheckin";
+    String IS_CHECKOUT = "isCheckout";
 }

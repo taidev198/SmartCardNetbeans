@@ -307,6 +307,8 @@ public class InfoGUI extends javax.swing.JFrame implements OnGetUserListener{
         user.setBirth(selectedValue);
         user.setPub_key(card.pubkeyRsa());
         user.setAvatar(imgBytes);
+        user.setIsCheckin(false);
+        user.setIsCheckout(false);
    // id
         System.out.println(new String(card.command(card.command(text_id.getText().trim().getBytes(), Constants.INS_ENCRYPT, Constants.ID), Constants.INS_DECRYPT, Constants.ID), StandardCharsets.UTF_8));
     //id
@@ -324,9 +326,9 @@ public class InfoGUI extends javax.swing.JFrame implements OnGetUserListener{
      InfoGUI.person = this.person;
 
      if(isEmpty)
-          dbHelper.insert(user, card);
+          dbHelper.insert(user);
      else {
-         dbHelper.updateUser(text_id.getText().trim(), user, card);
+         dbHelper.updateUser(text_id.getText().trim(), user);
      }
       mListener.onGetUserSuccess(user);
       this.setVisible(false);

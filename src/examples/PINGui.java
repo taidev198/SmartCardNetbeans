@@ -295,7 +295,7 @@ public class PINGui extends javax.swing.JFrame {
                byte[] digest = md.digest();
                String result = card.Open(digest);
         if(result.equals("9000")){
-                JOptionPane.showMessageDialog(null, "THANH CONG");
+               // JOptionPane.showMessageDialog(null, "THANH CONG");
                 this.setVisible(false);
                 mGetPinStatusListener.onGetPinStatusSuccessful();
                 isSuccess = true;
@@ -399,8 +399,11 @@ public class PINGui extends javax.swing.JFrame {
 
     private void clear_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clear_btnActionPerformed
         // TODO add your handling code here:
+       
         card.Open(new byte[]{(byte)0x00}, Constants.RESET_PIN);
         JOptionPane.showMessageDialog(null, "THE DA DUOC MO LAI");
+        text_input.setText("");
+        text = text_input.getText();
     }//GEN-LAST:event_clear_btnActionPerformed
     
     /**
