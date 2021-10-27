@@ -4,6 +4,8 @@
  * and open the template in the editor.
  */
 package examples.utils;
+import examples.data.Departments;
+import examples.data.DepartmentsKey;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import examples.data.Rule;
@@ -31,6 +33,18 @@ public class JsonParser {
         rule.setmInTime(LocalTime.parse(obj.getString(RuleKey.START_TIME)));
         rule.setmOutTime(LocalTime.parse(obj.getString(RuleKey.END_TIME)));
         return rule;
+        
+    }
+    
+    public static Departments jsonToDepartments(String jsonString) throws JSONException {
+        
+        Departments d = new Departments();
+        JSONObject obj = new JSONObject(jsonString);
+        d.setmId(obj.getInt("id"));
+        d.setmName(obj.getString(DepartmentsKey.NAME));
+        d.setmQuanlity(obj.getInt(DepartmentsKey.QUANLITY));
+        System.out.println(d.getmName());
+        return d;
         
     }
     

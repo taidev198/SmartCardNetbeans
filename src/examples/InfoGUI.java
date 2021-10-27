@@ -6,9 +6,11 @@
 package examples;
 
 import examples.data.Constants;
+import examples.data.Departments;
 import examples.utils.DataBaseUtils;
 import examples.data.User;
 import examples.utils.DateUtils;
+import examples.utils.ImageUltils;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
@@ -54,14 +56,18 @@ public class InfoGUI extends javax.swing.JFrame implements OnGetUserListener{
     static boolean isEmpty;
     private static OnGetUserListener mListener;
     private byte[] imgBytes;
+    private static ArrayList<Departments> departmentses;
+    private static User mUser;
     /**
      * Creates new form InitInfo
      */
     
     private DataBaseUtils dbHelper;
     
-    public InfoGUI(SmartCardWord card, boolean isEmpty, OnGetUserListener listener) {
+    public InfoGUI(SmartCardWord card, User user, ArrayList<Departments> d, boolean isEmpty, OnGetUserListener listener) {
         initComponents();
+        mUser = user;
+        departmentses = d;
         mListener = listener;
         gender_combobox.setSelectedIndex(1);
         birthday.setDateFormatString("yyyy-MM-dd");
@@ -71,14 +77,14 @@ public class InfoGUI extends javax.swing.JFrame implements OnGetUserListener{
         this.isEmpty = isEmpty;
         dbHelper = DataBaseUtils.getInstance();
         dbHelper.getCol("users");        
-        
+        for(int i = 0; i< departmentses.size(); i++)
+            id_department_cb.addItem(departmentses.get(i).getmName());
         if(!this.isEmpty) {
             save_btn.setText("EDIT");
             text_id.setEditable(false);
             String id = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.ID), StandardCharsets.UTF_8).replaceAll("[^a-zA-Z0-9]", "");  
             String name = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.NAME), StandardCharsets.UTF_8).replaceAll("[^a-zA-Z0-9 ]", "");  
             String date = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.DATE), StandardCharsets.UTF_8).replaceAll("[^a-zA-Z0-9,-]", ""); 
-            System.out.println(date);
             String address = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.ADDRESS), StandardCharsets.UTF_8).replaceAll("[^a-zA-Z0-9, ]", "");
             String gender = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.GENDER), StandardCharsets.UTF_8).replaceAll("[^a-zA-Z0-9]", "");
             String id_department = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.ID_DEPARTMENT), StandardCharsets.UTF_8).replaceAll("[^a-zA-Z0-9]", "");
@@ -88,10 +94,15 @@ public class InfoGUI extends javax.swing.JFrame implements OnGetUserListener{
                    text_address.setText(address);
                    gender_combobox.setSelectedIndex(Integer.valueOf(gender));
                    id_department_cb.setSelectedIndex(Integer.valueOf(id_department));
-                   //this.isEmpty = !this.isEmpty;
+                  
                          
             getImage(person.getAvatar());
-
+            ImageUltils iU = ImageUltils.getInstance();
+            try {
+                avatar.setIcon(iU.bufferImageToII(iU.byteToBufferImage(mUser.getAvatar()), avatar));
+            } catch (IOException ex) {
+                Logger.getLogger(InfoGUI.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
 
@@ -188,8 +199,6 @@ public class InfoGUI extends javax.swing.JFrame implements OnGetUserListener{
         jLabel7.setText("PHONG BAN");
 
         gender_combobox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "NAM", "NU" }));
-
-        id_department_cb.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -490,7 +499,7 @@ private void setImage(byte [] img){
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new InfoGUI(card, isEmpty, mListener).setVisible(true);
+                new InfoGUI(card, mUser, departmentses, isEmpty, mListener).setVisible(true);
             }
         });
     }

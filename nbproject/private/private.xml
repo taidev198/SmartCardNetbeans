@@ -5,12 +5,9 @@
         <group>
             <file>file:/E:/nam5/SC/Final%20Project/GUIFormExamples/src/examples/InfoGUI.java</file>
             <file>file:/E:/nam5/SC/Final%20Project/GUIFormExamples/src/examples/utils/RuleDbHelper.java</file>
-            <file>file:/E:/nam5/SC/Final%20Project/GUIFormExamples/src/examples/CalendarPanel.java</file>
             <file>file:/E:/nam5/SC/Final%20Project/GUIFormExamples/src/examples/utils/DataBaseUtils.java</file>
-            <file>file:/E:/nam5/SC/Final%20Project/GUIFormExamples/src/examples/data/Checkin.java</file>
-            <file>file:/E:/nam5/SC/Final%20Project/GUIFormExamples/src/examples/RuleFrame.java</file>
+            <file>file:/E:/nam5/SC/Final%20Project/GUIFormExamples/src/examples/utils/JsonParser.java</file>
             <file>file:/E:/nam5/SC/Final%20Project/GUIFormExamples/src/examples/MainApp.java</file>
-            <file>file:/E:/nam5/SC/Final%20Project/GUIFormExamples/src/examples/utils/DateUtils.java</file>
         </group>
     </open-files>
 </project-private>

@@ -5,8 +5,11 @@
  */
 package examples.utils;
 
+import com.mongodb.Block;
 import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
+import com.mongodb.async.SingleResultCallback;
+import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
@@ -19,10 +22,15 @@ import com.mongodb.connection.ConnectionPoolSettings;
 import com.mongodb.connection.SocketSettings;
 import examples.SmartCardWord;
 import examples.data.Checkin;
+import examples.data.Departments;
+import examples.data.DepartmentsKey;
 import examples.data.Rule;
 import examples.data.RuleKey;
 import examples.data.User;
 import examples.data.UserKey;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 import org.bson.Document;
 import static org.bson.codecs.configuration.CodecRegistries.fromProviders;
@@ -40,6 +48,7 @@ public class RuleDbHelper {
     private MongoDatabase database;
     private com.mongodb.client.MongoClient mongoClient;
     private MongoCollection<Document> ruleCol;
+    private MongoCollection<Document> departmentCol;
     
     private RuleDbHelper() {
        
@@ -79,6 +88,10 @@ CodecRegistry pojoCodecRegistry = fromRegistries(MongoClientSettings.getDefaultC
         ruleCol = database.getCollection(name);
     }
     
+    public void setDepartmentCol(String name) {
+        departmentCol = database.getCollection(name);
+    }
+    
     public static RuleDbHelper getInstance() {
         if(sInstance == null)
             sInstance = new RuleDbHelper();
@@ -109,5 +122,47 @@ CodecRegistry pojoCodecRegistry = fromRegistries(MongoClientSettings.getDefaultC
                                             set(RuleKey.END_DATE, rule.getmOutDate())
                                             ));
     }
+    
+    public void addDepartment(Departments departments) {
+        
+        Document d = new Document();
+        d.append(DepartmentsKey.ID, departments.getmId())
+                .append(DepartmentsKey.NAME, departments.getmName())
+                .append(DepartmentsKey.QUANLITY, departments.getmQuanlity());
+         departmentCol.insertOne(d);
+         
+    }
+    
+    public List<Document> getDepartments() {
+        List<Document> sr = new ArrayList<>();
+        
+        MongoCursor<Document> cursor = departmentCol.find().iterator();
+        while (cursor.hasNext()) {
+           // System.out.println("collection is " +cursor.next() );
+            sr.add(cursor.next());
+        }
+      return sr;
+    }
+    
+    public void updateDepartment(Departments departments) {
+        ruleCol.updateOne(eq(DepartmentsKey.ID, departments.getmId()),
+                                            combine(set(DepartmentsKey.NAME, departments.getmName()),
+                                            set(DepartmentsKey.QUANLITY, departments.getmQuanlity())
+                                            ));
+    }
+    
+    SingleResultCallback<Void> callbackWhenFinished = new SingleResultCallback<Void>() {
+    @Override
+    public void onResult(final Void result, final Throwable t) {
+        System.out.println("Operation Finished!");
+    }
+    };
+    
+    Block<Document> printBlock = new Block<Document>() {
+    @Override
+    public void apply(final Document document) {
+        System.out.println(document.toJson());
+    }
+};
     
 }

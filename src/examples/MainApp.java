@@ -22,6 +22,7 @@ package examples;
 import examples.data.Checkin;
 import static examples.InfoGUI.card;
 import examples.data.Constants;
+import examples.data.Departments;
 import examples.data.Rule;
 import examples.data.User;
 import examples.utils.DataBaseUtils;
@@ -29,6 +30,7 @@ import examples.utils.DateUtils;
 import examples.utils.ImageUltils;
 import examples.utils.JsonParser;
 import examples.utils.RuleDbHelper;
+import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
@@ -47,7 +49,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.smartcardio.Card;
 import javax.swing.AbstractListModel;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import org.bson.Document;
 import org.bson.codecs.jsr310.LocalDateTimeCodec;
 import org.json.JSONException;
 
@@ -63,7 +67,7 @@ public class MainApp extends javax.swing.JFrame implements OnGetUserListener, On
      private Rule mRule;
     Checkin c ;
      private ArrayList<LocalDate> mDates = new ArrayList<>();
-    
+    private ArrayList<Departments> departmentses = new ArrayList<>();
     /** Creates new form Antenna */
     public MainApp() {
         initComponents();
@@ -427,10 +431,11 @@ public class MainApp extends javax.swing.JFrame implements OnGetUserListener, On
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
         if(isConnected) {
-              InfoGUI infoGUI = new InfoGUI(card, true, this);
+              InfoGUI infoGUI = new InfoGUI(card, mUser, departmentses, true, this);
      //   infoGUI.setCallback(this);
         infoGUI.setVisible(true);
-        
+        //infoGUI.dispatchEvent(new WindowEvent(infoGUI, WindowEvent.WINDOW_CLOSING));
+        infoGUI.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
        // this.setVisible(false);
         }
       
@@ -440,8 +445,10 @@ public class MainApp extends javax.swing.JFrame implements OnGetUserListener, On
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
         if(isConnected) {
-           new InfoGUI(card, false, this).setVisible(true);
-
+           InfoGUI infoGUI = new InfoGUI(card, mUser, departmentses, false, this);
+     //   infoGUI.setCallback(this);
+        infoGUI.setVisible(true);
+       infoGUI.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         }
 //        this.setVisible(false);
     }//GEN-LAST:event_jButton2ActionPerformed
@@ -476,14 +483,21 @@ public class MainApp extends javax.swing.JFrame implements OnGetUserListener, On
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
         dbHelper.setRuleCol("rule");
-         new RuleFrame(this).setVisible(true);
+        RuleFrame r =
+         new RuleFrame(this);
+        r.setVisible(true);
+        r.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
        
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void changePinBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changePinBtnActionPerformed
         // TODO add your handling code here:
         if(isConnected) {
-            new changePINGui(card).setVisible(true);
+            
+            changePINGui c = 
+            new changePINGui(card);
+            c.setVisible(true);
+            c.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         }
 
     }//GEN-LAST:event_changePinBtnActionPerformed
@@ -553,8 +567,8 @@ public class MainApp extends javax.swing.JFrame implements OnGetUserListener, On
         text_name.setText(user.getFullname());
         text_address.setText(user.getAddress());
         text_birth.setText(DateUtils.dateToString(user.getBirth()));
-        text_gender.setText(String.valueOf(user.getGender()));
-        text_department.setText(String.valueOf(user.getId_department()));
+        text_gender.setText(user.getGender() == 0? "NAM" : "NU");
+        text_department.setText(departmentses.get(user.getId_department()).getmName());
         ImageUltils iU = ImageUltils.getInstance();
         try {
                 avatar.setIcon(iU.bufferImageToII(iU.byteToBufferImage(mUser.getAvatar()), avatar));
@@ -580,6 +594,9 @@ public class MainApp extends javax.swing.JFrame implements OnGetUserListener, On
             String address = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.ADDRESS), StandardCharsets.UTF_8).replaceAll("[^a-zA-Z0-9, -]", ""); 
             String gender = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.GENDER), StandardCharsets.UTF_8).replaceAll("[^a-zA-Z0-9]", ""); 
             String id_department = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.ID_DEPARTMENT), StandardCharsets.UTF_8).replaceAll("[^a-zA-Z0-9]", ""); 
+            departmentses = getDepartmentses();
+            
+        if(!id.equals("p3")) {
             mUser = dbHelper.findUser(id);
             mDates = getLateDate(mUser);
             calendarPanel.setLayout(new java.awt.BorderLayout());
@@ -592,24 +609,37 @@ public class MainApp extends javax.swing.JFrame implements OnGetUserListener, On
                 avatar.setIcon(iU.bufferImageToII(iU.byteToBufferImage(mUser.getAvatar()), avatar));
             } catch (IOException ex) {
                 Logger.getLogger(MainApp.class.getName()).log(Level.SEVERE, null, ex);
-            }
+                }
             
             }
-            
-        if(!id.equals("p3")) {
             text_id.setText(id);
             text_name.setText(name);
             text_address.setText(address);
-            System.out.println(date);
             text_birth.setText(date);
-            text_gender.setText(gender);
-            text_department.setText(id_department);
+            text_gender.setText(Integer.valueOf(gender) == 0? "NAM" : "NU");
+            text_department.setText(departmentses.get(Integer.valueOf(id_department)).getmName());
         }
         }
         
 
     }
 
+    
+    private ArrayList<Departments> getDepartmentses() {
+        ArrayList<Departments> rerult = new ArrayList<>();
+        
+        db.setDepartmentCol("departments");
+        List<Document> list = db.getDepartments();
+        for(int i =0; i< list.size(); i++) {
+            try {
+                rerult.add(JsonParser.jsonToDepartments(list.get(i).toJson()));
+            } catch (JSONException ex) {
+                Logger.getLogger(MainApp.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return rerult;
+    }
+    
     private ArrayList<LocalDate> getLateDate(User user) {
         ArrayList<LocalDate> rerult = new ArrayList<>();
         List<LocalDate> lateDate = user.getLate_date();
