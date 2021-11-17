@@ -27,14 +27,13 @@ public class Constants {
     public final static byte CLA = (byte) 0xA0;
     public final static byte RESET_PIN = (byte)0x04;
     
-    public final static String LATE_TIME = "YOU ARE LATE";
-    public final static String ON_TIME = "YOU ARE ON TIME";
-    public final static String NOT_WORKING_DAY = "OPPS TODAY IS NOT WORKING DAY";
-    public final static String DONT_WORK_TODAY = "OPPS YOU DONT WORK TODAY";
-    
-    public final static String NOT_TIME_UP = "OH NOW IS WORKING TIME";
-    public final static String TIME_UP = "SEE YOU TOMORROW";
-    public final static String STAY_HOME = "OPPS NOW IS NOT TIME WORKING";
+    public final static String LATE_TIME = "BẠN ĐÃ ĐI MUỘN";
+    public final static String ON_TIME = "BẠN ĐẾN ĐÚNG GIỜ RỒI";
+    public final static String NOT_WORKING_DAY = "OOH HÔM NAY LÀ NGÀY NGHỈ";
+    public final static String DONT_WORK_TODAY = "OH HÔM NAY BẠN KHÔNG ĐI LÀM";
+    public final static String NOT_TIME_UP = "OH GIỜ ĐANG TRONG GIỜ LÀM";
+    public final static String TIME_UP = "BYE, HẸN GẶP BẠN SÁNG MAI";
+    public final static String STAY_HOME = "OPPS BÂY GIỜ KHÔNG PHẢI GIỜ LÀM VIỆC";
     
     
     public final static String NOTIFICATION = "NOTIF";

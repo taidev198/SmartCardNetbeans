@@ -173,7 +173,7 @@ public class MainApp extends javax.swing.JFrame implements OnGetUserListener, On
 
         delete_btn.setBackground(new java.awt.Color(236, 236, 255));
         delete_btn.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        delete_btn.setText("XOA THE");
+        delete_btn.setText("XÓA THẺ");
         delete_btn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 delete_btnActionPerformed(evt);
@@ -217,15 +217,15 @@ public class MainApp extends javax.swing.JFrame implements OnGetUserListener, On
 
         jLabel3.setText("ID");
 
-        jLabel4.setText("FULLNAME");
+        jLabel4.setText("HỌ VÀ TÊN");
 
-        jLabel5.setText("BRITH");
+        jLabel5.setText("NGÀY SINH");
 
-        jLabel6.setText("GENDER");
+        jLabel6.setText("GIỚI TÍNH");
 
-        jLabel7.setText("ADDRESS");
+        jLabel7.setText("ĐỊA CHỈ");
 
-        jLabel8.setText("DEPARTMENT");
+        jLabel8.setText("PHÒNG BAN");
 
         jPanel4.setBackground(new java.awt.Color(121, 200, 232));
         jPanel4.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED, null, java.awt.Color.lightGray, null, null));
@@ -275,7 +275,7 @@ public class MainApp extends javax.swing.JFrame implements OnGetUserListener, On
                             .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel7)
                             .addComponent(jLabel8))
-                        .addGap(0, 503, Short.MAX_VALUE))
+                        .addGap(0, 519, Short.MAX_VALUE))
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel6)
@@ -367,7 +367,7 @@ public class MainApp extends javax.swing.JFrame implements OnGetUserListener, On
         );
 
         jLabel10.setFont(new java.awt.Font("Times New Roman", 1, 36)); // NOI18N
-        jLabel10.setText("THONG KE");
+        jLabel10.setText("THỐNG KÊ");
 
         jButton4.setBackground(new java.awt.Color(236, 236, 255));
         jButton4.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
@@ -397,13 +397,13 @@ public class MainApp extends javax.swing.JFrame implements OnGetUserListener, On
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(76, 76, 76)
-                                .addComponent(jLabel10))
-                            .addGroup(layout.createSequentialGroup()
                                 .addGap(31, 31, 31)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(workingDay)
-                                    .addComponent(workingTime))))
+                                    .addComponent(workingTime)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(76, 76, 76)
+                                .addComponent(jLabel10)))
                         .addGap(0, 0, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
@@ -418,8 +418,8 @@ public class MainApp extends javax.swing.JFrame implements OnGetUserListener, On
                 .addComponent(workingDay)
                 .addGap(38, 38, 38)
                 .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(73, 73, 73)
-                .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(56, 56, 56)
+                .addComponent(jLabel10)
                 .addGap(33, 33, 33)
                 .addComponent(calendarPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
