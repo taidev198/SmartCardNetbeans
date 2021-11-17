@@ -53,6 +53,14 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import org.bson.Document;
 import org.bson.codecs.jsr310.LocalDateTimeCodec;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.data.category.CategoryDataset;
+import org.jfree.data.category.DefaultCategoryDataset;
+import org.jfree.data.general.DefaultPieDataset;
+import org.jfree.data.general.PieDataset;
 import org.json.JSONException;
 
 
@@ -73,6 +81,15 @@ public class MainApp extends javax.swing.JFrame implements OnGetUserListener, On
         initComponents();
         db.setRuleCol("rule");
         card = new SmartCardWord();
+        ChartPanel chartPanel = new ChartPanel(createChart());
+        chartPanel.setPreferredSize(new java.awt.Dimension(200, 200));
+        chart_pane.setLayout(new java.awt.BorderLayout());
+        chart_pane.add(chartPanel);
+        chart_pane.revalidate();
+        chart_pane.repaint();
+        //chartPanel.setLocation(100, 100);
+        //add(chartPanel);
+        validate();
         initData();
         
     }
@@ -115,6 +132,7 @@ public class MainApp extends javax.swing.JFrame implements OnGetUserListener, On
         jButton4 = new javax.swing.JButton();
         workingTime = new javax.swing.JLabel();
         workingDay = new javax.swing.JLabel();
+        chart_pane = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Antenna");
@@ -352,7 +370,7 @@ public class MainApp extends javax.swing.JFrame implements OnGetUserListener, On
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(97, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout calendarPanelLayout = new javax.swing.GroupLayout(calendarPanel);
@@ -363,7 +381,7 @@ public class MainApp extends javax.swing.JFrame implements OnGetUserListener, On
         );
         calendarPanelLayout.setVerticalGroup(
             calendarPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 332, Short.MAX_VALUE)
+            .addGap(0, 310, Short.MAX_VALUE)
         );
 
         jLabel10.setFont(new java.awt.Font("Times New Roman", 1, 36)); // NOI18N
@@ -382,6 +400,17 @@ public class MainApp extends javax.swing.JFrame implements OnGetUserListener, On
 
         workingDay.setText("NGÀY LÀM VIỆC");
 
+        javax.swing.GroupLayout chart_paneLayout = new javax.swing.GroupLayout(chart_pane);
+        chart_pane.setLayout(chart_paneLayout);
+        chart_paneLayout.setHorizontalGroup(
+            chart_paneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        chart_paneLayout.setVerticalGroup(
+            chart_paneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -389,11 +418,6 @@ public class MainApp extends javax.swing.JFrame implements OnGetUserListener, On
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(calendarPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
@@ -404,25 +428,37 @@ public class MainApp extends javax.swing.JFrame implements OnGetUserListener, On
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(76, 76, 76)
                                 .addComponent(jLabel10)))
-                        .addGap(0, 0, Short.MAX_VALUE))))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(calendarPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(chart_pane, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addContainerGap())))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(workingTime)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(workingDay)
+                        .addGap(38, 38, 38)
+                        .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(56, 56, 56)
+                        .addComponent(jLabel10)
+                        .addGap(33, 33, 33)
+                        .addComponent(calendarPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(chart_pane, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap())
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(workingTime)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(workingDay)
-                .addGap(38, 38, 38)
-                .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(56, 56, 56)
-                .addComponent(jLabel10)
-                .addGap(33, 33, 33)
-                .addComponent(calendarPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -700,6 +736,23 @@ public class MainApp extends javax.swing.JFrame implements OnGetUserListener, On
 
     }
     
+    public static JFreeChart createChart() {
+        JFreeChart barChart = ChartFactory.createBarChart(
+                "BIỂU ĐỒ DÂN SỐ VIỆT NAM",
+                "Năm", "Số người",
+                createDataset(), PlotOrientation.VERTICAL, false, false, false);
+        return barChart;
+    }
+
+     private static CategoryDataset createDataset() {
+        final DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+        dataset.addValue(68000000, "Số người", "1990");
+        dataset.addValue(80000000, "Số người", "2000");
+        dataset.addValue(88000000, "Số người", "2010");
+        dataset.addValue(95000000, "Số người", "2020");
+        return dataset;
+    }
+
     
     class CalendarViewListModel extends AbstractListModel< LocalDate> {
   public static final int ROW_COUNT = 6;
@@ -789,6 +842,7 @@ public class MainApp extends javax.swing.JFrame implements OnGetUserListener, On
     private javax.swing.JLabel avatar;
     private javax.swing.JPanel calendarPanel;
     private javax.swing.JButton changePinBtn;
+    private javax.swing.JPanel chart_pane;
     private javax.swing.JButton checkinBtn;
     private javax.swing.JButton connect_btn;
     private javax.swing.JButton delete_btn;
