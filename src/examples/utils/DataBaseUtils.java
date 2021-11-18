@@ -111,16 +111,19 @@ CodecRegistry pojoCodecRegistry = fromRegistries(MongoClientSettings.getDefaultC
         
     }
     
-    public void printAll() {
+    public ArrayList<User> getAllUserOfDepartment(int id) {
+         ArrayList<User> rerult = new ArrayList<>();
         MongoCursor<User> cursor = col.find().iterator();
         try {
             while (cursor.hasNext()) {
-                
-                System.out.println(cursor.next());
+                User u = cursor.next();
+                if(u.getId_department() == id)
+               rerult.add(u);
             }
         } finally {
             cursor.close();
         }
+        return rerult;
     }
     
     public User findUser(String id) {
