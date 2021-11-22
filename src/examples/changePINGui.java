@@ -222,39 +222,33 @@ public class changePINGui extends javax.swing.JFrame {
         check_box_2.setText("");
         check_box_3.setText("");
 
-        check_box_1.addItemListener(new ItemListener() {
-    public void itemStateChanged(ItemEvent e) {
-        if (e.getStateChange() == ItemEvent.SELECTED) {
-            current_pass.setEchoChar((char) 0);
-        } else {
-            current_pass.setEchoChar('*');
-             
-        }
-    }
-});
+        check_box_1.addItemListener((ItemEvent e) -> {
+            if (e.getStateChange() == ItemEvent.SELECTED) {
+                current_pass.setEchoChar((char) 0);
+            } else {
+                current_pass.setEchoChar('*');
+                
+            }
+        });
         
-        check_box_2.addItemListener(new ItemListener() {
-    public void itemStateChanged(ItemEvent e) {
-        if (e.getStateChange() == ItemEvent.SELECTED) {
-            new_pass.setEchoChar((char) 0);
-        } else {
-            
-            new_pass.setEchoChar('*');
-             
-        }
-    }
-});
+        check_box_2.addItemListener((ItemEvent e) -> {
+            if (e.getStateChange() == ItemEvent.SELECTED) {
+                new_pass.setEchoChar((char) 0);
+            } else {
+                
+                new_pass.setEchoChar('*');
+                
+            }
+        });
         
-        check_box_3.addItemListener(new ItemListener() {
-    public void itemStateChanged(ItemEvent e) {
-        if (e.getStateChange() == ItemEvent.SELECTED) {
-           confirm_pass.setEchoChar((char) 0);
-        } else {
-            confirm_pass.setEchoChar('*');
-             
-        }
-    }
-});
+        check_box_3.addItemListener((ItemEvent e) -> {
+            if (e.getStateChange() == ItemEvent.SELECTED) {
+                confirm_pass.setEchoChar((char) 0);
+            } else {
+                confirm_pass.setEchoChar('*');
+                
+            }
+        });
     }
     
     public byte[] toHex(String arg) {

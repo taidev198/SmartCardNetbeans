@@ -30,6 +30,7 @@ import examples.utils.DateUtils;
 import examples.utils.ImageUltils;
 import examples.utils.JsonParser;
 import examples.utils.RuleDbHelper;
+import examples.utils.StringUltils;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.event.WindowEvent;
@@ -89,6 +90,7 @@ public class MainApp extends javax.swing.JFrame implements OnGetUserListener, On
     Checkin c ;
      private ArrayList<LocalDate> mDates = new ArrayList<>();
     private ArrayList<Departments> departmentses = new ArrayList<>();
+    private boolean isInitInforClicked;
     /** Creates new form Antenna */
     public MainApp() {
         initComponents();
@@ -97,6 +99,7 @@ public class MainApp extends javax.swing.JFrame implements OnGetUserListener, On
         card = new SmartCardWord();
         validate();
         initData();
+        System.out.println(StringUltils.generateId(StringUltils.reducingString("Hello World")));
         
     }
     
@@ -152,7 +155,7 @@ public class MainApp extends javax.swing.JFrame implements OnGetUserListener, On
 
         jLabel1.setFont(new java.awt.Font("Stencil", 1, 36)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(153, 0, 153));
-        jLabel1.setText("TRANG CHU THE CHAM CONG");
+        jLabel1.setText("TRANG chủ  THE CHAM CONG");
 
         jPanel2.setBackground(new java.awt.Color(153, 205, 212));
 
@@ -379,7 +382,7 @@ public class MainApp extends javax.swing.JFrame implements OnGetUserListener, On
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(112, Short.MAX_VALUE))
+                .addContainerGap(119, Short.MAX_VALUE))
         );
 
         non_data_label.setText("KHÔNG CÓ DỮ LIỆU");
@@ -514,12 +517,10 @@ public class MainApp extends javax.swing.JFrame implements OnGetUserListener, On
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
         if(isConnected) {
-              InfoGUI infoGUI = new InfoGUI(card, mUser, departmentses, true, this);
-     //   infoGUI.setCallback(this);
-        infoGUI.setVisible(true);
-        //infoGUI.dispatchEvent(new WindowEvent(infoGUI, WindowEvent.WINDOW_CLOSING));
-        infoGUI.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-       // this.setVisible(false);
+             PINGui pin =  new PINGui(card, this);
+             pin.setVisible(true);
+             pin.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+             isInitInforClicked = true;
         }
       
         
@@ -528,19 +529,27 @@ public class MainApp extends javax.swing.JFrame implements OnGetUserListener, On
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
         if(isConnected) {
-           InfoGUI infoGUI = new InfoGUI(card, mUser, departmentses, false, this);
-     //   infoGUI.setCallback(this);
-        infoGUI.setVisible(true);
-       infoGUI.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+             PINGui pin =  new PINGui(card, this);
+             pin.setVisible(true);
+             pin.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+          isInitInforClicked = false;
         }
-//        this.setVisible(false);
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void checkinBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkinBtnActionPerformed
         // TODO add your handling code here:
         if(isConnected) {
-       PINGui pin =  new PINGui(card, this);
-       pin.setVisible(true);
+            
+            if(card.VerifyRsa(mUser.getPub_key())) {
+            String result = c.doCjheckin(LocalDate.now(), LocalTime.now(), mUser, dbHelper); 
+            if(result.equals(Constants.LATE_TIME) || result.equals(Constants.DONT_WORK_TODAY) )
+                dbHelper.updateCheckinUser(text_id.getText(), LocalDate.now());
+            
+            JOptionPane.showMessageDialog(null, result);
+            
+        } else {
+            
+        }
 //       if(pin.getStatus()) {
 //           System.out.println("done");
 //            if(isConnected) {
@@ -708,16 +717,19 @@ public class MainApp extends javax.swing.JFrame implements OnGetUserListener, On
             non_data_label1.setVisible(false);
             
             String id = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.ID), StandardCharsets.UTF_8).replaceAll("[^a-zA-Z0-9]", "");  
-            String name = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.NAME), StandardCharsets.UTF_8).replaceAll("[^a-zA-Z0-9 ]", "");  
+            String name = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.NAME), StandardCharsets.UTF_8);  
             String date = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.DATE), StandardCharsets.UTF_8).replaceAll("[^a-zA-Z0-9,-]", "");  
-            String address = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.ADDRESS), StandardCharsets.UTF_8).replaceAll("[^a-zA-Z0-9, -]", ""); 
+            String address = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.ADDRESS), StandardCharsets.UTF_8); 
             String gender = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.GENDER), StandardCharsets.UTF_8).replaceAll("[^a-zA-Z0-9]", ""); 
             String id_department = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.ID_DEPARTMENT), StandardCharsets.UTF_8).replaceAll("[^a-zA-Z0-9]", ""); 
             departmentses = getDepartmentses();
             
         if(!id.equals("p3")) {
             mUser = dbHelper.findUser(id);
-            mDates = getLateDate(mUser);
+            if(mUser != null) {
+                 mDates = getLateDate(mUser);
+            }
+           
             calendarPanel.setLayout(new java.awt.BorderLayout());
             calendarPanel.add(new CalendarPanel(mDates));
             calendarPanel.revalidate();
@@ -825,15 +837,16 @@ public class MainApp extends javax.swing.JFrame implements OnGetUserListener, On
 //            System.out.println(Arrays.toString(mUser.getPub_key()));
 //        }
        
-        if(card.VerifyRsa(mUser.getPub_key())) {
-            String result = c.doCjheckin(LocalDate.now(), LocalTime.now(), mUser, dbHelper); 
-            if(result.equals(Constants.LATE_TIME) || result.equals(Constants.DONT_WORK_TODAY) )
-                dbHelper.updateCheckinUser(text_id.getText(), LocalDate.now());
-            
-            JOptionPane.showMessageDialog(null, result);
-            
+        if(isInitInforClicked) {
+             InfoGUI infoGUI = new InfoGUI(card, mUser, departmentses, true, this);
+        infoGUI.setVisible(true);
+        //infoGUI.dispatchEvent(new WindowEvent(infoGUI, WindowEvent.WINDOW_CLOSING));
+        infoGUI.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        isInitInforClicked = false;
         } else {
-            
+         InfoGUI infoGUI = new InfoGUI(card, mUser, departmentses, false, this);
+        infoGUI.setVisible(true);
+        infoGUI.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         }
 
     }
