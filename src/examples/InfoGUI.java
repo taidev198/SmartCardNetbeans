@@ -335,35 +335,35 @@ public class InfoGUI extends javax.swing.JFrame implements OnGetUserListener{
         String id = text_id.getText().trim();
         String name = text_name.getText().trim();
         String address = text_address.getText().trim();
-        if(id.length() == 0) {
-            JOptionPane.showMessageDialog(null, "VUI LÒNG NHẬP IḌ");
-            return;
-        }else if (!id.equals("[A-Z0-9]")) {
-            JOptionPane.showMessageDialog(null, "VUI LÒNG NHẬP LẠI IḌ");
-            return;
-        }
-        
-         if(name.length() == 0) {
-            JOptionPane.showMessageDialog(null, "VUI LÒNG NHẬP TÊN");
-            return;
-        }else if (!name.equals("[A-Z0-9 ]")) {
-            JOptionPane.showMessageDialog(null, "VUI LÒNG NHẬP LẠI TÊN");
-            return;
-        }
-         
-          if(address.length() == 0) {
-            JOptionPane.showMessageDialog(null, "VUI LÒNG NHẬP ĐỊA CHỈ");
-            return;
-        }else if (!address.equals("[a-z0-9 ]")) {
-            JOptionPane.showMessageDialog(null, "VUI LÒNG NHẬP LẠI ĐỊA CHỈ");
-            return;
-        }
-         
-          if(avatar.getIcon() == null) {
-              JOptionPane.showMessageDialog(null, "VUI LÒNG NHẬP CHỌN ẢNH");
-            return;
-          }
-          
+//        if(id.length() == 0) {
+//            JOptionPane.showMessageDialog(null, "VUI LÒNG NHẬP IḌ");
+//            return;
+//        }else if (!id.equals("[A-Z0-9]")) {
+//            JOptionPane.showMessageDialog(null, "VUI LÒNG NHẬP LẠI IḌ");
+//            return;
+//        }
+//        
+//         if(name.length() == 0) {
+//            JOptionPane.showMessageDialog(null, "VUI LÒNG NHẬP TÊN");
+//            return;
+//        }else if (!name.equals("[A-Z0-9 ]")) {
+//            JOptionPane.showMessageDialog(null, "VUI LÒNG NHẬP LẠI TÊN");
+//            return;
+//        }
+//         
+//          if(address.length() == 0) {
+//            JOptionPane.showMessageDialog(null, "VUI LÒNG NHẬP ĐỊA CHỈ");
+//            return;
+//        }else if (!address.equals("[a-z0-9 ]")) {
+//            JOptionPane.showMessageDialog(null, "VUI LÒNG NHẬP LẠI ĐỊA CHỈ");
+//            return;
+//        }
+//         
+//          if(avatar.getIcon() == null) {
+//              JOptionPane.showMessageDialog(null, "VUI LÒNG NHẬP CHỌN ẢNH");
+//            return;
+//          }
+//          
         Date selectedValue =  birthday.getCalendar().getTime();
         System.out.println(DateUtils.dateToString(selectedValue));  
         User user = new User();

@@ -116,7 +116,7 @@ CodecRegistry pojoCodecRegistry = fromRegistries(MongoClientSettings.getDefaultC
         MongoCursor<User> cursor = col.find().iterator();
         try {
             while (cursor.hasNext()) {
-                User u = cursor.next();
+                User u = (User)cursor.next();
                 if(u.getId_department() == id)
                rerult.add(u);
             }
