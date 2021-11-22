@@ -31,6 +31,7 @@ import examples.utils.ImageUltils;
 import examples.utils.JsonParser;
 import examples.utils.RuleDbHelper;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.math.BigInteger;
@@ -53,6 +54,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.smartcardio.Card;
 import javax.swing.AbstractListModel;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import org.bson.Document;
@@ -239,8 +241,6 @@ public class MainApp extends javax.swing.JFrame implements OnGetUserListener, On
                 .addComponent(delete_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(96, Short.MAX_VALUE))
         );
-
-        avatar.setText("AVATAR");
 
         jLabel3.setText("ID");
 
@@ -690,7 +690,11 @@ public class MainApp extends javax.swing.JFrame implements OnGetUserListener, On
     }
 
     private void initData() {
-      
+        
+        ImageIcon imageIcon = new ImageIcon(new ImageIcon(getClass().getResource("/icon/user.png")).getImage().getScaledInstance(120, 120, Image.SCALE_DEFAULT));
+        avatar.setIcon(imageIcon);
+     // avatar.setIcon(new ImageIcon(getClass().getResource("/icon/user.png")));
+
         try {
             Rule r = JsonParser.jsonToRule(db.getRule().toJson());
           c  = new Checkin(mRule);
