@@ -181,7 +181,7 @@ public class PINGui extends javax.swing.JFrame {
                 this.setVisible(false);
                 
                 mGetPinStatusListener.onGetPinStatusSuccessful();
-                this.pack();
+                
                 isSuccess = true;
             }
             else if(result.equals("6300")) {

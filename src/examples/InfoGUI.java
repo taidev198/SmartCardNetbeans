@@ -11,6 +11,7 @@ import examples.utils.DataBaseUtils;
 import examples.data.User;
 import examples.utils.DateUtils;
 import examples.utils.ImageUltils;
+import examples.utils.StringUltils;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
@@ -81,14 +82,12 @@ public class InfoGUI extends javax.swing.JFrame implements OnGetUserListener{
             id_department_cb.addItem(departmentses.get(i).getmName());
         if(!this.isEmpty) {
             save_btn.setText("EDIT");
-            text_id.setEditable(false);
             String id = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.ID), StandardCharsets.UTF_8).replaceAll("[^a-zA-Z0-9]", "");  
-            String name = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.NAME), StandardCharsets.UTF_8);  
+            String name = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.NAME), StandardCharsets.UTF_8).replaceAll("[^\\p{L}\\s]", "");
             String date = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.DATE), StandardCharsets.UTF_8).replaceAll("[^a-zA-Z0-9,-]", ""); 
-            String address = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.ADDRESS), StandardCharsets.UTF_8);
+            String address = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.ADDRESS), StandardCharsets.UTF_8).replaceAll("[^\\p{L}\\s]", "");
             String gender = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.GENDER), StandardCharsets.UTF_8).replaceAll("[^a-zA-Z0-9]", "");
             String id_department = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.ID_DEPARTMENT), StandardCharsets.UTF_8).replaceAll("[^a-zA-Z0-9]", "");
-                   text_id.setText(id);
                    text_name.setText(name);
                    birthday.setDate(DateUtils.stringToDate(date));
                    text_address.setText(address);
@@ -120,12 +119,10 @@ public class InfoGUI extends javax.swing.JFrame implements OnGetUserListener{
         text_address = new javax.swing.JTextField();
         save_btn = new javax.swing.JButton();
         browser_img = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         avatar = new javax.swing.JLabel();
-        text_id = new javax.swing.JTextField();
         text_name = new javax.swing.JTextField();
         birthday = new com.toedter.calendar.JDateChooser();
         jLabel6 = new javax.swing.JLabel();
@@ -135,7 +132,6 @@ public class InfoGUI extends javax.swing.JFrame implements OnGetUserListener{
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
-        jLabel11 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(255, 255, 255));
@@ -172,9 +168,6 @@ public class InfoGUI extends javax.swing.JFrame implements OnGetUserListener{
             }
         });
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel1.setText("ID");
-
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel2.setText("HO TEN");
 
@@ -185,8 +178,6 @@ public class InfoGUI extends javax.swing.JFrame implements OnGetUserListener{
         jLabel4.setText("GIOI TINH");
 
         avatar.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-
-        text_id.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
 
         text_name.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
 
@@ -213,9 +204,6 @@ public class InfoGUI extends javax.swing.JFrame implements OnGetUserListener{
         jLabel10.setForeground(new java.awt.Color(255, 51, 0));
         jLabel10.setText("KHÔNG DẤU");
 
-        jLabel11.setForeground(new java.awt.Color(255, 51, 0));
-        jLabel11.setText("A-Z,0-9");
-
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -223,7 +211,6 @@ public class InfoGUI extends javax.swing.JFrame implements OnGetUserListener{
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap(24, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1)
                     .addComponent(jLabel2)
                     .addComponent(jLabel3)
                     .addComponent(jLabel4)
@@ -239,7 +226,6 @@ public class InfoGUI extends javax.swing.JFrame implements OnGetUserListener{
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(id_department_cb, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(text_id)
                                 .addComponent(text_name)
                                 .addComponent(text_address)
                                 .addComponent(birthday, javax.swing.GroupLayout.DEFAULT_SIZE, 164, Short.MAX_VALUE)
@@ -250,9 +236,7 @@ public class InfoGUI extends javax.swing.JFrame implements OnGetUserListener{
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jLabel10)
-                                            .addComponent(jLabel11))
+                                        .addComponent(jLabel10)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(avatar, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addComponent(jLabel9))
@@ -275,11 +259,6 @@ public class InfoGUI extends javax.swing.JFrame implements OnGetUserListener{
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 88, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(text_id, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel11))
-                        .addGap(46, 46, 46)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(text_name, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel2)
@@ -332,9 +311,11 @@ public class InfoGUI extends javax.swing.JFrame implements OnGetUserListener{
     private void save_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_save_btnActionPerformed
         // TODO add your handling code here:
         
-        String id = text_id.getText().trim();
+        String id = StringUltils.generateId(StringUltils.reducingString(id_department_cb.getSelectedItem().toString()));
         String name = text_name.getText().trim();
         String address = text_address.getText().trim();
+        System.out.println(name.getBytes().length);
+        System.out.println(address.getBytes().length + " length");
 //        if(id.length() == 0) {
 //            JOptionPane.showMessageDialog(null, "VUI LÒNG NHẬP IḌ");
 //            return;
@@ -390,7 +371,7 @@ public class InfoGUI extends javax.swing.JFrame implements OnGetUserListener{
      if(isEmpty)
           dbHelper.insert(user);
      else {
-         dbHelper.updateUser(text_id.getText().trim(), user);
+         dbHelper.updateUser(user.getId(), user);
      }
       mListener.onGetUserSuccess(user);
       this.setVisible(false);
@@ -563,9 +544,7 @@ private void setImage(byte [] img){
     private javax.swing.JButton browser_img;
     private javax.swing.JComboBox<String> gender_combobox;
     private javax.swing.JComboBox<String> id_department_cb;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -577,7 +556,6 @@ private void setImage(byte [] img){
     private javax.swing.JPanel jPanel1;
     private javax.swing.JButton save_btn;
     private javax.swing.JTextField text_address;
-    private javax.swing.JTextField text_id;
     private javax.swing.JTextField text_name;
     // End of variables declaration//GEN-END:variables
 
