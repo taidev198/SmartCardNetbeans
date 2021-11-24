@@ -66,7 +66,7 @@ import org.json.JSONException;
  *
  * @author traig
  */
-public class UserFrame extends javax.swing.JFrame {
+public class UserFrame extends javax.swing.JFrame implements OnGetUserListener, OnGetRuleListener, OnGetPinStatusListener{
 
     /**
      * Creates new form UserFrame
@@ -85,6 +85,12 @@ public class UserFrame extends javax.swing.JFrame {
     private boolean isInitInforClicked;
     public UserFrame() {
         initComponents();
+        dbHelper.getCol("users");
+        db.setRuleCol("rule");
+        card = new SmartCardWord();
+        validate();
+        initData();
+        System.out.println(StringUltils.generateId(StringUltils.reducingString("Hello World")));
     }
 
     /**
@@ -100,15 +106,32 @@ public class UserFrame extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
-        checkinBtn = new javax.swing.JButton();
-        changePinBtn = new javax.swing.JButton();
         connect_btn = new javax.swing.JButton();
         delete_btn = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
         jPanel6 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
+        jPanel4 = new javax.swing.JPanel();
+        jPanel3 = new javax.swing.JPanel();
+        jLabel2 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
+        jPanel11 = new javax.swing.JPanel();
+        avatar = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        jPanel12 = new javax.swing.JPanel();
+        jLabel9 = new javax.swing.JLabel();
+        text_id = new javax.swing.JLabel();
+        text_name = new javax.swing.JLabel();
+        text_birth = new javax.swing.JLabel();
+        text_gender = new javax.swing.JLabel();
+        text_address = new javax.swing.JLabel();
+        text_department = new javax.swing.JLabel();
         jPanel10 = new javax.swing.JPanel();
         jYearChooser3 = new com.toedter.calendar.JYearChooser();
         chart_pane3 = new javax.swing.JPanel();
@@ -127,6 +150,8 @@ public class UserFrame extends javax.swing.JFrame {
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
+        jPanel2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+
         jButton1.setBackground(new java.awt.Color(255, 255, 255));
         jButton1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jButton1.setText("KHỞI TẠO THÔNG TIN THẺ");
@@ -142,24 +167,6 @@ public class UserFrame extends javax.swing.JFrame {
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
-            }
-        });
-
-        checkinBtn.setBackground(new java.awt.Color(236, 236, 255));
-        checkinBtn.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        checkinBtn.setText("ĐIỂM DANH");
-        checkinBtn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                checkinBtnActionPerformed(evt);
-            }
-        });
-
-        changePinBtn.setBackground(new java.awt.Color(255, 255, 255));
-        changePinBtn.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        changePinBtn.setText("ĐỔI MÃ PIN");
-        changePinBtn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                changePinBtnActionPerformed(evt);
             }
         });
 
@@ -199,8 +206,6 @@ public class UserFrame extends javax.swing.JFrame {
                     .addComponent(connect_btn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(checkinBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(changePinBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(delete_btn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(57, Short.MAX_VALUE))
@@ -215,17 +220,14 @@ public class UserFrame extends javax.swing.JFrame {
                 .addGap(50, 50, 50)
                 .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(51, 51, 51)
-                .addComponent(changePinBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(51, 51, 51)
-                .addComponent(checkinBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(51, 51, 51)
                 .addComponent(delete_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(51, 51, 51)
                 .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(46, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jPanel6.setBackground(new java.awt.Color(0, 153, 255));
+        jPanel6.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         jLabel1.setFont(new java.awt.Font("Times New Roman", 1, 36)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
@@ -248,6 +250,31 @@ public class UserFrame extends javax.swing.JFrame {
                 .addGap(31, 31, 31))
         );
 
+        jPanel4.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+
+        jPanel3.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+
+        jLabel2.setFont(new java.awt.Font("Times New Roman", 1, 24)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(0, 153, 255));
+        jLabel2.setText("DANH SÁCH CÁN BỘ");
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(255, 255, 255)
+                .addComponent(jLabel2)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel2)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -261,6 +288,142 @@ public class UserFrame extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(jTable1);
 
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1)
+                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 298, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(105, 105, 105))
+        );
+
+        jPanel11.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+
+        jLabel3.setText("ID");
+
+        jLabel4.setText("HỌ VÀ TÊN");
+
+        jLabel5.setText("NGÀY SINH");
+
+        jLabel6.setText("GIỚI TÍNH");
+
+        jLabel7.setText("ĐỊA CHỈ");
+
+        jLabel8.setText("PHÒNG BAN");
+
+        jPanel12.setBorder(javax.swing.BorderFactory.createEtchedBorder(javax.swing.border.EtchedBorder.RAISED));
+
+        jLabel9.setBackground(new java.awt.Color(0, 153, 255));
+        jLabel9.setFont(new java.awt.Font("Times New Roman", 1, 24)); // NOI18N
+        jLabel9.setForeground(new java.awt.Color(0, 153, 255));
+        jLabel9.setText("THÔNG TIN CHỦ THẺ");
+
+        javax.swing.GroupLayout jPanel12Layout = new javax.swing.GroupLayout(jPanel12);
+        jPanel12.setLayout(jPanel12Layout);
+        jPanel12Layout.setHorizontalGroup(
+            jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel12Layout.createSequentialGroup()
+                .addGap(273, 273, 273)
+                .addComponent(jLabel9)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel12Layout.setVerticalGroup(
+            jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel12Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel9)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        text_id.setText("N/A");
+
+        text_name.setText("N/A");
+
+        text_birth.setText("N/A");
+
+        text_gender.setText("N/A");
+
+        text_address.setText("N/A");
+
+        text_department.setText("N/A");
+
+        javax.swing.GroupLayout jPanel11Layout = new javax.swing.GroupLayout(jPanel11);
+        jPanel11.setLayout(jPanel11Layout);
+        jPanel11Layout.setHorizontalGroup(
+            jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(jPanel11Layout.createSequentialGroup()
+                .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel11Layout.createSequentialGroup()
+                        .addGap(125, 125, 125)
+                        .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel4)
+                            .addComponent(jLabel5))
+                        .addGap(68, 68, 68)
+                        .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(text_name)
+                            .addComponent(text_id, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(text_birth))
+                        .addGap(51, 51, 51)
+                        .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addGroup(jPanel11Layout.createSequentialGroup()
+                                .addComponent(jLabel7)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(text_address))
+                            .addGroup(jPanel11Layout.createSequentialGroup()
+                                .addComponent(jLabel6)
+                                .addGap(106, 106, 106)
+                                .addComponent(text_gender))
+                            .addGroup(jPanel11Layout.createSequentialGroup()
+                                .addComponent(jLabel8)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(text_department))))
+                    .addGroup(jPanel11Layout.createSequentialGroup()
+                        .addGap(294, 294, 294)
+                        .addComponent(avatar, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(0, 0, Short.MAX_VALUE))
+        );
+        jPanel11Layout.setVerticalGroup(
+            jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel11Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel12, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(avatar, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(text_id)
+                    .addComponent(jLabel6)
+                    .addComponent(text_gender))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
+                    .addComponent(text_name)
+                    .addComponent(jLabel7)
+                    .addComponent(text_address))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5)
+                    .addComponent(text_birth)
+                    .addComponent(jLabel8)
+                    .addComponent(text_department))
+                .addContainerGap(26, Short.MAX_VALUE))
+        );
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -269,12 +432,13 @@ public class UserFrame extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
+                        .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jScrollPane1)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jPanel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -283,12 +447,18 @@ public class UserFrame extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jScrollPane1)
-                        .addContainerGap())))
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jPanel11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 401, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, 0)))
+                .addContainerGap())
         );
+
+        jPanel10.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         non_data_label4.setText("KHÔNG CÓ DỮ LIỆU");
 
@@ -389,7 +559,7 @@ public class UserFrame extends javax.swing.JFrame {
                     .addGroup(jPanel10Layout.createSequentialGroup()
                         .addGap(121, 121, 121)
                         .addComponent(jLabel10)))
-                .addContainerGap(263, Short.MAX_VALUE))
+                .addContainerGap(16, Short.MAX_VALUE))
         );
         jPanel10Layout.setVerticalGroup(
             jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -428,13 +598,13 @@ public class UserFrame extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(21, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel10, javax.swing.GroupLayout.PREFERRED_SIZE, 788, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jPanel10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -453,33 +623,33 @@ public class UserFrame extends javax.swing.JFrame {
     private void delete_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_delete_btnActionPerformed
         // TODO add your handling code here:
         if(isConnected) {
-            JOptionPane.showMessageDialog(this, "XOA THE THANH CONG");
-            avatar.setIcon(null);
-            //XOA THONG TIN TREN THE
-            // id
-            System.out.println(new String(card.command(card.command(" ".getBytes(), Constants.INS_ENCRYPT, Constants.ID), Constants.INS_DECRYPT, Constants.ID), StandardCharsets.UTF_8));
-            //id
-            System.out.println(new String(card.command(card.command(" ".getBytes(), Constants.INS_ENCRYPT, Constants.NAME), Constants.INS_DECRYPT, Constants.NAME), StandardCharsets.UTF_8));
-            //id
-            System.out.println(new String(card.command(card.command(" ".getBytes(), Constants.INS_ENCRYPT, Constants.DATE), Constants.INS_DECRYPT, Constants.DATE), StandardCharsets.UTF_8));
-            //id
-            System.out.println(new String(card.command(card.command(" ".getBytes(), Constants.INS_ENCRYPT, Constants.ADDRESS), Constants.INS_DECRYPT, Constants.ADDRESS), StandardCharsets.UTF_8));
-            //id
+        JOptionPane.showMessageDialog(this, "XOA THE THANH CONG");
+        avatar.setIcon(null);
+        //XOA THONG TIN TREN THE
+         // id
+        System.out.println(new String(card.command(card.command(" ".getBytes(), Constants.INS_ENCRYPT, Constants.ID), Constants.INS_DECRYPT, Constants.ID), StandardCharsets.UTF_8));
+    //id
+        System.out.println(new String(card.command(card.command(" ".getBytes(), Constants.INS_ENCRYPT, Constants.NAME), Constants.INS_DECRYPT, Constants.NAME), StandardCharsets.UTF_8));
+    //id
+        System.out.println(new String(card.command(card.command(" ".getBytes(), Constants.INS_ENCRYPT, Constants.DATE), Constants.INS_DECRYPT, Constants.DATE), StandardCharsets.UTF_8));
+    //id
+        System.out.println(new String(card.command(card.command(" ".getBytes(), Constants.INS_ENCRYPT, Constants.ADDRESS), Constants.INS_DECRYPT, Constants.ADDRESS), StandardCharsets.UTF_8));
+    //id
+    
+        System.out.println(new String(card.command(card.command(" ".getBytes(), Constants.INS_ENCRYPT, Constants.GENDER), Constants.INS_DECRYPT, Constants.GENDER), StandardCharsets.UTF_8));
 
-            System.out.println(new String(card.command(card.command(" ".getBytes(), Constants.INS_ENCRYPT, Constants.GENDER), Constants.INS_DECRYPT, Constants.GENDER), StandardCharsets.UTF_8));
+        System.out.println(new String(card.command(card.command(" ".getBytes(), Constants.INS_ENCRYPT, Constants.ID_DEPARTMENT), Constants.INS_DECRYPT, Constants.ID_DEPARTMENT), StandardCharsets.UTF_8));
 
-            System.out.println(new String(card.command(card.command(" ".getBytes(), Constants.INS_ENCRYPT, Constants.ID_DEPARTMENT), Constants.INS_DECRYPT, Constants.ID_DEPARTMENT), StandardCharsets.UTF_8));
-
-            //xoa thong tin tren db
-            dbHelper.deleteUser(text_id.getText());
-            System.out.println(text_id.getText());
+        //xoa thong tin tren db
+        dbHelper.deleteUser(text_id.getText());
+        System.out.println(text_id.getText());
             text_id.setText("N/A");
             text_name.setText("N/A");
             text_address.setText("N/A");
             System.out.println("N/A");
             text_birth.setText("N/A");
             text_gender.setText("N/A");
-            text_department.setText("N/A");
+            text_department.setText("N/A");      
         }
     }//GEN-LAST:event_delete_btnActionPerformed
 
@@ -491,7 +661,9 @@ public class UserFrame extends javax.swing.JFrame {
                 isConnected = true;
                 JOptionPane.showMessageDialog(this, "ket noi thanh cong");
                 connect_btn.setText("DISCONNECT");
-                initData();
+                PINGui pin =  new PINGui(card, this);
+                pin.setVisible(true);
+                pin.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
             }else{
                 JOptionPane.showMessageDialog(this, "chua ket noi applet");
                 isConnected = false;
@@ -504,50 +676,6 @@ public class UserFrame extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_connect_btnActionPerformed
-
-    private void changePinBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changePinBtnActionPerformed
-        // TODO add your handling code here:
-        if(isConnected) {
-
-            changePINGui c =
-            new changePINGui(card);
-            c.setVisible(true);
-            c.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        }
-    }//GEN-LAST:event_changePinBtnActionPerformed
-
-    private void checkinBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkinBtnActionPerformed
-        // TODO add your handling code here:
-        if(isConnected) {
-
-            if(card.VerifyRsa(mUser.getPub_key())) {
-                String result = c.doCjheckin(LocalDate.now(), LocalTime.now(), mUser, dbHelper);
-                if(result.equals(Constants.LATE_TIME) || result.equals(Constants.DONT_WORK_TODAY) )
-                dbHelper.updateCheckinUser(text_id.getText(), LocalDate.now());
-
-                JOptionPane.showMessageDialog(null, result);
-
-            } else {
-
-            }
-            //       if(pin.getStatus()) {
-                //           System.out.println("done");
-                //            if(isConnected) {
-                    //                if(card.VerifyRsa(mUser.getPub_key())) {
-                        //                    System.out.println("done");
-                        //                }
-                    //
-                    //
-                    //            }
-                //        }
-
-            // System.out.println(c.doCjheckin(LocalDate.now(), LocalTime.now()));
-            //  dbHelper.updateCheckinUser("abcd", LocalDate.now());
-            //      User u = dbHelper.findUser("abcd");
-            //      List<LocalDate> dates = u.getLate_date();
-
-        }
-    }//GEN-LAST:event_checkinBtnActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
@@ -583,6 +711,243 @@ public class UserFrame extends javax.swing.JFrame {
 
     }//GEN-LAST:event_analysis_btnActionPerformed
 
+    private Map<Departments, Integer> getDataSet(int month, int year) {
+       ArrayList<Departments> departmentses = new ArrayList<>();
+       
+       departmentses = getDepartmentses();
+       Map<Departments, Integer> map = new LinkedHashMap<>();
+       for (Departments de : departmentses) {
+           ArrayList<User> users = new ArrayList<>();
+           users = getUsers(de.getmId());
+           System.out.println("deparment size" + users.size());
+           map.put(de, (Integer)getNumberUserForSpecificDate(users, month, year));
+       }
+       return map;
+   }
+    
+     @Override
+    public void onGetUserSuccess(User user) {
+        mUser = user;
+        text_id.setText(user.getId());
+        text_name.setText(user.getFullname());
+        text_address.setText(user.getAddress());
+        text_birth.setText(DateUtils.dateToString(user.getBirth()));
+        text_gender.setText(user.getGender() == 0? "NAM" : "NU");
+        text_department.setText(departmentses.get(user.getId_department()).getmName());
+        ImageUltils iU = ImageUltils.getInstance();
+        try {
+                avatar.setIcon(iU.bufferImageToII(iU.byteToBufferImage(mUser.getAvatar()), avatar));
+            } catch (IOException ex) {
+                Logger.getLogger(MainApp.class.getName()).log(Level.SEVERE, null, ex);
+            }
+    }
+
+    private void initData() {
+        
+        ImageIcon imageIcon = new ImageIcon(new ImageIcon(getClass().getResource("/icon/user.png")).getImage().getScaledInstance(120, 120, Image.SCALE_DEFAULT));
+        avatar.setIcon(imageIcon);
+     // avatar.setIcon(new ImageIcon(getClass().getResource("/icon/user.png")));
+
+        try {
+            Rule r = JsonParser.jsonToRule(db.getRule().toJson());
+          c  = new Checkin(mRule);
+            updateTime(r);
+        } catch (JSONException ex) {
+            Logger.getLogger(MainApp.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        if(isConnected) {
+            non_data_label.setVisible(false);
+            non_data_label1.setVisible(false);
+            
+            String id = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.ID), StandardCharsets.UTF_8).replaceAll("[^a-zA-Z0-9]", "");  
+            String name = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.NAME), StandardCharsets.UTF_8).replaceAll("[^\\p{L}\\s]", "");
+            String date = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.DATE), StandardCharsets.UTF_8).replaceAll("[^a-zA-Z0-9,-]", "");  
+            String address = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.ADDRESS), StandardCharsets.UTF_8).replaceAll("[^\\p{L}\\s]", "");
+            String gender = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.GENDER), StandardCharsets.UTF_8).replaceAll("[^a-zA-Z0-9]", ""); 
+            String id_department = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.ID_DEPARTMENT), StandardCharsets.UTF_8).replaceAll("[^a-zA-Z0-9]", ""); 
+            departmentses = getDepartmentses();
+            
+        if(!id.equals("p3")) {
+            mUser = dbHelper.findUser(id);
+            if(mUser != null) {
+                 mDates = getLateDate(mUser);
+            }
+           
+            calendarPanel.setLayout(new java.awt.BorderLayout());
+            calendarPanel.add(new CalendarPanel(mDates));
+            calendarPanel.revalidate();
+            calendarPanel.repaint();
+            ImageUltils iU = ImageUltils.getInstance();
+            if(mUser != null) {
+                  try {
+                avatar.setIcon(iU.bufferImageToII(iU.byteToBufferImage(mUser.getAvatar()), avatar));
+            } catch (IOException ex) {
+                Logger.getLogger(MainApp.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            
+            }
+            text_id.setText(id);
+            text_name.setText(name);
+            text_address.setText(address);
+            text_birth.setText(date);
+            text_gender.setText(Integer.valueOf(gender) == 0? "NAM" : "NU");
+            text_department.setText(departmentses.get(Integer.valueOf(id_department)).getmName());
+        }
+        }
+        
+
+    }
+
+    
+    private ArrayList<Departments> getDepartmentses() {
+        ArrayList<Departments> rerult = new ArrayList<>();
+        
+        db.setDepartmentCol("departments");
+        List<Document> list = db.getDepartments();
+        for(int i =0; i< list.size(); i++) {
+            try {
+                rerult.add(JsonParser.jsonToDepartments(list.get(i).toJson()));
+            } catch (JSONException ex) {
+                Logger.getLogger(MainApp.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return rerult;
+    }
+    
+    private ArrayList<User> getUsers(int id) {
+        return dbHelper.getAllUserOfDepartment(id);
+    }
+    
+    private int getNumberUserForSpecificDate(ArrayList<User> users, int month, int year) {
+        
+        int result = 0;
+        for(int i =0 ; i< users.size(); i++) {
+            List<LocalDate> lateDate = users.get(i).getLate_date();
+            for (LocalDate lateDate1 : lateDate) {
+                if(lateDate1.getMonthValue() ==  month && lateDate1.getYear() == year) {
+                    result ++;
+                    break;
+                }
+            }
+        }
+        return result;
+    }
+    
+    private ArrayList<LocalDate> getLateDate(User user) {
+        ArrayList<LocalDate> rerult = new ArrayList<>();
+        List<LocalDate> lateDate = user.getLate_date();
+        
+        for(int i =0 ; i< lateDate.size(); i++) {
+            LocalDate ld = lateDate.get(i);
+            if(ld.getMonthValue() ==  LocalDate.now().getMonthValue()) {
+                System.out.println("added");
+                rerult.add(ld);
+            }
+        }
+        return rerult;
+    }
+    
+    
+    private void setRule(Rule rule) {
+        
+    }
+    
+    private void updateTime(Rule r) {
+        
+        mRule = r;
+        c.setmRule(r);
+        workingTime.setText("GIO LAM VIEC: TU " + r.getmInTime() + " DEN " + r.getmOutTime());
+        workingDay.setText("NGAY LAM VIEC: TU THU " + r.getmInDate()+ " DEN THU " + r.getmOutDate());
+    }
+    
+    @Override
+    public void onGetRuleSuccess(Rule rule) {
+        if(db.getRule() == null)
+        db.addRule(rule);
+       
+        else 
+            db.updateRule(rule);
+      
+        updateTime(rule);
+    }
+
+    @Override
+    public void onGetPinStatusSuccessful() {
+
+//        if(mUser == null) {
+//             dbHelper.getCol("users"); 
+//           mUser = dbHelper.findUser(text_id.getText());
+//            System.out.println(Arrays.toString(mUser.getPub_key()));
+//        }
+       
+        if(isInitInforClicked) {
+             InfoGUI infoGUI = new InfoGUI(card, mUser, departmentses, true, this);
+        infoGUI.setVisible(true);
+        //infoGUI.dispatchEvent(new WindowEvent(infoGUI, WindowEvent.WINDOW_CLOSING));
+        infoGUI.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        isInitInforClicked = false;
+        } else {
+         InfoGUI infoGUI = new InfoGUI(card, mUser, departmentses, false, this);
+        infoGUI.setVisible(true);
+        infoGUI.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        }
+
+    }
+    
+    public static JFreeChart createChart(Map<Departments, Integer> data) {
+        JFreeChart barChart = ChartFactory.createBarChart(
+                "BIỂU ĐỒ SỐ SV ĐI MUỘN TRONG MỖI KHOA",
+                "Năm", "SV",
+                createDataset(data), PlotOrientation.VERTICAL, false, false, false);
+        return barChart;
+    }
+
+     private static CategoryDataset createDataset(Map<Departments, Integer> data) {
+        final DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+        for ( Departments key : data.keySet() ) {
+            String initials = "";
+        for (String s : key.getmName().split(" ")) {
+            initials+=s.charAt(0);
+        }
+            System.out.println(data.get(key));
+            dataset.addValue(data.get(key), "Lần Đi Muộn",initials);
+        }
+      
+        return dataset;
+    }
+
+    
+    class CalendarViewListModel extends AbstractListModel< LocalDate> {
+  public static final int ROW_COUNT = 6;
+  private final LocalDate startDate;
+  private final WeekFields weekFields = WeekFields.of(Locale.getDefault());
+  protected CalendarViewListModel(LocalDate date) {
+    super();
+    LocalDate firstDayOfMonth = YearMonth.from(date).atDay(1);
+    int dowv = firstDayOfMonth.get(weekFields.dayOfWeek()) - 1;
+    startDate = firstDayOfMonth.minusDays(dowv);
+  }
+  @Override public int getSize() {
+    return DayOfWeek.values().length * ROW_COUNT;
+  }
+  @Override public LocalDate getElementAt(int index) {
+    return startDate.plusDays(index);
+  }
+}
+      
+    public byte[] hexStringToByteHexArr(String s) {
+        byte[] result = new byte[s.length()];
+        
+      //Converting string to character array
+      char ch[] = s.toCharArray();
+      for(int i = 0; i < ch.length; i++) {
+         result[i] = (byte) (Integer.parseInt(Integer.toHexString(ch[i]),16) );
+       
+      }
+      return result;
+    }
+   
     /**
      * @param args the command line arguments
      */
@@ -620,13 +985,12 @@ public class UserFrame extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton analysis_btn;
+    private javax.swing.JLabel avatar;
     private javax.swing.JPanel calendarPanel;
-    private javax.swing.JButton changePinBtn;
     private javax.swing.JPanel chart_pane;
     private javax.swing.JPanel chart_pane1;
     private javax.swing.JPanel chart_pane2;
     private javax.swing.JPanel chart_pane3;
-    private javax.swing.JButton checkinBtn;
     private javax.swing.JButton connect_btn;
     private javax.swing.JButton delete_btn;
     private javax.swing.JButton jButton1;
@@ -634,10 +998,22 @@ public class UserFrame extends javax.swing.JFrame {
     private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private com.toedter.calendar.JMonthChooser jMonthChooser;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
+    private javax.swing.JPanel jPanel11;
+    private javax.swing.JPanel jPanel12;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
@@ -654,6 +1030,12 @@ public class UserFrame extends javax.swing.JFrame {
     private javax.swing.JLabel non_data_label2;
     private javax.swing.JLabel non_data_label3;
     private javax.swing.JLabel non_data_label4;
+    private javax.swing.JLabel text_address;
+    private javax.swing.JLabel text_birth;
+    private javax.swing.JLabel text_department;
+    private javax.swing.JLabel text_gender;
+    private javax.swing.JLabel text_id;
+    private javax.swing.JLabel text_name;
     private javax.swing.JLabel workingDay;
     private javax.swing.JLabel workingTime;
     // End of variables declaration//GEN-END:variables
