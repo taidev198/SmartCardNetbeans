@@ -198,7 +198,7 @@ public class WelcomeFrame extends javax.swing.JFrame {
         manager_pane.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                new MainApp().setVisible(true);
+                new UserFrame().setVisible(true);
                 pack();
             }
 
@@ -225,7 +225,7 @@ public class WelcomeFrame extends javax.swing.JFrame {
         user_pane.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                new UserFrame().setVisible(true);
+                new ManagerFrame().setVisible(true);
                 pack();
             }
 
