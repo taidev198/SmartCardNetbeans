@@ -15,6 +15,7 @@ import examples.utils.DateUtils;
 import examples.utils.ImageUltils;
 import examples.utils.JsonParser;
 import examples.database.RuleDbHelper;
+import examples.utils.ExcelUtils;
 import examples.utils.StringUltils;
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -90,6 +91,7 @@ public class ManagerFrame extends javax.swing.JFrame implements OnGetUserListene
         card = new SmartCardWord();
         validate();
         initData();
+        ExcelUtils.exportData();
         System.out.println(StringUltils.generateId(StringUltils.reducingString("Hello World")));
     }
 
@@ -145,6 +147,7 @@ public class ManagerFrame extends javax.swing.JFrame implements OnGetUserListene
         non_data_label = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
         analysis_btn = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setPreferredSize(new java.awt.Dimension(1588, 817));
@@ -467,8 +470,7 @@ public class ManagerFrame extends javax.swing.JFrame implements OnGetUserListene
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(jPanel11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 401, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, 0))))
+                        .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 401, javax.swing.GroupLayout.PREFERRED_SIZE))))
         );
 
         jPanel10.setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -546,6 +548,8 @@ public class ManagerFrame extends javax.swing.JFrame implements OnGetUserListene
             }
         });
 
+        jButton3.setText("XUẤT DL");
+
         javax.swing.GroupLayout jPanel10Layout = new javax.swing.GroupLayout(jPanel10);
         jPanel10.setLayout(jPanel10Layout);
         jPanel10Layout.setHorizontalGroup(
@@ -554,22 +558,23 @@ public class ManagerFrame extends javax.swing.JFrame implements OnGetUserListene
                 .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel10Layout.createSequentialGroup()
                         .addContainerGap()
-                        .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel10Layout.createSequentialGroup()
-                                .addGap(42, 42, 42)
-                                .addComponent(jMonthChooser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(35, 35, 35)
-                                .addComponent(jYearChooser3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(54, 54, 54)
-                                .addComponent(analysis_btn))
+                        .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(calendarPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel10Layout.createSequentialGroup()
                                 .addGap(41, 41, 41)
-                                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel10Layout.createSequentialGroup()
+                                .addComponent(jMonthChooser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(30, 30, 30)
+                                .addComponent(jYearChooser3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(analysis_btn)
+                                .addGap(31, 31, 31)
+                                .addComponent(jButton3))))
                     .addGroup(jPanel10Layout.createSequentialGroup()
                         .addGap(121, 121, 121)
                         .addComponent(jLabel10)))
-                .addContainerGap(16, Short.MAX_VALUE))
+                .addGap(17, 17, 17))
             .addComponent(chart_pane3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel10Layout.setVerticalGroup(
@@ -590,7 +595,9 @@ public class ManagerFrame extends javax.swing.JFrame implements OnGetUserListene
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel10Layout.createSequentialGroup()
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jYearChooser3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addComponent(analysis_btn))
+                    .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(analysis_btn)
+                        .addComponent(jButton3)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
                 .addComponent(chart_pane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -780,7 +787,7 @@ public class ManagerFrame extends javax.swing.JFrame implements OnGetUserListene
         
         if(isConnected) {
             non_data_label.setVisible(false);
-            non_data_label1.setVisible(false);
+            non_data_label4.setVisible(false);
             
             String id = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.ID), StandardCharsets.UTF_8).replaceAll("[^a-zA-Z0-9]", "");  
             String name = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.NAME), StandardCharsets.UTF_8).replaceAll("[^\\p{L}\\s]", "");
@@ -1011,14 +1018,12 @@ public class ManagerFrame extends javax.swing.JFrame implements OnGetUserListene
     private javax.swing.JLabel avatar;
     private javax.swing.JPanel calendarPanel;
     private javax.swing.JButton changePinBtn;
-    private javax.swing.JPanel chart_pane;
-    private javax.swing.JPanel chart_pane1;
-    private javax.swing.JPanel chart_pane2;
     private javax.swing.JPanel chart_pane3;
     private javax.swing.JButton connect_btn;
     private javax.swing.JButton delete_btn;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -1040,19 +1045,10 @@ public class ManagerFrame extends javax.swing.JFrame implements OnGetUserListene
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
-    private javax.swing.JPanel jPanel7;
-    private javax.swing.JPanel jPanel8;
-    private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
-    private com.toedter.calendar.JYearChooser jYearChooser;
-    private com.toedter.calendar.JYearChooser jYearChooser1;
-    private com.toedter.calendar.JYearChooser jYearChooser2;
     private com.toedter.calendar.JYearChooser jYearChooser3;
     private javax.swing.JLabel non_data_label;
-    private javax.swing.JLabel non_data_label1;
-    private javax.swing.JLabel non_data_label2;
-    private javax.swing.JLabel non_data_label3;
     private javax.swing.JLabel non_data_label4;
     private javax.swing.JLabel text_address;
     private javax.swing.JLabel text_birth;
