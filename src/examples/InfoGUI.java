@@ -7,7 +7,7 @@ package examples;
 
 import examples.data.Constants;
 import examples.data.Departments;
-import examples.utils.DataBaseUtils;
+import examples.database.DataBaseUtils;
 import examples.data.User;
 import examples.utils.DateUtils;
 import examples.utils.ImageUltils;

@@ -16,18 +16,19 @@ import org.bson.codecs.pojo.annotations.BsonProperty;
  */
 public class User {
     
-    @BsonProperty("id") String id;
-    @BsonProperty("fullname") String fullname;
-    @BsonProperty("birth") Date birth;
-    @BsonProperty("gender") int gender;
     @BsonProperty("address") String address;
+    @BsonProperty("avatar") byte[] avatar;
+    @BsonProperty("birth") Date birth;
+    @BsonProperty("fullname") String fullname;
+    @BsonProperty("gender") int gender;
+    @BsonProperty("id") String id;
     @BsonProperty("id_department") int id_department;
+    @BsonProperty("isCheckin") private boolean isCheckin ;
+    @BsonProperty("isCheckout") private boolean isCheckout ;
     @BsonProperty("late_date") List<LocalDate> late_date;
     @BsonProperty("password") String password;
-     @BsonProperty("isCheckin") private boolean isCheckin ;
-    @BsonProperty("isCheckout") private boolean isCheckout ;
     @BsonProperty("pub_key") byte[] pub_key;
-     @BsonProperty("avatar") byte[] avatar;
+     
     
     public String getId() {
         return id;

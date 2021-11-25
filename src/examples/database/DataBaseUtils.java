@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package examples.utils;
+package examples.database;
 
+import com.mongodb.Block;
 import com.mongodb.ConnectionString;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientSettings;
@@ -36,6 +37,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import org.bson.BSONObject;
 import org.bson.Document;
 import org.bson.codecs.configuration.CodecRegistries;
 import static org.bson.codecs.configuration.CodecRegistries.fromProviders;
@@ -112,19 +114,30 @@ CodecRegistry pojoCodecRegistry = fromRegistries(MongoClientSettings.getDefaultC
     }
     
     public ArrayList<User> getAllUserOfDepartment(int id) {
-         ArrayList<User> rerult = new ArrayList<>();
-        MongoCursor<User> cursor = col.find().iterator();
-        try {
+        
+        ArrayList<User> rerult = new ArrayList<>();
+ 
+//        col.find().forEach((Block<User>) (User t) -> {
+//            if(t.getId_department() == id){
+//                System.out.println(t.toString());
+//            }
+//                //rerult.add(t);
+//        });
+        
+         MongoCursor<User> cursor = col.find().iterator();
             while (cursor.hasNext()) {
-                User u = (User)cursor.next();
-                if(u.getId_department() == id)
-               rerult.add(u);
+                System.out.println(cursor.next().toString());
+//                User u = (User)cursor.next();
+//                if(u.getId_department() == id)
+//               rerult.add(u);
             }
-        } finally {
-            cursor.close();
-        }
+        
         return rerult;
     }
+    
+   
+
+
     
     public User findUser(String id) {
         

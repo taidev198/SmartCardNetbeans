@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package examples.utils;
+package examples.database;
 
 import com.mongodb.Block;
 import com.mongodb.ConnectionString;
@@ -28,15 +28,19 @@ import examples.data.Rule;
 import examples.data.RuleKey;
 import examples.data.User;
 import examples.data.UserKey;
+import examples.utils.JsonParser;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.bson.Document;
 import static org.bson.codecs.configuration.CodecRegistries.fromProviders;
 import static org.bson.codecs.configuration.CodecRegistries.fromRegistries;
 import org.bson.codecs.configuration.CodecRegistry;
 import org.bson.codecs.pojo.PojoCodecProvider;
+import org.json.JSONException;
 
 /**
  *
@@ -49,6 +53,7 @@ public class RuleDbHelper {
     private com.mongodb.client.MongoClient mongoClient;
     private MongoCollection<Document> ruleCol;
     private MongoCollection<Document> departmentCol;
+    private MongoCollection<Document> userCol;
     
     private RuleDbHelper() {
        
@@ -142,6 +147,48 @@ CodecRegistry pojoCodecRegistry = fromRegistries(MongoClientSettings.getDefaultC
             sr.add(cursor.next());
         }
       return sr;
+    }
+    
+    public ArrayList<User> getAllUserOfDepartment(int id) {
+        
+        ArrayList<User> rerult = new ArrayList<>();
+        userCol = database.getCollection("users");
+//        userCol.find().forEach(new Block<Document> () {
+//            @Override
+//            public void apply(Document t) {
+//                User u;
+//                try {
+//                    u = JsonParser.jsonToUser(t.toJson());
+//                     if(u.getId_department() == id)
+//                        rerult.add(u);
+//                } catch (JSONException ex) {
+//                    Logger.getLogger(RuleDbHelper.class.getName()).log(Level.SEVERE, null, ex);
+//                }
+//                
+//            }
+//        });
+        
+         MongoCursor<Document> cursor = userCol.find().iterator();
+            while (cursor.hasNext()) {
+                System.out.println("hello");
+                      
+                      Runnable r1 = new Runnable(){
+                        public void run(){
+                            User u;
+                            try { 
+                                u = JsonParser.jsonToUser(cursor.next().toJson());
+                                if(u.getId_department() == id)
+                                      rerult.add(u);
+                            } catch (JSONException ex) {
+                                Logger.getLogger(RuleDbHelper.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                                        
+
+                        }
+                    };
+                      r1.run();
+            }
+        return rerult;
     }
     
     public void updateDepartment(Departments departments) {

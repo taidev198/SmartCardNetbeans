@@ -10,11 +10,11 @@ import examples.data.Constants;
 import examples.data.Departments;
 import examples.data.Rule;
 import examples.data.User;
-import examples.utils.DataBaseUtils;
+import examples.database.DataBaseUtils;
 import examples.utils.DateUtils;
 import examples.utils.ImageUltils;
 import examples.utils.JsonParser;
-import examples.utils.RuleDbHelper;
+import examples.database.RuleDbHelper;
 import examples.utils.StringUltils;
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -172,6 +172,7 @@ public class ManagerFrame extends javax.swing.JFrame implements OnGetUserListene
         });
 
         connect_btn.setBackground(new java.awt.Color(0, 255, 51));
+        connect_btn.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         connect_btn.setText("KẾT NỐI THẺ");
         connect_btn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -481,14 +482,14 @@ public class ManagerFrame extends javax.swing.JFrame implements OnGetUserListene
             .addGroup(chart_pane3Layout.createSequentialGroup()
                 .addGap(153, 153, 153)
                 .addComponent(non_data_label4)
-                .addContainerGap(115, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         chart_pane3Layout.setVerticalGroup(
             chart_pane3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(chart_pane3Layout.createSequentialGroup()
                 .addGap(116, 116, 116)
                 .addComponent(non_data_label4)
-                .addContainerGap(152, Short.MAX_VALUE))
+                .addContainerGap(181, Short.MAX_VALUE))
         );
 
         workingDay.setText("NGÀY LÀM VIỆC");
@@ -561,9 +562,6 @@ public class ManagerFrame extends javax.swing.JFrame implements OnGetUserListene
                                 .addComponent(jYearChooser3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(54, 54, 54)
                                 .addComponent(analysis_btn))
-                            .addGroup(jPanel10Layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 11, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(chart_pane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(calendarPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel10Layout.createSequentialGroup()
                                 .addGap(41, 41, 41)
@@ -572,6 +570,7 @@ public class ManagerFrame extends javax.swing.JFrame implements OnGetUserListene
                         .addGap(121, 121, 121)
                         .addComponent(jLabel10)))
                 .addContainerGap(16, Short.MAX_VALUE))
+            .addComponent(chart_pane3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel10Layout.setVerticalGroup(
             jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -592,7 +591,7 @@ public class ManagerFrame extends javax.swing.JFrame implements OnGetUserListene
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jYearChooser3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addComponent(analysis_btn))
-                .addGap(16, 16, 16)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
                 .addComponent(chart_pane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -611,12 +610,12 @@ public class ManagerFrame extends javax.swing.JFrame implements OnGetUserListene
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 17, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 17, Short.MAX_VALUE))
         );
 
         pack();
@@ -712,14 +711,14 @@ public class ManagerFrame extends javax.swing.JFrame implements OnGetUserListene
     private void analysis_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_analysis_btnActionPerformed
         // TODO add your handling code here:
         System.out.println(jMonthChooser.getMonth());
-        System.out.println(jYearChooser.getYear());
-        non_data_label1.setVisible(false);
-        ChartPanel chartPanel = new ChartPanel(createChart(getDataSet(jMonthChooser.getMonth() + 1, jYearChooser.getYear())));
+        System.out.println(jYearChooser3.getYear());
+        non_data_label4.setVisible(false);
+        ChartPanel chartPanel = new ChartPanel(createChart(getDataSet(jMonthChooser.getMonth() + 1, jYearChooser3.getYear())));
         chartPanel.setPreferredSize(new java.awt.Dimension(200, 200));
-        chart_pane.setLayout(new java.awt.BorderLayout());
-        chart_pane.add(chartPanel);
-        chart_pane.revalidate();
-        chart_pane.repaint();
+        chart_pane3.setLayout(new java.awt.BorderLayout());
+        chart_pane3.add(chartPanel);
+        chart_pane3.revalidate();
+        chart_pane3.repaint();
 
     }//GEN-LAST:event_analysis_btnActionPerformed
 
@@ -735,14 +734,14 @@ public class ManagerFrame extends javax.swing.JFrame implements OnGetUserListene
     }//GEN-LAST:event_changePinBtnActionPerformed
 
     private Map<Departments, Integer> getDataSet(int month, int year) {
-       ArrayList<Departments> departmentses = new ArrayList<>();
+       ArrayList<Departments> departments = new ArrayList<>();
        
-       departmentses = getDepartmentses();
+       departments = getDepartmentses();
        Map<Departments, Integer> map = new LinkedHashMap<>();
-       for (Departments de : departmentses) {
+       for (Departments de : departments) {
            ArrayList<User> users = new ArrayList<>();
            users = getUsers(de.getmId());
-           System.out.println("deparment size" + users.size());
+           System.out.println("deparment size" + de.getmId());
            map.put(de, (Integer)getNumberUserForSpecificDate(users, month, year));
        }
        return map;
@@ -839,7 +838,7 @@ public class ManagerFrame extends javax.swing.JFrame implements OnGetUserListene
     }
     
     private ArrayList<User> getUsers(int id) {
-        return dbHelper.getAllUserOfDepartment(id);
+        return db.getAllUserOfDepartment(id);
     }
     
     private int getNumberUserForSpecificDate(ArrayList<User> users, int month, int year) {

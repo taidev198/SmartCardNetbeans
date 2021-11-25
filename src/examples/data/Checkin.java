@@ -6,7 +6,7 @@
 package examples.data;
 
 import examples.data.Constants;
-import examples.utils.DataBaseUtils;
+import examples.database.DataBaseUtils;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import org.bson.codecs.pojo.annotations.BsonProperty;

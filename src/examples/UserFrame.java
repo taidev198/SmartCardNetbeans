@@ -25,11 +25,11 @@ import examples.data.Constants;
 import examples.data.Departments;
 import examples.data.Rule;
 import examples.data.User;
-import examples.utils.DataBaseUtils;
+import examples.database.DataBaseUtils;
 import examples.utils.DateUtils;
 import examples.utils.ImageUltils;
 import examples.utils.JsonParser;
-import examples.utils.RuleDbHelper;
+import examples.database.RuleDbHelper;
 import examples.utils.StringUltils;
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -179,6 +179,7 @@ public class UserFrame extends javax.swing.JFrame implements OnGetUserListener, 
         });
 
         connect_btn.setBackground(new java.awt.Color(0, 255, 51));
+        connect_btn.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         connect_btn.setText("KẾT NỐI THẺ");
         connect_btn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
