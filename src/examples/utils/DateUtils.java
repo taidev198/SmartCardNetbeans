@@ -57,7 +57,7 @@ public class DateUtils {
     cal.set(year, month - 1, 1);
     int daysInMonth = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
     for (int i = 0; i < daysInMonth; i++) {
-        datesOfMonth.add(stringToDate(fmt.format(cal.getTime())));
+        datesOfMonth.add(cal.getTime());
         cal.add(Calendar.DAY_OF_MONTH, 1);
     }
     

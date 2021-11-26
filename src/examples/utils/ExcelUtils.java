@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -207,10 +208,14 @@ public abstract class ExcelUtils {
         ArrayList<Date> datesOfMonth = DateUtils.printDatesInMonth(year, month, "yyyy-MM-dd");
         int i = 3;
         for (Date date : datesOfMonth) {
+            LocalDate in = date.toInstant()
+      .atZone(ZoneId.systemDefault())
+      .toLocalDate();
             List<LocalDate> lateDate = user.getLate_date();
             for (LocalDate ld : lateDate) {
-                System.out.println(date.getMonth() + " :" + ld.getMonthValue());
-                if(ld.getMonthValue() == date.getMonth() && ld.getMonthValue() == date.getYear()) {
+              //  System.out.println(date.getMonth() + " :" + ld.getMonthValue());
+                if(ld.getMonthValue() == in.getMonthValue() && ld.getDayOfMonth()== in.getDayOfMonth()) {
+                    System.out.println("added");
                      cell = row.createCell(i);
                      cell.setCellValue("X");
                 }

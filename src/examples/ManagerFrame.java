@@ -765,7 +765,7 @@ public class ManagerFrame extends javax.swing.JFrame implements OnGetUserListene
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
         ArrayList<User> users = db.getAllUser();
-        ExcelUtils.exportData(users, jMonthChooser.getMonth(), jYearChooser3.getYear());
+        ExcelUtils.exportData(users, jMonthChooser.getMonth() +1, jYearChooser3.getYear());
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void back_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_back_btnActionPerformed
