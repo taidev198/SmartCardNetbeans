@@ -5,12 +5,17 @@
  */
 package examples.utils;
 
+import examples.data.User;
 import java.awt.Font;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -35,17 +40,22 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
  */
 public abstract class ExcelUtils {
     
-     public static final int COLUMN_INDEX_ID         = 0;
+     public static final int COLUMN_INDEX_ID        = 0;
     public static final int COLUMN_INDEX_TITLE      = 1;
     public static final int COLUMN_INDEX_PRICE      = 2;
     public static final int COLUMN_INDEX_QUANTITY   = 3;
     public static final int COLUMN_INDEX_TOTAL      = 4;
     private static CellStyle cellStyleFormatNumber = null;
+    private static int month;
+    private static int year;
+    private static ArrayList<User> mUsers = new ArrayList<>();
     
-    public static void exportData() {
-        
+    public static void exportData(ArrayList<User> datas, int month, int year) {
+        ExcelUtils.month = month;
+        ExcelUtils.year = year;
+        ExcelUtils.mUsers = datas;
         final List<Book> books = getBooks();
-        final String excelFilePath = "C:/demo/books.xlsx";
+        final String excelFilePath = "C:/demo/users.xlsx";
          try {         
              writeExcel(books, excelFilePath);
          } catch (IOException ex) {
@@ -59,7 +69,7 @@ public abstract class ExcelUtils {
         Workbook workbook = getWorkbook(excelFilePath);
  
         // Create sheet
-        Sheet sheet = workbook.createSheet("Books"); // Create sheet with sheet name
+        Sheet sheet = workbook.createSheet("Users"); // Create sheet with sheet name
  
         int rowIndex = 0;
          
@@ -68,16 +78,16 @@ public abstract class ExcelUtils {
  
         // Write data
         rowIndex++;
-        for (Book book : books) {
+        for (User user : mUsers) {
             // Create row
             Row row = sheet.createRow(rowIndex);
             // Write data on row
-            writeBook(book, row);
+            writeBook(user, row);
             rowIndex++;
         }
          
         // Write footer
-        writeFooter(sheet, rowIndex);
+        //writeFooter(sheet, rowIndex);
  
         // Auto resize column witdth
         int numberOfColumn = sheet.getRow(0).getPhysicalNumberOfCells();
@@ -125,27 +135,39 @@ public abstract class ExcelUtils {
         // Create cells
         Cell cell = row.createCell(COLUMN_INDEX_ID);
         cell.setCellStyle(cellStyle);
-        cell.setCellValue("Id");
+        cell.setCellValue("ID");
  
         cell = row.createCell(COLUMN_INDEX_TITLE);
         cell.setCellStyle(cellStyle);
-        cell.setCellValue("Title");
+        cell.setCellValue("Họ Tên");
  
         cell = row.createCell(COLUMN_INDEX_PRICE);
         cell.setCellStyle(cellStyle);
-        cell.setCellValue("Price");
+        cell.setCellValue("Phòng Ban");
  
-        cell = row.createCell(COLUMN_INDEX_QUANTITY);
-        cell.setCellStyle(cellStyle);
-        cell.setCellValue("Quantity");
- 
-        cell = row.createCell(COLUMN_INDEX_TOTAL);
-        cell.setCellStyle(cellStyle);
-        cell.setCellValue("Total money");
+        writeDateInHeader(cell, row, cellStyle);
     }
  
+    
+    private static void writeDateInHeader(Cell cell, Row row, CellStyle cellStyle) {
+        
+        SimpleDateFormat fmt = new SimpleDateFormat("dd/MM");
+        Calendar cal = Calendar.getInstance();
+        cal.clear();
+        cal.set(year, month - 1, 1);
+        int daysInMonth = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
+        for (int i = 0; i < daysInMonth; i++) {
+            System.out.println(fmt.format(cal.getTime()));
+        cell = row.createCell(3+i);
+        cell.setCellStyle(cellStyle);
+        cell.setCellValue(fmt.format(cal.getTime()));
+            cal.add(Calendar.DAY_OF_MONTH, 1);
+        }
+
+    }
+    
     // Write data
-    private static void writeBook(Book book, Row row) {
+    private static void writeBook(User user, Row row) {
         if (cellStyleFormatNumber == null) {
             // Format number
             short format = (short)BuiltinFormats.getBuiltinFormat("#,##0");
@@ -159,28 +181,44 @@ public abstract class ExcelUtils {
         }
          
         Cell cell = row.createCell(COLUMN_INDEX_ID);
-        cell.setCellValue(book.getId());
+        cell.setCellValue(user.getId());
  
         cell = row.createCell(COLUMN_INDEX_TITLE);
-        cell.setCellValue(book.getTitle());
+        cell.setCellValue(user.getFullname());
  
         cell = row.createCell(COLUMN_INDEX_PRICE);
-        cell.setCellValue(book.getPrice());
-        cell.setCellStyle(cellStyleFormatNumber);
+        cell.setCellValue(user.getId_department());
+       // cell.setCellStyle(cellStyleFormatNumber);
  
-        cell = row.createCell(COLUMN_INDEX_QUANTITY);
-        cell.setCellValue(book.getQuantity());
-         
+        
+         fillLateDate(user, cell, row);
         // Create cell formula
         // totalMoney = price * quantity
-        cell = row.createCell(COLUMN_INDEX_TOTAL, CellType.FORMULA);
-        cell.setCellStyle(cellStyleFormatNumber);
-        int currentRow = row.getRowNum() + 1;
-        String columnPrice = CellReference.convertNumToColString(COLUMN_INDEX_PRICE);
-        String columnQuantity = CellReference.convertNumToColString(COLUMN_INDEX_QUANTITY);
-        cell.setCellFormula(columnPrice + currentRow + "*" + columnQuantity + currentRow);
+//        cell = row.createCell(COLUMN_INDEX_TOTAL, CellType.FORMULA);
+//        cell.setCellStyle(cellStyleFormatNumber);
+//        int currentRow = row.getRowNum() + 1;
+//        String columnPrice = CellReference.convertNumToColString(COLUMN_INDEX_PRICE);
+//        String columnQuantity = CellReference.convertNumToColString(COLUMN_INDEX_QUANTITY);
+//        cell.setCellFormula(columnPrice + currentRow + "*" + columnQuantity + currentRow);
     }
  
+    
+    private static void fillLateDate(User user, Cell cell, Row row) {
+        ArrayList<Date> datesOfMonth = DateUtils.printDatesInMonth(year, month, "yyyy-MM-dd");
+        int i = 3;
+        for (Date date : datesOfMonth) {
+            List<LocalDate> lateDate = user.getLate_date();
+            for (LocalDate ld : lateDate) {
+                System.out.println(date.getMonth() + " :" + ld.getMonthValue());
+                if(ld.getMonthValue() == date.getMonth() && ld.getMonthValue() == date.getYear()) {
+                     cell = row.createCell(i);
+                     cell.setCellValue("X");
+                }
+            }
+            i++;
+        }
+    }
+    
     // Create CellStyle for header
     private static CellStyle createStyleForHeader(Sheet sheet) {
         // Create font

@@ -35,4 +35,16 @@ public abstract class StringUltils {
         
         return result + median;
     }
+    
+    public static String removeLastChar(String str) {
+        int len = str.length();
+        int i = len -1;
+        for(;i >=0 ; i--) {
+            String s = String.valueOf(str.charAt(i));
+            if(s.contains("[\\p{L}\\s]"))
+                break;
+        }
+        
+    return str.substring(0, i);
+}
 }

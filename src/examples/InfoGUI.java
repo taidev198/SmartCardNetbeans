@@ -82,10 +82,11 @@ public class InfoGUI extends javax.swing.JFrame implements OnGetUserListener{
             id_department_cb.addItem(departmentses.get(i).getmName());
         if(!this.isEmpty) {
             save_btn.setText("EDIT");
+            System.out.println("name:" +new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.NAME), StandardCharsets.UTF_8));
             String id = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.ID), StandardCharsets.UTF_8).replaceAll("[^a-zA-Z0-9]", "");  
-            String name = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.NAME), StandardCharsets.UTF_8).replaceAll("[^\\p{L}\\s]", "");
+            String name = (new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.NAME), StandardCharsets.UTF_8)).replaceAll("[^\\x00-\\xFF]", "").trim();
             String date = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.DATE), StandardCharsets.UTF_8).replaceAll("[^a-zA-Z0-9,-]", ""); 
-            String address = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.ADDRESS), StandardCharsets.UTF_8).replaceAll("[^\\p{L}\\s]", "");
+            String address = (new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.ADDRESS), StandardCharsets.UTF_8)).replaceAll("[^\\x00-\\xFF]", "").trim();
             String gender = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.GENDER), StandardCharsets.UTF_8).replaceAll("[^a-zA-Z0-9]", "");
             String id_department = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.ID_DEPARTMENT), StandardCharsets.UTF_8).replaceAll("[^a-zA-Z0-9]", "");
                    text_name.setText(name);
@@ -131,7 +132,7 @@ public class InfoGUI extends javax.swing.JFrame implements OnGetUserListener{
         jLabel8 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        exit_btn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(255, 255, 255));
@@ -220,9 +221,14 @@ public class InfoGUI extends javax.swing.JFrame implements OnGetUserListener{
                 .addContainerGap())
         );
 
-        jButton1.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
-        jButton1.setForeground(new java.awt.Color(255, 0, 0));
-        jButton1.setText("X");
+        exit_btn.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
+        exit_btn.setForeground(new java.awt.Color(255, 0, 0));
+        exit_btn.setText("X");
+        exit_btn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                exit_btnActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -264,12 +270,12 @@ public class InfoGUI extends javax.swing.JFrame implements OnGetUserListener{
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                                 .addComponent(save_btn)
                                 .addGap(271, 271, 271))
-                            .addComponent(jButton1, javax.swing.GroupLayout.Alignment.TRAILING)))))
+                            .addComponent(exit_btn, javax.swing.GroupLayout.Alignment.TRAILING)))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addComponent(jButton1)
+                .addComponent(exit_btn)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -441,6 +447,11 @@ public class InfoGUI extends javax.swing.JFrame implements OnGetUserListener{
         
     }//GEN-LAST:event_birthdayMouseClicked
 
+    private void exit_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exit_btnActionPerformed
+        // TODO add your handling code here:
+        setVisible(false);
+    }//GEN-LAST:event_exit_btnActionPerformed
+
    
 
 private void setImage(byte [] img){
@@ -557,9 +568,9 @@ private void setImage(byte [] img){
     private javax.swing.JLabel avatar;
     private com.toedter.calendar.JDateChooser birthday;
     private javax.swing.JButton browser_img;
+    private javax.swing.JButton exit_btn;
     private javax.swing.JComboBox<String> gender_combobox;
     private javax.swing.JComboBox<String> id_department_cb;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;

@@ -52,6 +52,7 @@ public class JsonParser {
 
         JSONObject obj = new JSONObject(jsonString);
         user.setId(obj.getString("id"));
+        user.setFullname(obj.getString(UserKey.FULLNAME));
         user.setId_department(obj.getInt(UserKey.ID_DEPARTMENT));
       JSONArray jsonarray = obj.getJSONArray(UserKey.LATE_DATE);
         ArrayList<LocalDate> lateDate = new ArrayList<>();

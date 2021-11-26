@@ -8,6 +8,8 @@ package examples.utils;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -45,4 +47,20 @@ public class DateUtils {
           DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");  
                 return  dateFormat.format(date);  
      }
+     
+     public static ArrayList<Date> printDatesInMonth(int year, int month, String format) {
+         
+         ArrayList<Date> datesOfMonth = new ArrayList<>();
+    SimpleDateFormat fmt = new SimpleDateFormat(format);
+    Calendar cal = Calendar.getInstance();
+    cal.clear();
+    cal.set(year, month - 1, 1);
+    int daysInMonth = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
+    for (int i = 0; i < daysInMonth; i++) {
+        datesOfMonth.add(stringToDate(fmt.format(cal.getTime())));
+        cal.add(Calendar.DAY_OF_MONTH, 1);
+    }
+    
+    return datesOfMonth;
+}
 }

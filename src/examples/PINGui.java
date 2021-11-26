@@ -136,6 +136,11 @@ public class PINGui extends javax.swing.JFrame {
         jButton1.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         jButton1.setForeground(new java.awt.Color(255, 0, 51));
         jButton1.setText("X");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -260,6 +265,11 @@ public class PINGui extends javax.swing.JFrame {
         text_input.setText("");
         text = text_input.getText();
     }//GEN-LAST:event_clear_btnActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        this.setVisible(false);
+    }//GEN-LAST:event_jButton1ActionPerformed
     
     /**
      * @param args the command line arguments

@@ -191,6 +191,30 @@ CodecRegistry pojoCodecRegistry = fromRegistries(MongoClientSettings.getDefaultC
         return rerult;
     }
     
+    
+    public ArrayList<User> getAllUser() {
+        
+        ArrayList<User> rerult = new ArrayList<>();
+        userCol = database.getCollection("users");
+         MongoCursor<Document> cursor = userCol.find().iterator();
+            while (cursor.hasNext()) {
+                      Runnable r1 = new Runnable(){
+                        public void run(){
+                            User u;
+                            try { 
+                                u = JsonParser.jsonToUser(cursor.next().toJson());
+                                      rerult.add(u);
+                            } catch (JSONException ex) {
+                                Logger.getLogger(RuleDbHelper.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        }
+                    };
+                      r1.run();
+            }
+        return rerult;
+    }
+    
+    
     public void updateDepartment(Departments departments) {
         ruleCol.updateOne(eq(DepartmentsKey.ID, departments.getmId()),
                                             combine(set(DepartmentsKey.NAME, departments.getmName()),

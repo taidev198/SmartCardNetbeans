@@ -142,6 +142,7 @@ public class UserFrame extends javax.swing.JFrame implements OnGetUserListener, 
         jPanel5 = new javax.swing.JPanel();
         workingDay = new javax.swing.JLabel();
         workingTime = new javax.swing.JLabel();
+        back_btn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Antenna");
@@ -178,7 +179,7 @@ public class UserFrame extends javax.swing.JFrame implements OnGetUserListener, 
             }
         });
 
-        connect_btn.setBackground(new java.awt.Color(0, 255, 51));
+        connect_btn.setBackground(new java.awt.Color(0, 102, 255));
         connect_btn.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         connect_btn.setText("KẾT NỐI THẺ");
         connect_btn.addActionListener(new java.awt.event.ActionListener() {
@@ -438,6 +439,14 @@ public class UserFrame extends javax.swing.JFrame implements OnGetUserListener, 
 
         workingTime.setText("GIỜ LÀM VIỆC");
 
+        back_btn.setBackground(new java.awt.Color(0, 153, 255));
+        back_btn.setText("QUAY LẠI");
+        back_btn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                back_btnActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
@@ -446,14 +455,22 @@ public class UserFrame extends javax.swing.JFrame implements OnGetUserListener, 
                 .addGap(22, 22, 22)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(workingDay)
-                    .addComponent(workingTime))
-                .addContainerGap(294, Short.MAX_VALUE))
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addComponent(workingTime)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 213, Short.MAX_VALUE)
+                        .addComponent(back_btn)))
+                .addContainerGap())
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
-                .addGap(25, 25, 25)
-                .addComponent(workingTime)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addGap(25, 25, 25)
+                        .addComponent(workingTime))
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(back_btn)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(workingDay)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -468,11 +485,11 @@ public class UserFrame extends javax.swing.JFrame implements OnGetUserListener, 
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
                         .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap())))
+                        .addContainerGap())
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -569,6 +586,13 @@ public class UserFrame extends javax.swing.JFrame implements OnGetUserListener, 
             isInitInforClicked = false;
         }
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void back_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_back_btnActionPerformed
+        // TODO add your handling code here:
+        
+        new WelcomeFrame().setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_back_btnActionPerformed
 
    private Map<Departments, Integer> getDataSet(int month, int year) {
        ArrayList<Departments> departmentses = new ArrayList<>();
@@ -847,6 +871,7 @@ public class UserFrame extends javax.swing.JFrame implements OnGetUserListener, 
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel avatar;
+    private javax.swing.JButton back_btn;
     private javax.swing.JPanel calendarPanel;
     private javax.swing.JButton changePinBtn;
     private javax.swing.JButton checkinBtn;

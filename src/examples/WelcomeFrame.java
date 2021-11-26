@@ -199,7 +199,7 @@ public class WelcomeFrame extends javax.swing.JFrame {
             @Override
             public void mouseClicked(MouseEvent e) {
                 new ManagerFrame().setVisible(true);
-                pack();
+                setVisible(false);
             }
 
             @Override
@@ -226,7 +226,7 @@ public class WelcomeFrame extends javax.swing.JFrame {
             @Override
             public void mouseClicked(MouseEvent e) {
                 new UserFrame().setVisible(true);
-                pack();
+                setVisible(false);
             }
 
             @Override
