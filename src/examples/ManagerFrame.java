@@ -79,7 +79,7 @@ public class ManagerFrame extends javax.swing.JFrame implements OnGetUserListene
      private User mUser;
     private Checkin mCheckIn;
     private DataBaseUtils dbHelper = DataBaseUtils.getInstance();
-     RuleDbHelper db = RuleDbHelper.getInstance();
+    private RuleDbHelper db = RuleDbHelper.getInstance();
      private Rule mRule;
     Checkin c ;
      private ArrayList<LocalDate> mDates = new ArrayList<>();
@@ -764,8 +764,14 @@ public class ManagerFrame extends javax.swing.JFrame implements OnGetUserListene
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
-        ArrayList<User> users = db.getAllUser();
-        ExcelUtils.exportData(users, jMonthChooser.getMonth() +1, jYearChooser3.getYear());
+        new Runnable() {
+            @Override
+            public void run() {
+                ArrayList<User> users = db.getAllUser();
+                ExcelUtils.exportData(users, dbHelper, db, jMonthChooser.getMonth() +1, jYearChooser3.getYear());
+            }
+        }.run();
+       
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void back_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_back_btnActionPerformed

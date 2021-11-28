@@ -5,11 +5,18 @@
  */
 package examples.utils;
 
+import examples.UserFrame;
+import examples.data.Departments;
 import examples.data.User;
+import examples.database.DataBaseUtils;
+import examples.database.RuleDbHelper;
 import java.awt.Font;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -17,7 +24,9 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -34,6 +43,8 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.CellReference;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.bson.Document;
+import org.json.JSONException;
 
 /**
  *
@@ -50,27 +61,34 @@ public abstract class ExcelUtils {
     private static int month;
     private static int year;
     private static ArrayList<User> mUsers = new ArrayList<>();
+    private static DataBaseUtils dbHelper = DataBaseUtils.getInstance();
+    private static RuleDbHelper db = RuleDbHelper.getInstance();
+    private static final String excelFilePath = "C:/demo/BaoCao.xlsx";
+    private static ArrayList<Departments> departmentses;
     
-    public static void exportData(ArrayList<User> datas, int month, int year) {
+    public static void exportData(ArrayList<User> datas, DataBaseUtils dataBaseUtils, RuleDbHelper ruleDbHelper, int month, int year) {
         ExcelUtils.month = month;
         ExcelUtils.year = year;
         ExcelUtils.mUsers = datas;
-        final List<Book> books = getBooks();
-        final String excelFilePath = "C:/demo/users.xlsx";
+        ExcelUtils.db = ruleDbHelper;
+        ExcelUtils.dbHelper = dataBaseUtils;
+         departmentses = getDepartmentses();
+        File file = new File(excelFilePath);
          try {         
-             writeExcel(books, excelFilePath);
+             writeExcel( excelFilePath, "TỔNG QUAN", mUsers);
+             getAnalysicOfDepartment();
          } catch (IOException ex) {
              Logger.getLogger(ExcelUtils.class.getName()).log(Level.SEVERE, null, ex);
          }
     }
     
     
-     public static void writeExcel(List<Book> books, String excelFilePath) throws IOException {
+     public static void writeExcel( String excelFilePath, String sheetName, ArrayList<User> users) throws IOException {
         // Create Workbook
         Workbook workbook = getWorkbook(excelFilePath);
  
         // Create sheet
-        Sheet sheet = workbook.createSheet("Users"); // Create sheet with sheet name
+        Sheet sheet = workbook.createSheet(sheetName); // Create sheet with sheet name
  
         int rowIndex = 0;
          
@@ -79,11 +97,11 @@ public abstract class ExcelUtils {
  
         // Write data
         rowIndex++;
-        for (User user : mUsers) {
+        for (User user : users) {
             // Create row
             Row row = sheet.createRow(rowIndex);
             // Write data on row
-            writeBook(user, row);
+            writeUser(user, row);
             rowIndex++;
         }
          
@@ -98,30 +116,31 @@ public abstract class ExcelUtils {
         createOutputFile(workbook, excelFilePath);
         System.out.println("Done!!!");
     }
- 
-    // Create dummy data
-    private static List<Book> getBooks() {
-        List<Book> listBook = new ArrayList<>();
-        Book book;
-        for (int i = 1; i <= 5; i++) {
-            book = new Book(i, "Book " + i, i * 2, i * 1000);
-            listBook.add(book);
-        }
-        return listBook;
-    }
+
  
     // Create workbook
     private static Workbook getWorkbook(String excelFilePath) throws IOException {
         Workbook workbook = null;
  
-        if (excelFilePath.endsWith("xlsx")) {
-            workbook = new XSSFWorkbook();
-        } else if (excelFilePath.endsWith("xls")) {
-            workbook = new HSSFWorkbook();
-        } else {
-            throw new IllegalArgumentException("The specified file is not Excel file");
-        }
+//        if (excelFilePath.endsWith("xlsx")) {
+//            workbook = new XSSFWorkbook();
+//        } else if (excelFilePath.endsWith("xls")) {
+//            workbook = new HSSFWorkbook();
+//        } else {
+//            throw new IllegalArgumentException("The specified file is not Excel file");
+//        }
  
+        final File file = new File(excelFilePath);
+        if (file.exists() == false) {
+          System.out.println("Creating a new workbook '" + file + "'");
+          workbook = new XSSFWorkbook();
+        } else {
+          System.out.println("Appending to existing workbook '" + file + "'");
+          try (InputStream is = new FileInputStream(file)) {
+            workbook = new XSSFWorkbook(is);
+          }
+        }
+        
         return workbook;
     }
  
@@ -168,7 +187,7 @@ public abstract class ExcelUtils {
     }
     
     // Write data
-    private static void writeBook(User user, Row row) {
+    private static void writeUser(User user, Row row) {
         if (cellStyleFormatNumber == null) {
             // Format number
             short format = (short)BuiltinFormats.getBuiltinFormat("#,##0");
@@ -188,7 +207,13 @@ public abstract class ExcelUtils {
         cell.setCellValue(user.getFullname());
  
         cell = row.createCell(COLUMN_INDEX_PRICE);
-        cell.setCellValue(user.getId_department());
+        for (Departments de : departmentses) {
+            if(de.getmId() == user.getId_department()) {
+                cell.setCellValue(de.getmName());
+                break;
+            }
+        }
+        
        // cell.setCellStyle(cellStyleFormatNumber);
  
         
@@ -261,70 +286,48 @@ public abstract class ExcelUtils {
     private static void createOutputFile(Workbook workbook, String excelFilePath) throws IOException {
         try (OutputStream os = new FileOutputStream(excelFilePath)) {
             workbook.write(os);
+            os.close();
         }
     }
 
-    private static class Book {
-
-        public Book() {
-        }
-        
-         private Integer id;
-        private String title;
-        private Integer quantity;
-        private Double price;
-        private Double totalMoney;
-
-        private Book(int i, String string, int i0, int i1) {
-            id = i;
-            title = string;
-            quantity = i0;
-            price = 10.1;
-            totalMoney = 10.2;
-            
-        }
-
-        public Integer getId() {
-            return id;
-        }
-
-        public void setId(Integer id) {
-            this.id = id;
-        }
-
-        public String getTitle() {
-            return title;
-        }
-
-        public void setTitle(String title) {
-            this.title = title;
-        }
-
-        public Integer getQuantity() {
-            return quantity;
-        }
-
-        public void setQuantity(Integer quantity) {
-            this.quantity = quantity;
-        }
-
-        public Double getPrice() {
-            return price;
-        }
-
-        public void setPrice(Double price) {
-            this.price = price;
-        }
-
-        public Double getTotalMoney() {
-            return totalMoney;
-        }
-
-        public void setTotalMoney(Double totalMoney) {
-            this.totalMoney = totalMoney;
-        }
+    private static Map<Departments, List<User>> getAnalysicOfDepartment() {
+        Map<Departments, List<User>> map = new LinkedHashMap<>();
         
         
+        departmentses.forEach(de -> {
+            ArrayList<User> users;
+            users = getUsers(de.getmId());
+            System.out.println("deparment size" + de.getmId());
+            try {
+                writeExcel(excelFilePath, de.getmName(), users);
+            } catch (IOException ex) {
+                Logger.getLogger(ExcelUtils.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            map.put(de, users);
+         });
+;
+        
+        
+        return map;
+    }
+    
+    private static ArrayList<Departments> getDepartmentses() {
+        ArrayList<Departments> rerult = new ArrayList<>();
+        
+        db.setDepartmentCol("departments");
+        List<Document> list = db.getDepartments();
+        for(int i =0; i< list.size(); i++) {
+            try {
+                rerult.add(JsonParser.jsonToDepartments(list.get(i).toJson()));
+            } catch (JSONException ex) {
+                Logger.getLogger(UserFrame.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return rerult;
+    }
+    
+     private static ArrayList<User> getUsers(int id) {
+        return db.getAllUserOfDepartment(id);
     }
     
 }
