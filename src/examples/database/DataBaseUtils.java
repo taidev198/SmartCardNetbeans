@@ -21,7 +21,7 @@ import com.mongodb.client.result.DeleteResult;
 import com.mongodb.connection.ConnectionPoolSettings;
 import com.mongodb.connection.SocketSettings;
 import examples.data.Checkin;
-import examples.SmartCardWord;
+import frame.SmartCardWord;
 import examples.data.Rule;
 import examples.data.RuleKey;
 import examples.data.User;

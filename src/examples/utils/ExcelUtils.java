@@ -5,7 +5,7 @@
  */
 package examples.utils;
 
-import examples.UserFrame;
+import frame.UserFrame;
 import examples.data.Departments;
 import examples.data.User;
 import examples.database.DataBaseUtils;

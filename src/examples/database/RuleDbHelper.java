@@ -20,7 +20,7 @@ import static com.mongodb.client.model.Updates.set;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.connection.ConnectionPoolSettings;
 import com.mongodb.connection.SocketSettings;
-import examples.SmartCardWord;
+import frame.SmartCardWord;
 import examples.data.Checkin;
 import examples.data.Departments;
 import examples.data.DepartmentsKey;
