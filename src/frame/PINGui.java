@@ -227,7 +227,6 @@ public class PINGui extends javax.swing.JFrame {
                 isSuccess = false;
             }
           } catch (NoSuchAlgorithmException ex) {
-              Logger.getLogger(WelcomeGUI.class.getName()).log(Level.SEVERE, null, ex);
           }
         
       

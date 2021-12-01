@@ -11,6 +11,7 @@ import examples.data.Departments;
 import examples.database.DataBaseUtils;
 import examples.data.User;
 import examples.utils.DateUtils;
+import examples.utils.ImageUltils;
 import examples.utils.StringUltils;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
@@ -22,6 +23,7 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
@@ -58,43 +60,45 @@ public class InfoGUI extends javax.swing.JFrame implements OnGetUserListener{
     
     public InfoGUI(SmartCardWord card, User user, ArrayList<Departments> d, boolean isEmpty, OnGetUserListener listener) {
         initComponents();
-//        mUser = user;
-//        departmentses = d;
-//        mListener = listener;
-//        gender_combobox.setSelectedIndex(1);
-//        birthday.setDateFormatString("yyyy-MM-dd");
-//        birthday.setCalendar(new GregorianCalendar(2021,8,30));
-//        person = new Person();
-//        this.card = card;
-//        this.isEmpty = isEmpty;
-//        dbHelper = DataBaseUtils.getInstance();
-//        dbHelper.getCol("users");        
-//        for(int i = 0; i< departmentses.size(); i++)
-//            id_department_cb.addItem(departmentses.get(i).getmName());
-//        if(!this.isEmpty) {
-//            save_btn.setText("EDIT");
-//            System.out.println("name:" +new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.NAME), StandardCharsets.UTF_8));
-//            String id = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.ID), StandardCharsets.UTF_8).replaceAll("[^a-zA-Z0-9]", "");  
-//            String name = (new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.NAME), StandardCharsets.UTF_8)).replaceAll("[^\\x00-\\xFF]", "").trim();
-//            String date = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.DATE), StandardCharsets.UTF_8).replaceAll("[^a-zA-Z0-9,-]", ""); 
-//            String address = (new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.ADDRESS), StandardCharsets.UTF_8)).replaceAll("[^\\x00-\\xFF]", "").trim();
-//            String gender = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.GENDER), StandardCharsets.UTF_8).replaceAll("[^a-zA-Z0-9]", "");
-//            String id_department = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.ID_DEPARTMENT), StandardCharsets.UTF_8).replaceAll("[^a-zA-Z0-9]", "");
-//                   text_name.setText(name);
-//                   birthday.setDate(DateUtils.stringToDate(date));
-//                   text_address.setText(address);
-//                   gender_combobox.setSelectedIndex(Integer.valueOf(gender));
-//                   id_department_cb.setSelectedIndex(Integer.valueOf(id_department));
-//                  
-//                         
-//            getImage(person.getAvatar());
-//            ImageUltils iU = ImageUltils.getInstance();
-//            try {
-//                avatar.setIcon(iU.bufferImageToII(iU.byteToBufferImage(mUser.getAvatar()), avatar));
-//            } catch (IOException ex) {
-//                Logger.getLogger(InfoGUI.class.getName()).log(Level.SEVERE, null, ex);
-//            }
-//        }
+        mUser = user;
+        departmentses = d;
+        mListener = listener;
+        gender_combobox.setSelectedIndex(1);
+        birthday.setDateFormatString("yyyy-MM-dd");
+        birthday.setCalendar(new GregorianCalendar(2021,8,30));
+        person = new Person();
+        this.card = card;
+        this.isEmpty = isEmpty;
+        dbHelper = DataBaseUtils.getInstance();
+        dbHelper.getCol("users");        
+        for(int i = 0; i< departmentses.size(); i++)
+            id_department_cb.addItem(departmentses.get(i).getmName());
+        if(!this.isEmpty) {
+            save_btn.setText("EDIT");
+            System.out.println("name:" +new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.NAME), StandardCharsets.UTF_8));
+            String id = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.ID), StandardCharsets.UTF_8).replaceAll("[^a-zA-Z0-9]", "");  
+            String name = (new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.NAME), StandardCharsets.UTF_8));
+            name = user.getFullname();
+            String date = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.DATE), StandardCharsets.UTF_8).replaceAll("[^a-zA-Z0-9,-]", ""); 
+            String address = (new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.ADDRESS), StandardCharsets.UTF_8));
+            address = user.getAddress();
+            String gender = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.GENDER), StandardCharsets.UTF_8).replaceAll("[^a-zA-Z0-9]", "");
+            String id_department = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.ID_DEPARTMENT), StandardCharsets.UTF_8).replaceAll("[^a-zA-Z0-9]", "");
+                   text_name.setText(name);
+                   birthday.setDate(DateUtils.stringToDate(date));
+                   text_address.setText(address);
+                   gender_combobox.setSelectedIndex(Integer.valueOf(gender));
+                   id_department_cb.setSelectedIndex(Integer.valueOf(id_department));
+                  
+                         
+            getImage(person.getAvatar());
+            ImageUltils iU = ImageUltils.getInstance();
+            try {
+                avatar.setIcon(iU.bufferImageToII(iU.byteToBufferImage(mUser.getAvatar()), avatar));
+            } catch (IOException ex) {
+                Logger.getLogger(InfoGUI.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }
 
     /**

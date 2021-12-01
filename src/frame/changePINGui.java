@@ -237,7 +237,6 @@ public class changePINGui extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "SAI MA PIN HIEN TAI");
             } 
           } catch (NoSuchAlgorithmException ex) {
-              Logger.getLogger(WelcomeGUI.class.getName()).log(Level.SEVERE, null, ex);
           }
         
         
