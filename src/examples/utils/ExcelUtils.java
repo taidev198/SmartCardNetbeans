@@ -29,6 +29,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.BuiltinFormats;
@@ -63,7 +65,7 @@ public abstract class ExcelUtils {
     private static ArrayList<User> mUsers = new ArrayList<>();
     private static DataBaseUtils dbHelper = DataBaseUtils.getInstance();
     private static RuleDbHelper db = RuleDbHelper.getInstance();
-    private static final String excelFilePath = "C:/demo/BaoCao.xlsx";
+    private static String excelFilePath = "C:/demo/BaoCao1.xlsx";
     private static ArrayList<Departments> departmentses;
     
     public static void exportData(ArrayList<User> datas, DataBaseUtils dataBaseUtils, RuleDbHelper ruleDbHelper, int month, int year) {
@@ -74,14 +76,25 @@ public abstract class ExcelUtils {
         ExcelUtils.dbHelper = dataBaseUtils;
          departmentses = getDepartmentses();
         File file = new File(excelFilePath);
-         try {         
-             writeExcel( excelFilePath, "TỔNG QUAN", mUsers);
-             getAnalysicOfDepartment();
-         } catch (IOException ex) {
-             Logger.getLogger(ExcelUtils.class.getName()).log(Level.SEVERE, null, ex);
-         }
+        creatNewFile();
+        //writeExcel( excelFilePath, "TỔNG QUAN", mUsers);
+        getAnalysicOfDepartment();
     }
     
+    
+    private static void creatNewFile() {
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Specify a file to save");
+        fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("MS Office Documents", "xlsx"));
+        fileChooser.setSelectedFile(new File("BaoCao.xlsx"));
+        int userSelection = fileChooser.showSaveDialog(null);
+        if (userSelection == JFileChooser.APPROVE_OPTION) {
+        File fileToSave = fileChooser.getSelectedFile();
+        System.out.println("Save as file: " + fileToSave.getAbsolutePath());
+        excelFilePath = fileToSave.getAbsolutePath();
+        }
+    }
     
      public static void writeExcel( String excelFilePath, String sheetName, ArrayList<User> users) throws IOException {
         // Create Workbook
