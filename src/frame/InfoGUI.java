@@ -327,9 +327,17 @@ public class InfoGUI extends javax.swing.JFrame implements OnGetUserListener{
     private void save_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_save_btnActionPerformed
         // TODO add your handling code here:
         String id;
-        if(isEmpty)
-        id  = StringUltils.generateId(StringUltils.reducingString(id_department_cb.getSelectedItem().toString()));
-        else id = mUser.getId();
+        User user = new User();
+        if(isEmpty) {
+         id  = StringUltils.generateId(StringUltils.reducingString(id_department_cb.getSelectedItem().toString()));
+         user.setAvatar(imgBytes);
+          user.setPub_key(card.pubkeyRsa());
+        }
+        else {
+            id = mUser.getId();
+            user.setAvatar(mUser.getAvatar());
+            user.setPub_key(mUser.getPub_key());
+        }
         String name = text_name.getText().trim();
         String address = text_address.getText().trim();
         System.out.println(name.getBytes().length);
@@ -365,7 +373,7 @@ public class InfoGUI extends javax.swing.JFrame implements OnGetUserListener{
 //          
         Date selectedValue =  birthday.getCalendar().getTime();
         System.out.println(DateUtils.dateToString(selectedValue));  
-        User user = new User();
+        
         user.setId(id);
         user.setFullname(name);
         user.setGender(gender_combobox.getSelectedIndex());
@@ -374,8 +382,6 @@ public class InfoGUI extends javax.swing.JFrame implements OnGetUserListener{
         user.setLate_date(new ArrayList<>());
         user.setPassword("12345");
         user.setBirth(selectedValue);
-        user.setPub_key(card.pubkeyRsa());
-        user.setAvatar(imgBytes);
         user.setIsCheckin(false);
         user.setIsCheckout(false);
 
