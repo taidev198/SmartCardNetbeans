@@ -326,8 +326,10 @@ public class InfoGUI extends javax.swing.JFrame implements OnGetUserListener{
 
     private void save_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_save_btnActionPerformed
         // TODO add your handling code here:
-        
-        String id = StringUltils.generateId(StringUltils.reducingString(id_department_cb.getSelectedItem().toString()));
+        String id;
+        if(isEmpty)
+        id  = StringUltils.generateId(StringUltils.reducingString(id_department_cb.getSelectedItem().toString()));
+        else id = mUser.getId();
         String name = text_name.getText().trim();
         String address = text_address.getText().trim();
         System.out.println(name.getBytes().length);
@@ -518,13 +520,7 @@ private void setImage(byte [] img){
                     break;
                 }
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(InfoGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(InfoGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(InfoGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(InfoGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         /* Set the Nimbus look and feel */
@@ -552,10 +548,8 @@ private void setImage(byte [] img){
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new InfoGUI(card, mUser, departmentses, isEmpty, mListener).setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            new InfoGUI(card, mUser, departmentses, isEmpty, mListener).setVisible(true);
         });
     }
 
