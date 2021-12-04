@@ -188,7 +188,7 @@ public abstract class ExcelUtils {
         SimpleDateFormat fmt = new SimpleDateFormat("dd/MM");
         Calendar cal = Calendar.getInstance();
         cal.clear();
-        cal.set(year, month, 1);
+        cal.set(year, month - 1, 1);
         int daysInMonth = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
         for (int i = 0; i < daysInMonth; i++) {
             System.out.println(fmt.format(cal.getTime()));
@@ -221,7 +221,7 @@ public abstract class ExcelUtils {
         cell.setCellValue(user.getFullname());
  
         cell = row.createCell(COLUMN_INDEX_PRICE);
-        cell.setCellValue(DateUtils.getNumberLateDate(year, month, user));
+        //cell.setCellValue(DateUtils.getNumberLateDate(year, month, user));
         
 //        for (Departments de : departmentses) {
 //            if(de.getmId() == user.getId_department()) {
@@ -248,21 +248,27 @@ public abstract class ExcelUtils {
     private static void fillLateDate(User user, Cell cell, Row row) {
         ArrayList<Date> datesOfMonth = DateUtils.printDatesInMonth(year, month, "yyyy-MM-dd");
         int i = 3;
+        int numOfLateDate = 0;
         for (Date date : datesOfMonth) {
             LocalDate in = date.toInstant()
-      .atZone(ZoneId.systemDefault())
-      .toLocalDate();
+                                            .atZone(ZoneId.systemDefault())
+                                            .toLocalDate();
             List<LocalDate> lateDate = user.getLate_date();
+            System.out.println(user.getFullname()+ "==============");
             for (LocalDate ld : lateDate) {
               //  System.out.println(date.getMonth() + " :" + ld.getMonthValue());
                 if(ld.getMonthValue() == in.getMonthValue() && ld.getDayOfMonth()== in.getDayOfMonth()) {
-                    System.out.println("added");
+                    System.out.println(ld.toString() + ":" + in.toString());
                      cell = row.createCell(i);
                      cell.setCellValue("X");
+                     numOfLateDate++;
                 }
             }
             i++;
         }
+        
+        cell = row.getCell(2);
+        cell.setCellValue(String.valueOf(numOfLateDate));
     }
     
     // Create CellStyle for header
