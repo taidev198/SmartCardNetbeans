@@ -152,7 +152,8 @@ CodecRegistry pojoCodecRegistry = fromRegistries(MongoClientSettings.getDefaultC
                                             set(UserKey.GENDER, user.getGender()),
                                             set(UserKey.ID_DEPARTMENT, user.getId_department()),
                                             set(UserKey.IS_CHECKIN, user.isIsCheckin()),
-                                            set(UserKey.IS_CHECKOUT, user.isIsCheckout())
+                                            set(UserKey.IS_CHECKOUT, user.isIsCheckout()),
+                                            set(UserKey.CHECKIN_DATE, user.getCheckinDate())
                                             ));
 
         return user;

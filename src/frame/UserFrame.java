@@ -350,7 +350,7 @@ public class UserFrame extends javax.swing.JFrame implements OnGetUserListener, 
 
         jLabel1.setFont(new java.awt.Font("Times New Roman", 1, 36)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel1.setText("THẺ CHẤM CÔNG");
+        jLabel1.setText("THẺ ĐIỂM DANH");
 
         back_btn.setBackground(new java.awt.Color(0, 153, 255));
         back_btn.setText("QUAY LẠI");
@@ -531,12 +531,24 @@ public class UserFrame extends javax.swing.JFrame implements OnGetUserListener, 
     private void checkinBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkinBtnActionPerformed
         // TODO add your handling code here:
         if(isConnected) {
-            
             if(card.VerifyRsa(mUser.getPub_key())) {
+                LocalDate ld = LocalDate.now();
+           //reset flag checkin
+           if(!ld.equals(mUser.getCheckinDate())) {
+               mUser.setIsCheckin(false);
+               mUser.setIsCheckout(false);
+               dbHelper.updateUser(text_id.getText(), mUser);
+           }
+             mUser.setCheckinDate(ld);
             String result = c.doCjheckin(LocalDate.now(), LocalTime.now(), mUser, dbHelper); 
-            if(result.equals(Constants.LATE_TIME) || result.equals(Constants.DONT_WORK_TODAY) )
-                dbHelper.updateCheckinUser(text_id.getText(), LocalDate.now());
-            
+            if(result.equals(Constants.LATE_TIME)) {
+                int num = DateUtils.getNumberLateDate(ld.getMonthValue(), ld.getYear(), mUser);
+                if(mRule.getmFines() - num == 0) {
+                    JOptionPane.showMessageDialog(null, "Bạn đã bị phạt vì đi muộn lần thứ " + num);
+                } else result = result + ": Bạn chỉ còn " + (mRule.getmFines() - num) + " lần";
+                 dbHelper.updateCheckinUser(text_id.getText(), LocalDate.now());
+            }
+
             JOptionPane.showMessageDialog(null, result);
             
         } else {

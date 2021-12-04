@@ -479,7 +479,7 @@
                 <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="ff" green="ff" red="ff" type="rgb"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="THE&#x309; CH&#xc2;&#x301;M C&#xd4;NG"/>
+                <Property name="text" type="java.lang.String" value="THE&#x309; &#x110;I&#xca;&#x309;M DANH"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JButton" name="back_btn">

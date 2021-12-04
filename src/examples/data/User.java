@@ -28,7 +28,7 @@ public class User {
     @BsonProperty("late_date") List<LocalDate> late_date;
     @BsonProperty("password") String password;
     @BsonProperty("pub_key") byte[] pub_key;
-     
+    @BsonProperty("checkin_date") LocalDate checkinDate;
     
     public String getId() {
         return id;
@@ -125,6 +125,15 @@ public class User {
     public void setIsCheckout(boolean isCheckout) {
         this.isCheckout = isCheckout;
     }
+
+    public LocalDate getCheckinDate() {
+        return checkinDate;
+    }
+
+    public void setCheckinDate(LocalDate checkinDate) {
+        this.checkinDate = checkinDate;
+    }
+    
     
     
 }

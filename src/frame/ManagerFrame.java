@@ -956,7 +956,7 @@ public class ManagerFrame extends javax.swing.JFrame implements OnGetUserListene
     
     public static JFreeChart createChart(Map<Departments, Integer> data) {
         JFreeChart barChart = ChartFactory.createBarChart(
-                "BIỂU ĐỒ SỐ SV ĐI MUỘN TRONG MỖI KHOA",
+                "BIỂU ĐỒ SỐ CBNV ĐI MUỘN TRONG MỖI KHOA",
                 "", "CBNV",
                 createDataset(data), PlotOrientation.VERTICAL, false, false, false);
         return barChart;
