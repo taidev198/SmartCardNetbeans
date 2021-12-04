@@ -49,7 +49,8 @@ import org.bson.Document;
 import org.json.JSONException;
 
 /**
- *
+ *https://www.codejava.net/java-se/swing/show-save-file-dialog-using-jfilechooser
+ * https://stackoverflow.com/questions/356671/how-do-i-set-a-suggested-file-name-using-jfilechooser-showsavedialog
  * @author traig
  */
 public abstract class ExcelUtils {
@@ -176,7 +177,7 @@ public abstract class ExcelUtils {
  
         cell = row.createCell(COLUMN_INDEX_PRICE);
         cell.setCellStyle(cellStyle);
-        cell.setCellValue("Phòng Ban");
+        cell.setCellValue("Số lần đi muộn");
  
         writeDateInHeader(cell, row, cellStyle);
     }
@@ -187,7 +188,7 @@ public abstract class ExcelUtils {
         SimpleDateFormat fmt = new SimpleDateFormat("dd/MM");
         Calendar cal = Calendar.getInstance();
         cal.clear();
-        cal.set(year, month - 1, 1);
+        cal.set(year, month, 1);
         int daysInMonth = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
         for (int i = 0; i < daysInMonth; i++) {
             System.out.println(fmt.format(cal.getTime()));
@@ -220,12 +221,14 @@ public abstract class ExcelUtils {
         cell.setCellValue(user.getFullname());
  
         cell = row.createCell(COLUMN_INDEX_PRICE);
-        for (Departments de : departmentses) {
-            if(de.getmId() == user.getId_department()) {
-                cell.setCellValue(de.getmName());
-                break;
-            }
-        }
+        cell.setCellValue(DateUtils.getNumberLateDate(year, month, user));
+        
+//        for (Departments de : departmentses) {
+//            if(de.getmId() == user.getId_department()) {
+//                cell.setCellValue(de.getmName());
+//                break;
+//            }
+//        }
         
        // cell.setCellStyle(cellStyleFormatNumber);
  

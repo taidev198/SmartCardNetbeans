@@ -727,6 +727,8 @@ public class ManagerFrame extends javax.swing.JFrame implements OnGetUserListene
         non_data_label4.setVisible(false);
         ChartPanel chartPanel = new ChartPanel(createChart(getDataSet(jMonthChooser.getMonth() + 1, jYearChooser3.getYear())));
         chartPanel.setPreferredSize(new java.awt.Dimension(200, 200));
+        chart_pane3.removeAll();
+        chart_pane3.revalidate();
         chart_pane3.setLayout(new java.awt.BorderLayout());
         chart_pane3.add(chartPanel);
         chart_pane3.revalidate();
@@ -747,6 +749,7 @@ public class ManagerFrame extends javax.swing.JFrame implements OnGetUserListene
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
+         System.out.println(jMonthChooser + "month");
         new Runnable() {
             @Override
             public void run() {
@@ -954,7 +957,7 @@ public class ManagerFrame extends javax.swing.JFrame implements OnGetUserListene
     public static JFreeChart createChart(Map<Departments, Integer> data) {
         JFreeChart barChart = ChartFactory.createBarChart(
                 "BIỂU ĐỒ SỐ SV ĐI MUỘN TRONG MỖI KHOA",
-                "Năm", "SV",
+                "", "CBNV",
                 createDataset(data), PlotOrientation.VERTICAL, false, false, false);
         return barChart;
     }

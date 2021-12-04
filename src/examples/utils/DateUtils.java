@@ -5,12 +5,15 @@
  */
 package examples.utils;
 
+import examples.data.User;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -63,4 +66,17 @@ public class DateUtils {
     
     return datesOfMonth;
 }
+     
+     public static int getNumberLateDate(int year, int month, User user) {
+         
+         int num = 0;
+         List<LocalDate> lateDate = user.getLate_date();
+            for (LocalDate lateDate1 : lateDate) {
+                if(lateDate1.getMonthValue() ==  month && lateDate1.getYear() == year) {
+                    num ++;
+                    break;
+                }
+            }
+         return num;
+     }
 }

@@ -57,7 +57,7 @@ public class JsonParser {
       JSONArray jsonarray = obj.getJSONArray(UserKey.LATE_DATE);
         ArrayList<LocalDate> lateDate = new ArrayList<>();
       for (int i = 0; i < jsonarray.length(); i++) {
-        String late_date = jsonarray.getJSONObject(i).toString();
+       // String late_date = jsonarray.getJSONObject(i).toString();
         Timestamp stamp = new Timestamp(jsonarray.getJSONObject(i).getLong("$date"));
         Date date = new Date(stamp.getTime());
         DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
