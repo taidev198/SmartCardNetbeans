@@ -658,6 +658,7 @@ public class UserFrame extends javax.swing.JFrame implements OnGetUserListener, 
         
         new WelcomeFrame().setVisible(true);
         this.setVisible(false);
+        card.disconnect();
     }//GEN-LAST:event_back_btnActionPerformed
 
    private Map<Departments, Integer> getDataSet(int month, int year) {
@@ -719,7 +720,7 @@ public class UserFrame extends javax.swing.JFrame implements OnGetUserListener, 
             String id_department = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.ID_DEPARTMENT), StandardCharsets.UTF_8).replaceAll("[^a-zA-Z0-9/]", ""); 
             departmentses = getDepartmentses();
             
-        if(!id.equals("p3")) {
+        if(!id.contains("p3")) {
             mUser = dbHelper.findUser(id);
             if(mUser != null) {
                  mDates = getLateDate(mUser);

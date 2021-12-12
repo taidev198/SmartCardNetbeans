@@ -341,14 +341,19 @@ public class ManagerFrame extends javax.swing.JFrame implements OnGetUserListene
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        text_id.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
         text_id.setText("N/A");
 
+        text_name.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
         text_name.setText("N/A");
 
+        text_birth.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
         text_birth.setText("N/A");
 
+        text_gender.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
         text_gender.setText("N/A");
 
+        text_address.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
         text_address.setText("N/A");
 
         text_department.setText("N/A");
@@ -764,7 +769,7 @@ public class ManagerFrame extends javax.swing.JFrame implements OnGetUserListene
         // TODO add your handling code here:
         new WelcomeFrame().setVisible(true);
         this.setVisible(false);
-        
+        card.disconnect();
     }//GEN-LAST:event_back_btnActionPerformed
 
     private Map<Departments, Integer> getDataSet(int month, int year) {
@@ -827,7 +832,7 @@ public class ManagerFrame extends javax.swing.JFrame implements OnGetUserListene
             String id_department = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.ID_DEPARTMENT), StandardCharsets.UTF_8).replaceAll("[^a-zA-Z0-9/]", ""); 
             departmentses = getDepartmentses();
             
-        if(!id.equals("p3")) {
+        if(!id.contains("p3")) {
             mUser = dbHelper.findUser(id);
             if(mUser != null) {
                  mDates = getLateDate(mUser);
