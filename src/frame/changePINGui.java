@@ -53,10 +53,8 @@ public class changePINGui extends javax.swing.JFrame {
         confirm_pass = new javax.swing.JPasswordField();
         jPanel2 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
-        back_btn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setUndecorated(true);
         setResizable(false);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
@@ -112,7 +110,7 @@ public class changePINGui extends javax.swing.JFrame {
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(180, Short.MAX_VALUE)
+                .addContainerGap(168, Short.MAX_VALUE)
                 .addComponent(jLabel3)
                 .addGap(168, 168, 168))
         );
@@ -123,15 +121,6 @@ public class changePINGui extends javax.swing.JFrame {
                 .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
-
-        back_btn.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
-        back_btn.setForeground(new java.awt.Color(255, 0, 51));
-        back_btn.setText("X");
-        back_btn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                back_btnActionPerformed(evt);
-            }
-        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -154,23 +143,20 @@ public class changePINGui extends javax.swing.JFrame {
                     .addComponent(check_box_2)
                     .addComponent(check_box_3)
                     .addComponent(check_box_1))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(75, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(change_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(151, 151, 151))
-                    .addComponent(back_btn, javax.swing.GroupLayout.Alignment.TRAILING)))
+                .addComponent(change_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(151, 151, 151))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(back_btn)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
+                .addContainerGap(51, Short.MAX_VALUE)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -211,6 +197,12 @@ public class changePINGui extends javax.swing.JFrame {
     private void change_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_change_btnActionPerformed
         // TODO add your handling code here:
         
+        if(!new_pass.getText().equals(confirm_pass.getText())) {
+            JOptionPane.showMessageDialog(null, "MÃ PIN MỚI VÀ MÃ PIN XÁC NHẬN KHÔNG TRÙNG NHAU");
+            System.out.println("mã mới:" + new_pass.getText());
+            return;
+        }
+        
          MessageDigest md;
           try {
               md = MessageDigest.getInstance("MD5");
@@ -223,8 +215,9 @@ public class changePINGui extends javax.swing.JFrame {
                       md.reset();
                 md.update(toHex(new_pass.getText()));
                 digest = md.digest();
-                if(new String(card.Open(digest, (byte)5)).contains("9000")){
+                if(card.Open(digest, (byte)5).contains("9000")){
                  //new PINGui(card).setVisible(true);
+                 JOptionPane.showMessageDialog(null, "ĐỔI MÃ PIN THÀNH CÔNG");
                  this.setVisible(false);
                 }
               
@@ -234,7 +227,7 @@ public class changePINGui extends javax.swing.JFrame {
               
             }
             else if(result.equals("6300")) {
-                JOptionPane.showMessageDialog(null, "SAI MA PIN HIEN TAI");
+                JOptionPane.showMessageDialog(null, "SAI MÃ PIN HIỆN TẠI");
             } 
           } catch (NoSuchAlgorithmException ex) {
           }
@@ -250,11 +243,6 @@ public class changePINGui extends javax.swing.JFrame {
     private void new_passActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_new_passActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_new_passActionPerformed
-
-    private void back_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_back_btnActionPerformed
-        // TODO add your handling code here:
-        this.setVisible(false);
-    }//GEN-LAST:event_back_btnActionPerformed
     private void initEvents() {
         check_box_1.setText("");
         check_box_2.setText("");
@@ -332,7 +320,6 @@ public class changePINGui extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton back_btn;
     private javax.swing.JButton change_btn;
     private javax.swing.JCheckBox check_box_1;
     private javax.swing.JCheckBox check_box_2;
