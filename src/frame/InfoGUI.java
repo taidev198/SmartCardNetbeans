@@ -76,6 +76,7 @@ public class InfoGUI extends javax.swing.JFrame implements OnGetUserListener{
             id_department_cb.addItem(departmentses.get(i).getmName());
         showId(false);
         if(!this.isEmpty) {
+            title_text.setText("CHỈNH SỬA THÔNG TIN CÁ NHÂN");
             save_btn.setText("EDIT");
             System.out.println("name:" +new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.NAME), StandardCharsets.UTF_8));
             String id = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.ID), StandardCharsets.UTF_8).replaceAll("[^a-zA-Z0-9]", "");  
@@ -135,7 +136,7 @@ public class InfoGUI extends javax.swing.JFrame implements OnGetUserListener{
         id_department_cb = new javax.swing.JComboBox<>();
         jLabel8 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
-        jLabel5 = new javax.swing.JLabel();
+        title_text = new javax.swing.JLabel();
         id_lb = new javax.swing.JLabel();
         id_text = new javax.swing.JTextField();
 
@@ -208,10 +209,10 @@ public class InfoGUI extends javax.swing.JFrame implements OnGetUserListener{
 
         jPanel2.setBackground(new java.awt.Color(0, 153, 255));
 
-        jLabel5.setFont(new java.awt.Font("Times New Roman", 1, 24)); // NOI18N
-        jLabel5.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel5.setText("NHẬP THÔNG TIN CÁ NHÂN");
-        jLabel5.setToolTipText("");
+        title_text.setFont(new java.awt.Font("Times New Roman", 1, 24)); // NOI18N
+        title_text.setForeground(new java.awt.Color(255, 255, 255));
+        title_text.setText("NHẬP THÔNG TIN CÁ NHÂN");
+        title_text.setToolTipText("");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -219,14 +220,14 @@ public class InfoGUI extends javax.swing.JFrame implements OnGetUserListener{
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(132, 132, 132)
-                .addComponent(jLabel5)
+                .addComponent(title_text)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(title_text, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -253,11 +254,10 @@ public class InfoGUI extends javax.swing.JFrame implements OnGetUserListener{
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(id_text)
                     .addComponent(id_department_cb, 0, 164, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(text_name)
-                        .addComponent(text_address)
-                        .addComponent(birthday, javax.swing.GroupLayout.DEFAULT_SIZE, 164, Short.MAX_VALUE)
-                        .addComponent(gender_combobox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addComponent(text_name)
+                    .addComponent(text_address)
+                    .addComponent(birthday, javax.swing.GroupLayout.DEFAULT_SIZE, 164, Short.MAX_VALUE)
+                    .addComponent(gender_combobox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(72, 72, 72)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(avatar, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -587,7 +587,6 @@ private void setImage(byte [] img){
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
@@ -596,6 +595,7 @@ private void setImage(byte [] img){
     private javax.swing.JButton save_btn;
     private javax.swing.JTextField text_address;
     private javax.swing.JTextField text_name;
+    private javax.swing.JLabel title_text;
     // End of variables declaration//GEN-END:variables
 
     public void setCallback(OnGetUserListener listener) {

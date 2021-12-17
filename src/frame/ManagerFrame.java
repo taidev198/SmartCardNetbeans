@@ -91,7 +91,7 @@ public class ManagerFrame extends javax.swing.JFrame implements OnGetUserListene
     public ManagerFrame() {
         initComponents();
         dbHelper.getCol("users");
-        db.setRuleCol("rule");
+        db.setRuleCol("rules");
         card = new SmartCardWord();
         validate();
         initData();
@@ -330,7 +330,7 @@ public class ManagerFrame extends javax.swing.JFrame implements OnGetUserListene
         jPanel12Layout.setHorizontalGroup(
             jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel12Layout.createSequentialGroup()
-                .addGap(273, 273, 273)
+                .addGap(283, 283, 283)
                 .addComponent(jLabel9)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -649,7 +649,7 @@ public class ManagerFrame extends javax.swing.JFrame implements OnGetUserListene
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
-        dbHelper.setRuleCol("rule");
+        dbHelper.setRuleCol("rules");
         RuleFrame r =
         new RuleFrame(this);
         r.setVisible(true);
@@ -833,7 +833,7 @@ public class ManagerFrame extends javax.swing.JFrame implements OnGetUserListene
             String id_department = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.ID_DEPARTMENT), StandardCharsets.UTF_8).replaceAll("[^a-zA-Z0-9/]", ""); 
             departmentses = getDepartmentses();
             
-        if(!id.contains("p3")) {
+        if(id.contains("[^a-zA-Z0-9]")) {
             mUser = dbHelper.findUser(id);
             if(mUser != null) {
                  mDates = getLateDate(mUser);

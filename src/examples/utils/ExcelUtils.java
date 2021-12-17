@@ -68,6 +68,7 @@ public abstract class ExcelUtils {
     private static RuleDbHelper db = RuleDbHelper.getInstance();
     private static String excelFilePath = "C:/demo/BaoCao1.xlsx";
     private static ArrayList<Departments> departmentses;
+    private static int numberOfLate = 0;
     
     public static void exportData(ArrayList<User> datas, DataBaseUtils dataBaseUtils, RuleDbHelper ruleDbHelper, int month, int year) {
         ExcelUtils.month = month;
@@ -104,21 +105,19 @@ public abstract class ExcelUtils {
         // Create sheet
         Sheet sheet = workbook.createSheet(sheetName); // Create sheet with sheet name
  
-        int rowIndex = 0;
-         
+        int rowIndex = 4;
+        
         // Write header
         writeHeader(sheet, rowIndex);
- 
-        // Write data
-        rowIndex++;
         for (User user : users) {
             // Create row
+            rowIndex++;
             Row row = sheet.createRow(rowIndex);
             // Write data on row
             writeUser(user, row);
-            rowIndex++;
+            
         }
-         
+         writeTitle(sheet, 0, users);
         // Write footer
         //writeFooter(sheet, rowIndex);
  
@@ -131,7 +130,52 @@ public abstract class ExcelUtils {
         System.out.println("Done!!!");
     }
 
- 
+    private static void writeTitle(Sheet sheet, int rowIndex, ArrayList<User> users) {
+         CellStyle cellStyle = createStyleForTitle(sheet);
+         
+        // Create row
+        Row row = sheet.createRow(rowIndex);
+         
+        Cell cell = row.createCell(0);
+        cell.setCellStyle(cellStyle);
+        cell.setCellValue("Tên");
+        SimpleDateFormat fmt = new SimpleDateFormat("MM/YYYY");
+        Calendar cal = Calendar.getInstance();
+        cell = row.createCell(1);
+        cell.setCellStyle(cellStyle);
+        cell.setCellValue("Báo cáo thống kê các ngày đi muộn trong tháng " + fmt.format(cal.getTime()));
+        
+        
+        row = sheet.createRow(++rowIndex);
+        cell = row.createCell(0);
+        cell.setCellStyle(cellStyle);
+        cell.setCellValue("Ngày xuất dữ liệu");
+        fmt = new SimpleDateFormat("dd/MM/YYYY");
+        cell = row.createCell(1);
+        cell.setCellStyle(cellStyle);
+        cell.setCellValue( fmt.format(cal.getTime()));
+        
+        row = sheet.createRow(++rowIndex);
+        cell = row.createCell(0);
+        cell.setCellStyle(cellStyle);
+        cell.setCellValue("Sĩ số");
+        cell = row.createCell(1);
+        cell.setCellStyle(cellStyle);
+        cell.setCellValue(String.valueOf(users.size()));
+        
+        row = sheet.createRow(++rowIndex);
+        cell = row.createCell(0);
+        cell.setCellStyle(cellStyle);
+        cell.setCellValue("Số người đi muộn");
+        cell = row.createCell(1);
+        cell.setCellStyle(cellStyle);
+        cell.setCellValue(String.valueOf(numberOfLate));
+        numberOfLate = 0;
+        
+        
+    }
+     
+     
     // Create workbook
     private static Workbook getWorkbook(String excelFilePath) throws IOException {
         Workbook workbook = null;
@@ -166,8 +210,9 @@ public abstract class ExcelUtils {
         // Create row
         Row row = sheet.createRow(rowIndex);
          
+        Cell cell ;
         // Create cells
-        Cell cell = row.createCell(COLUMN_INDEX_ID);
+        cell = row.createCell(COLUMN_INDEX_ID);
         cell.setCellStyle(cellStyle);
         cell.setCellValue("ID");
  
@@ -248,6 +293,7 @@ public abstract class ExcelUtils {
     private static void fillLateDate(User user, Cell cell, Row row) {
         ArrayList<Date> datesOfMonth = DateUtils.printDatesInMonth(year, month, "yyyy-MM-dd");
         int i = 3;
+        boolean hasLateDay = false;
         int numOfLateDate = 0;
         for (Date date : datesOfMonth) {
             LocalDate in = date.toInstant()
@@ -262,11 +308,12 @@ public abstract class ExcelUtils {
                      cell = row.createCell(i);
                      cell.setCellValue("X");
                      numOfLateDate++;
+                     hasLateDay = true;
                 }
             }
             i++;
         }
-        
+        if(hasLateDay) numberOfLate++;
         cell = row.getCell(2);
         cell.setCellValue(String.valueOf(numOfLateDate));
     }
@@ -289,6 +336,24 @@ public abstract class ExcelUtils {
         return cellStyle;
     }
      
+    
+     private static CellStyle createStyleForTitle(Sheet sheet) {
+        // Create font
+         org.apache.poi.ss.usermodel.Font font = sheet.getWorkbook().createFont();
+        font.setFontName("Times New Roman"); 
+        font.setBold(true);
+        font.setFontHeightInPoints((short) 14); // font size
+        font.setColor(IndexedColors.BLACK.getIndex()); // text color
+ 
+        // Create CellStyle
+        CellStyle cellStyle = sheet.getWorkbook().createCellStyle();
+        cellStyle.setFont(font);
+        //cellStyle.setFillForegroundColor(IndexedColors.BLUE.getIndex());
+        //cellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+        cellStyle.setBorderBottom(BorderStyle.THIN);
+        return cellStyle;
+    }
+    
     // Write footer
     private static void writeFooter(Sheet sheet, int rowIndex) {
         // Create row

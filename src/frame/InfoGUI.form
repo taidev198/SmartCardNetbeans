@@ -72,12 +72,10 @@
                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
                       <Component id="id_text" max="32767" attributes="0"/>
                       <Component id="id_department_cb" alignment="0" pref="164" max="32767" attributes="0"/>
-                      <Group type="103" alignment="1" groupAlignment="0" max="-2" attributes="0">
-                          <Component id="text_name" max="32767" attributes="0"/>
-                          <Component id="text_address" alignment="0" max="32767" attributes="0"/>
-                          <Component id="birthday" pref="164" max="32767" attributes="0"/>
-                          <Component id="gender_combobox" max="32767" attributes="0"/>
-                      </Group>
+                      <Component id="text_name" max="32767" attributes="0"/>
+                      <Component id="text_address" alignment="0" max="32767" attributes="0"/>
+                      <Component id="birthday" pref="164" max="32767" attributes="0"/>
+                      <Component id="gender_combobox" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace min="-2" pref="72" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="1" attributes="0">
@@ -306,7 +304,7 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace min="-2" pref="132" max="-2" attributes="0"/>
-                      <Component id="jLabel5" min="-2" max="-2" attributes="0"/>
+                      <Component id="title_text" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="32767" attributes="0"/>
                   </Group>
               </Group>
@@ -315,14 +313,14 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jLabel5" min="-2" pref="51" max="-2" attributes="0"/>
+                      <Component id="title_text" min="-2" pref="51" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
           </Layout>
           <SubComponents>
-            <Component class="javax.swing.JLabel" name="jLabel5">
+            <Component class="javax.swing.JLabel" name="title_text">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Times New Roman" size="24" style="1"/>
