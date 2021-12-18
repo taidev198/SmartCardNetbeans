@@ -37,9 +37,9 @@ public class JsonParser {
         rule.setId(obj.getInt("id"));
         rule.setmInDate(obj.getInt(RuleKey.START_DATE));
         rule.setmOutDate(obj.getInt(RuleKey.END_DATE));
-        System.out.println(obj.getString(RuleKey.START_TIME));
         rule.setmInTime(LocalTime.parse(obj.getString(RuleKey.START_TIME)));
         rule.setmOutTime(LocalTime.parse(obj.getString(RuleKey.END_TIME)));
+        rule.setmFines(obj.getInt(RuleKey.FINES));
         return rule;
         
     }

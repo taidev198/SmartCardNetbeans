@@ -21,6 +21,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -73,6 +74,7 @@ public class InfoGUI extends javax.swing.JFrame implements OnGetUserListener{
         dbHelper.getCol("users");        
         for(int i = 0; i< departmentses.size(); i++)
             id_department_cb.addItem(departmentses.get(i).getmName());
+        showId(false);
         if(!this.isEmpty) {
             save_btn.setText("EDIT");
             System.out.println("name:" +new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.NAME), StandardCharsets.UTF_8));
@@ -89,6 +91,8 @@ public class InfoGUI extends javax.swing.JFrame implements OnGetUserListener{
                    text_address.setText(address);
                    gender_combobox.setSelectedIndex(Integer.valueOf(gender));
                    id_department_cb.setSelectedIndex(Integer.valueOf(id_department));
+                   showId(true);
+                   id_text.setText(id);
                   
                          
             getImage(person.getAvatar());
@@ -101,6 +105,11 @@ public class InfoGUI extends javax.swing.JFrame implements OnGetUserListener{
         }
     }
 
+    
+    private void showId(boolean flag) {
+        id_lb.setVisible(flag);
+        id_text.setVisible(flag);   
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -127,7 +136,8 @@ public class InfoGUI extends javax.swing.JFrame implements OnGetUserListener{
         jLabel8 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
-        exit_btn = new javax.swing.JButton();
+        id_lb = new javax.swing.JLabel();
+        id_text = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(255, 255, 255));
@@ -173,6 +183,11 @@ public class InfoGUI extends javax.swing.JFrame implements OnGetUserListener{
         avatar.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
 
         text_name.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        text_name.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                text_nameActionPerformed(evt);
+            }
+        });
 
         birthday.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -215,31 +230,30 @@ public class InfoGUI extends javax.swing.JFrame implements OnGetUserListener{
                 .addContainerGap())
         );
 
-        exit_btn.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
-        exit_btn.setForeground(new java.awt.Color(255, 0, 0));
-        exit_btn.setText("X");
-        exit_btn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                exit_btnActionPerformed(evt);
-            }
-        });
+        id_lb.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        id_lb.setText("MÃ SINH VIÊN");
+
+        id_text.setEditable(false);
+        id_text.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap(22, Short.MAX_VALUE)
+                .addContainerGap(13, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel2)
                     .addComponent(jLabel3)
                     .addComponent(jLabel4)
                     .addComponent(jLabel6)
-                    .addComponent(jLabel7))
+                    .addComponent(jLabel7)
+                    .addComponent(id_lb))
                 .addGap(43, 43, 43)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(id_department_cb, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(id_text)
+                    .addComponent(id_department_cb, 0, 164, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                         .addComponent(text_name)
                         .addComponent(text_address)
                         .addComponent(birthday, javax.swing.GroupLayout.DEFAULT_SIZE, 164, Short.MAX_VALUE)
@@ -248,7 +262,7 @@ public class InfoGUI extends javax.swing.JFrame implements OnGetUserListener{
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(avatar, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(browser_img, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 33, Short.MAX_VALUE))
+                .addGap(0, 24, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -263,44 +277,49 @@ public class InfoGUI extends javax.swing.JFrame implements OnGetUserListener{
                                 .addGap(159, 159, 159))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                                 .addComponent(save_btn)
-                                .addGap(271, 271, 271))
-                            .addComponent(exit_btn, javax.swing.GroupLayout.Alignment.TRAILING)))))
+                                .addGap(271, 271, 271))))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addComponent(exit_btn)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(text_name, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel2))
-                        .addGap(46, 46, 46)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(birthday, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel3))
-                        .addGap(46, 46, 46)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel4)
-                            .addComponent(gender_combobox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(43, 43, 43)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel6)
-                            .addComponent(text_address, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(54, 54, 54))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel7)
-                        .addComponent(id_department_cb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(avatar, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(48, 48, 48)
                         .addComponent(browser_img)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel8)
-                        .addGap(82, 82, 82)))
+                        .addGap(82, 82, 82))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(25, 25, 25)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(id_text, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(id_lb))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(text_name, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel2))
+                                .addGap(37, 37, 37)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(birthday, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel3))
+                                .addGap(46, 46, 46)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel4)
+                                    .addComponent(gender_combobox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(43, 43, 43)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel6)
+                                    .addComponent(text_address, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(54, 54, 54))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(jLabel7)
+                                .addComponent(id_department_cb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addGap(88, 88, 88)
                 .addComponent(save_btn)
                 .addGap(85, 85, 85))
@@ -383,7 +402,7 @@ public class InfoGUI extends javax.swing.JFrame implements OnGetUserListener{
         user.setBirth(selectedValue);
         user.setIsCheckin(false);
         user.setIsCheckout(false);
-
+        user.setCheckinDate(LocalDate.now());
         System.out.println(new String(card.command(card.command(id.getBytes(), Constants.INS_ENCRYPT, Constants.ID), Constants.INS_DECRYPT, Constants.ID), StandardCharsets.UTF_8));
         System.out.println(new String(card.command(card.command(name.trim().getBytes(), Constants.INS_ENCRYPT, Constants.NAME), Constants.INS_DECRYPT, Constants.NAME), StandardCharsets.UTF_8));
         System.out.println(new String(card.command(card.command(DateUtils.dateToString(birthday.getCalendar().getTime()).getBytes(), Constants.INS_ENCRYPT, Constants.DATE), Constants.INS_DECRYPT, Constants.DATE), StandardCharsets.UTF_8));
@@ -449,10 +468,9 @@ public class InfoGUI extends javax.swing.JFrame implements OnGetUserListener{
         
     }//GEN-LAST:event_birthdayMouseClicked
 
-    private void exit_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exit_btnActionPerformed
+    private void text_nameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_text_nameActionPerformed
         // TODO add your handling code here:
-        setVisible(false);
-    }//GEN-LAST:event_exit_btnActionPerformed
+    }//GEN-LAST:event_text_nameActionPerformed
 
    
 
@@ -562,9 +580,10 @@ private void setImage(byte [] img){
     private javax.swing.JLabel avatar;
     private com.toedter.calendar.JDateChooser birthday;
     private javax.swing.JButton browser_img;
-    private javax.swing.JButton exit_btn;
     private javax.swing.JComboBox<String> gender_combobox;
     private javax.swing.JComboBox<String> id_department_cb;
+    private javax.swing.JLabel id_lb;
+    private javax.swing.JTextField id_text;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;

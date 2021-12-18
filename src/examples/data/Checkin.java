@@ -30,7 +30,7 @@ public class Checkin {
    }
    
    public String doCjheckin( LocalDate date, LocalTime time, User user, DataBaseUtils dbHelper) {
-       
+       String result = "";
        isCheckin = user.isIsCheckin();
        isCheckout = user.isIsCheckout();
         dateNow = date;
@@ -39,35 +39,42 @@ public class Checkin {
        LocalTime endTime = mRule.getmOutTime();
        int inDate = mRule.getmInDate();
        int outDate = mRule.getmOutDate();
-        int dayOfWeekNow = date.getDayOfWeek().getValue();
+        int dayOfWeekNow = date.getDayOfWeek().getValue() +1 ;
+        System.out.println("day of week " + dayOfWeekNow);
        if(dayOfWeekNow >= inDate && dayOfWeekNow <= outDate) {
             if(time.isBefore(startTime)) {
                 setIsCheckin(true);
                 user.setIsCheckin(isCheckin);
+                dbHelper.updateUser(user.getId(), user);
                return Constants.ON_TIME;
             }
             if(time.isBefore(endTime)) {
               if(!isCheckin) {
                   setIsCheckin(true);
                   user.setIsCheckin(isCheckin);
-                  return Constants.LATE_TIME;
+                  dbHelper.updateUser(user.getId(), user);
+                  return Constants.LATE_TIME;     
               }else {
                   if(!isCheckout) {
-                     return Constants.NOT_TIME_UP;
+                      dbHelper.updateUser(user.getId(), user);
+                      return Constants.NOT_TIME_UP;
                   }
               }
             } else {
              if(!isCheckin) {
+                 dbHelper.updateUser(user.getId(), user);
                  return Constants.DONT_WORK_TODAY;
              }else{
                  setIsCheckout(true);
                  user.setIsCheckout(isCheckout);
-                 return Constants.STAY_HOME;
+                 dbHelper.updateUser(user.getId(), user);
+                 return Constants.TIME_UP;
              }
          }
          }
        dbHelper.updateUser(user.getId(), user);
        return Constants.NOT_WORKING_DAY;
+       
    }
 
     public boolean isIsCheckin() {

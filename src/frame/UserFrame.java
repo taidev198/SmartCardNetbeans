@@ -562,11 +562,13 @@ public class UserFrame extends javax.swing.JFrame implements OnGetUserListener, 
 
     private void checkinBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkinBtnActionPerformed
         // TODO add your handling code here:
+        System.out.println(LocalDate.now());
         if(isConnected) {
             if(card.VerifyRsa(mUser.getPub_key())) {
                 LocalDate ld = LocalDate.now();
            //reset flag checkin
            if(!ld.equals(mUser.getCheckinDate())) {
+               System.out.println("checkin date");
                mUser.setIsCheckin(false);
                mUser.setIsCheckout(false);
                dbHelper.updateUser(text_id.getText(), mUser);
@@ -576,7 +578,7 @@ public class UserFrame extends javax.swing.JFrame implements OnGetUserListener, 
             if(result.equals(Constants.LATE_TIME)) {
                 int num = DateUtils.getNumberLateDate(ld.getMonthValue(), ld.getYear(), mUser);
                 if(mRule.getmFines() - num == 0) {
-                    JOptionPane.showMessageDialog(null, "Bạn đã bị phạt vì đi muộn lần thứ " + num);
+                    result =  "Bạn đã bị phạt vì đi muộn lần quá " + num ;
                 } else result = result + ": Bạn chỉ còn " + (mRule.getmFines() - num) + " lần";
                  dbHelper.updateCheckinUser(text_id.getText(), LocalDate.now());
             }

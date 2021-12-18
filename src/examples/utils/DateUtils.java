@@ -67,16 +67,11 @@ public class DateUtils {
     return datesOfMonth;
 }
      
-     public static int getNumberLateDate(int year, int month, User user) {
+     public static int getNumberLateDate(int month, int year, User user) {
          
          int num = 0;
          List<LocalDate> lateDate = user.getLate_date();
-            for (LocalDate lateDate1 : lateDate) {
-                if(lateDate1.getMonthValue() ==  month && lateDate1.getYear() == year) {
-                    num ++;
-                    break;
-                }
-            }
+         num = lateDate.stream().filter(lateDate1 -> (lateDate1.getMonthValue() ==  month && lateDate1.getYear() == year)).map(_item -> 1).reduce(num, Integer::sum);
          return num;
      }
 }

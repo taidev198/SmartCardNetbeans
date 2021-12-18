@@ -33,7 +33,7 @@ public class Constants {
     public final static String DONT_WORK_TODAY = "OH HÔM NAY BẠN KHÔNG ĐI LÀM";
     public final static String NOT_TIME_UP = "OH GIỜ ĐANG TRONG GIỜ LÀM";
     public final static String TIME_UP = "BYE, HẸN GẶP BẠN SÁNG MAI";
-    public final static String STAY_HOME = "OPPS BÂY GIỜ KHÔNG PHẢI GIỜ LÀM VIỆC";
+    public final static String STAY_HOME = "MỘT NGÀY LÀM VIỆC HIỆU QUẢ, HẸN LẶP LẠI BẠN VÀO NGÀY MAI";
     
     
     public final static String NOTIFICATION = "NOTIF";
