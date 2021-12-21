@@ -581,7 +581,7 @@ public class UserFrame extends javax.swing.JFrame implements OnGetUserListener, 
                  dbHelper.updateCheckinUser(text_id.getText(), LocalDate.now());
             }
 
-            JOptionPane.showMessageDialog(null, result);
+            JOptionPane.showMessageDialog(null, result, "THÔNG BÁO", JOptionPane.INFORMATION_MESSAGE);
             
         } else {
             
@@ -626,23 +626,38 @@ public class UserFrame extends javax.swing.JFrame implements OnGetUserListener, 
           if(!isConnected) {
             if(card.connectCard()) {
                 isConnected = true;
-                JOptionPane.showMessageDialog(this, "ket noi thanh cong");
+                JOptionPane.showMessageDialog(this, "KẾT NỐI THÀNH CÔNG", "THÔNG BÁO", JOptionPane.INFORMATION_MESSAGE);
                 connect_btn.setText("DISCONNECT");
+                calendarPanel.setVisible(true);
                 initData();               
+                
             }else{
-                JOptionPane.showMessageDialog(this, "chua ket noi applet");
+                JOptionPane.showMessageDialog(this, "SAI CẤU HÌNH KẾT NỐI", "THÔNG BÁO", JOptionPane.INFORMATION_MESSAGE);
                 isConnected = false;
                 
             }
         }else {
             if(card.disconnect()){
+                JOptionPane.showMessageDialog(this, "ĐÃ NGẮT KẾT NỐI", "THÔNG BÁO", JOptionPane.INFORMATION_MESSAGE);
                 isConnected = false;
                 connect_btn.setText("CONNECT");
+                calendarPanel.setVisible(false);
+                hideInformation();
             }
         }
         
     }//GEN-LAST:event_connect_btnActionPerformed
 
+      private void hideInformation() {
+        text_id.setText("N/A");
+            text_name.setText("N/A");
+            text_address.setText("N/A");
+            System.out.println("N/A");
+            text_birth.setText("N/A");
+            text_gender.setText("N/A");
+            text_department.setText("N/A");  
+    }
+    
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
         if(isConnected) {

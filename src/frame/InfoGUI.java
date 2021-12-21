@@ -30,6 +30,7 @@ import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 
 /**
  * https://mkyong.com/java/java-date-and-calendar-examples/
@@ -94,8 +95,6 @@ public class InfoGUI extends javax.swing.JFrame implements OnGetUserListener{
                    id_department_cb.setSelectedIndex(Integer.valueOf(id_department));
                    showId(true);
                    id_text.setText(id);
-                  
-                         
             getImage(person.getAvatar());
             ImageUltils iU = ImageUltils.getInstance();
             try {
@@ -110,6 +109,23 @@ public class InfoGUI extends javax.swing.JFrame implements OnGetUserListener{
     private void showId(boolean flag) {
         id_lb.setVisible(flag);
         id_text.setVisible(flag);   
+    }
+    
+    private boolean validateInfo() {
+        
+        if(text_name.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "CHƯA ĐIỀN HỌ TÊN", "THÔNG BÁO", JOptionPane.INFORMATION_MESSAGE);
+            return false;
+        }
+        if(text_address.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "CHƯA ĐIỀN ĐỊA CHỈ", "THÔNG BÁO", JOptionPane.INFORMATION_MESSAGE);
+            return false;
+        }
+        if(avatar == null) {
+            JOptionPane.showMessageDialog(this, "CHƯA CHỌN ẢNH ĐẠI DIỆN", "THÔNG BÁO", JOptionPane.INFORMATION_MESSAGE);
+            return false;
+        }
+        return true;
     }
     /**
      * This method is called from within the constructor to initialize the form.

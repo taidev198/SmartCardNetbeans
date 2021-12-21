@@ -659,7 +659,7 @@ public class ManagerFrame extends javax.swing.JFrame implements OnGetUserListene
     private void delete_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_delete_btnActionPerformed
         // TODO add your handling code here:
         if(isConnected) {
-        JOptionPane.showMessageDialog(this, "XOA THE THANH CONG");
+        JOptionPane.showMessageDialog(this, "XÓA THÀNH CÔNG", "THÔNG BÁO", JOptionPane.INFORMATION_MESSAGE);
         avatar.setIcon(null);
         //XOA THONG TIN TREN THE
         System.out.println(new String(card.command(card.command("N/A".getBytes(), Constants.INS_ENCRYPT, Constants.ID), Constants.INS_DECRYPT, Constants.ID), StandardCharsets.UTF_8));
@@ -671,37 +671,45 @@ public class ManagerFrame extends javax.swing.JFrame implements OnGetUserListene
         //xoa thong tin tren db
         dbHelper.deleteUser(text_id.getText());
         System.out.println(text_id.getText());
-            text_id.setText("N/A");
+        hideInformation();
+        }
+    }//GEN-LAST:event_delete_btnActionPerformed
+
+    private void hideInformation() {
+        text_id.setText("N/A");
             text_name.setText("N/A");
             text_address.setText("N/A");
             System.out.println("N/A");
             text_birth.setText("N/A");
             text_gender.setText("N/A");
-            text_department.setText("N/A");      
-        }
-    }//GEN-LAST:event_delete_btnActionPerformed
-
+            text_department.setText("N/A");  
+    }
+    
     private void connect_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_connect_btnActionPerformed
         // TODO add your handling code here:
 
         if(!isConnected) {
             if(card.connectCard()) {
                 isConnected = true;
-                JOptionPane.showMessageDialog(this, "ket noi thanh cong");
+                JOptionPane.showMessageDialog(this, "KẾT NỐI THÀNH CÔNG", "THÔNG BÁO", JOptionPane.INFORMATION_MESSAGE);
                 connect_btn.setText("DISCONNECT");
 //                PINGui pin =  new PINGui(card, this);
 //                pin.setVisible(true);
 //                pin.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+             calendarPanel.setVisible(true);
                 initData();
             }else{
-                JOptionPane.showMessageDialog(this, "chua ket noi applet");
+                JOptionPane.showMessageDialog(this, "SAI CẤU HÌNH KẾT NỐI", "THÔNG BÁO", JOptionPane.INFORMATION_MESSAGE);
                 isConnected = false;
 
             }
         }else {
             if(card.disconnect()){
+                JOptionPane.showMessageDialog(this, "ĐÃ NGẮT KẾT NỐI", "THÔNG BÁO", JOptionPane.INFORMATION_MESSAGE);
                 isConnected = false;
                 connect_btn.setText("CONNECT");
+                calendarPanel.setVisible(false);
+                hideInformation();
             }
         }
     }//GEN-LAST:event_connect_btnActionPerformed
