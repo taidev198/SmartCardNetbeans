@@ -11,6 +11,7 @@ package examples.data;
  */
 public class Constants {
     
+    public final static  byte AVATAR = (byte)0x21;
     public final static  byte ID = (byte)0x01;
     public final static  byte NAME = (byte)0x02;	
     public final static  byte DATE = (byte)0x03;

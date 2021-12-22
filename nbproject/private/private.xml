@@ -3,20 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-<<<<<<< HEAD
             <file>file:/E:/nam5/SC/Final%20Project/GUIFormExamples/src/frame/ManagerFrame.java</file>
             <file>file:/E:/nam5/SC/Final%20Project/GUIFormExamples/src/frame/InfoGUI.java</file>
             <file>file:/E:/nam5/SC/Final%20Project/GUIFormExamples/src/frame/UserFrame.java</file>
-=======
-            <file>file://Mac/Home/Downloads/SmartCardNetbeans/src/frame/InfoGUI.java</file>
-            <file>file://Mac/Home/Downloads/SmartCardNetbeans/src/frame/PINGui.java</file>
-            <file>file://Mac/Home/Downloads/SmartCardNetbeans/src/examples/utils/ExcelUtils.java</file>
-            <file>file://Mac/Home/Downloads/SmartCardNetbeans/src/examples/utils/AudioUtils.java</file>
-            <file>file://Mac/Home/Downloads/SmartCardNetbeans/src/frame/WelcomeFrame.java</file>
-            <file>file://Mac/Home/Downloads/SmartCardNetbeans/src/frame/RuleFrame.java</file>
-            <file>file://Mac/Home/Downloads/SmartCardNetbeans/src/frame/UserFrame.java</file>
-            <file>file://Mac/Home/Downloads/SmartCardNetbeans/src/frame/ManagerFrame.java</file>
->>>>>>> 0b15f92c70282893df57dedc6e2f8ae5992c44ff
+            <file>file:/E:/nam5/SC/Final%20Project/GUIFormExamples/src/frame/WelcomeFrame.java</file>
         </group>
     </open-files>
 </project-private>

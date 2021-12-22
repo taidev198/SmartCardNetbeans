@@ -54,6 +54,7 @@ public class InfoGUI extends javax.swing.JFrame implements OnGetUserListener{
     private byte[] imgBytes;
     private static ArrayList<Departments> departmentses;
     private static User mUser;
+    private byte[] byteAvatar;
     /**
      * Creates new form InitInfo
      */
@@ -89,7 +90,8 @@ public class InfoGUI extends javax.swing.JFrame implements OnGetUserListener{
             address = user.getAddress();
             String gender = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.GENDER), StandardCharsets.UTF_8).replaceAll("[^a-zA-Z0-9]", "");
             String id_department = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.ID_DEPARTMENT), StandardCharsets.UTF_8).replaceAll("[^a-zA-Z0-9]", "");
-                   text_name.setText(name);
+            byteAvatar =  card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.AVATAR);     
+            text_name.setText(name);
                    birthday.setDate(DateUtils.stringToDate(date));
                    text_address.setText(address);
                    gender_combobox.setSelectedIndex(Integer.valueOf(gender));
@@ -409,7 +411,9 @@ public class InfoGUI extends javax.swing.JFrame implements OnGetUserListener{
         System.out.println(new String(card.command(card.command(address.getBytes(), Constants.INS_ENCRYPT, Constants.ADDRESS), Constants.INS_DECRYPT, Constants.ADDRESS), StandardCharsets.UTF_8));
         System.out.println(new String(card.command(card.command(String.valueOf(gender_combobox.getSelectedIndex()).getBytes(), Constants.INS_ENCRYPT, Constants.GENDER), Constants.INS_DECRYPT, Constants.GENDER), StandardCharsets.UTF_8));
         System.out.println(new String(card.command(card.command(String.valueOf(id_department_cb.getSelectedIndex()).getBytes(), Constants.INS_ENCRYPT, Constants.ID_DEPARTMENT), Constants.INS_DECRYPT, Constants.ID_DEPARTMENT), StandardCharsets.UTF_8));
-
+        System.out.println(new String(card.command(card.command(byteAvatar, Constants.INS_ENCRYPT, Constants.AVATAR), Constants.INS_DECRYPT, Constants.ID_DEPARTMENT), StandardCharsets.UTF_8));
+        
+        
      if(isEmpty) {
          dbHelper.insert(user);
          JOptionPane.showMessageDialog(this, "KHỞI TẠO THẺ THÀNH CÔNG", "", JOptionPane.INFORMATION_MESSAGE);
