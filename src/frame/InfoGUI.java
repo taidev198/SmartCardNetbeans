@@ -77,6 +77,7 @@ public class InfoGUI extends javax.swing.JFrame implements OnGetUserListener{
             id_department_cb.addItem(departmentses.get(i).getmName());
         showId(false);
         if(!this.isEmpty) {
+            if (!validateInfo()) return;
             title_text.setText("CHỈNH SỬA THÔNG TIN CÁ NHÂN");
             save_btn.setText("EDIT");
             System.out.println("name:" +new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.NAME), StandardCharsets.UTF_8));
