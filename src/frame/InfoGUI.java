@@ -110,23 +110,7 @@ public class InfoGUI extends javax.swing.JFrame implements OnGetUserListener{
         id_lb.setVisible(flag);
         id_text.setVisible(flag);   
     }
-    
-    private boolean validateInfo() {
-        
-        if(text_name.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "CHƯA ĐIỀN HỌ TÊN", "THÔNG BÁO", JOptionPane.INFORMATION_MESSAGE);
-            return false;
-        }
-        if(text_address.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "CHƯA ĐIỀN ĐỊA CHỈ", "THÔNG BÁO", JOptionPane.INFORMATION_MESSAGE);
-            return false;
-        }
-        if(avatar == null) {
-            JOptionPane.showMessageDialog(this, "CHƯA CHỌN ẢNH ĐẠI DIỆN", "THÔNG BÁO", JOptionPane.INFORMATION_MESSAGE);
-            return false;
-        }
-        return true;
-    }
+   
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -374,8 +358,7 @@ public class InfoGUI extends javax.swing.JFrame implements OnGetUserListener{
         }
         String name = text_name.getText().trim();
         String address = text_address.getText().trim();
-        System.out.println(name.getBytes().length);
-        System.out.println(address.getBytes().length + " length");
+        if(!validateInfor()) return;
 //        if(id.length() == 0) {
 //            JOptionPane.showMessageDialog(null, "VUI LÒNG NHẬP IḌ");
 //            return;
@@ -426,16 +409,41 @@ public class InfoGUI extends javax.swing.JFrame implements OnGetUserListener{
         System.out.println(new String(card.command(card.command(String.valueOf(gender_combobox.getSelectedIndex()).getBytes(), Constants.INS_ENCRYPT, Constants.GENDER), Constants.INS_DECRYPT, Constants.GENDER), StandardCharsets.UTF_8));
         System.out.println(new String(card.command(card.command(String.valueOf(id_department_cb.getSelectedIndex()).getBytes(), Constants.INS_ENCRYPT, Constants.ID_DEPARTMENT), Constants.INS_DECRYPT, Constants.ID_DEPARTMENT), StandardCharsets.UTF_8));
 
-     if(isEmpty)
-          dbHelper.insert(user);
+     if(isEmpty) {
+         dbHelper.insert(user);
+         JOptionPane.showMessageDialog(this, "KHỞI TẠO THẺ THÀNH CÔNG", "", JOptionPane.INFORMATION_MESSAGE);
+     }
+          
      else {
          dbHelper.updateUser(user.getId(), user);
+         JOptionPane.showMessageDialog(this, "SỬA THÔNG TIN THẺ THÀNH CÔNG", "", JOptionPane.INFORMATION_MESSAGE);
      }
       mListener.onGetUserSuccess(user);
       this.setVisible(false);
       //  System.out.println(text_id.getText().trim());
     }//GEN-LAST:event_save_btnActionPerformed
 
+    private boolean validateInfor() {
+        
+        if(text_name.getText().isEmpty()) {
+           JOptionPane.showMessageDialog(this, "VUI LÒNG NHẬP HỌ TÊN", "", JOptionPane.INFORMATION_MESSAGE);
+            return false;
+        }
+        
+        if(text_address.getText().isEmpty()) {
+           JOptionPane.showMessageDialog(this, "VUI LÒNG NHẬP ĐỊA CHỈ", "", JOptionPane.INFORMATION_MESSAGE);
+            return false;
+        }
+
+        if(avatar == null) {
+            JOptionPane.showMessageDialog(this, "CHƯA CHỌN ẢNH ĐẠI DIỆN", "THÔNG BÁO", JOptionPane.INFORMATION_MESSAGE);
+            return false;
+        }
+        
+        return true;
+    }
+    
+    
     private void browser_imgActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_browser_imgActionPerformed
         // TODO add your handling code here:
         JFileChooser fc = new JFileChooser();

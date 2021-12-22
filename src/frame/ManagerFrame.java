@@ -67,7 +67,7 @@ import org.jfree.ui.RectangleEdge;
 import org.json.JSONException;
 
 /**
- *
+ *https://stackoverflow.com/questions/63687/calling-function-when-program-exits-in-java
  * @author traig
  */
 public class ManagerFrame extends javax.swing.JFrame implements OnGetUserListener, OnGetRuleListener, OnGetPinStatusListener{
@@ -95,9 +95,23 @@ public class ManagerFrame extends javax.swing.JFrame implements OnGetUserListene
         card = new SmartCardWord();
         validate();
         initData();
-        
+        initEvent();
     }
 
+    private void initEvent() {
+        
+        ManagerFrame fm = this;
+      Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
+        public void run() {
+            String[] options = {"Có", "Không"};
+        int x = JOptionPane.showOptionDialog(null, "Bạn muốn thoát?",
+                "Cảnh báo",
+                JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+        }
+        }));
+        
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -152,6 +166,7 @@ public class ManagerFrame extends javax.swing.JFrame implements OnGetUserListene
         back_btn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -407,7 +422,7 @@ public class ManagerFrame extends javax.swing.JFrame implements OnGetUserListene
                 .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
                     .addComponent(text_birth))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 72, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
                     .addComponent(text_gender))
@@ -445,9 +460,8 @@ public class ManagerFrame extends javax.swing.JFrame implements OnGetUserListene
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGap(0, 1, Short.MAX_VALUE)
-                        .addComponent(jPanel11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jPanel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addContainerGap())))
         );
 
@@ -659,7 +673,7 @@ public class ManagerFrame extends javax.swing.JFrame implements OnGetUserListene
     private void delete_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_delete_btnActionPerformed
         // TODO add your handling code here:
         if(isConnected) {
-        JOptionPane.showMessageDialog(this, "XÓA THÀNH CÔNG", "THÔNG BÁO", JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(this, "XÓA THÀNH CÔNG", "", JOptionPane.INFORMATION_MESSAGE);
         avatar.setIcon(null);
         //XOA THONG TIN TREN THE
         System.out.println(new String(card.command(card.command("N/A".getBytes(), Constants.INS_ENCRYPT, Constants.ID), Constants.INS_DECRYPT, Constants.ID), StandardCharsets.UTF_8));
@@ -802,7 +816,7 @@ public class ManagerFrame extends javax.swing.JFrame implements OnGetUserListene
         text_name.setText(user.getFullname());
         text_address.setText(user.getAddress());
         text_birth.setText(DateUtils.dateToString(user.getBirth()));
-        text_gender.setText(user.getGender() == 0? "NAM" : "NU");
+        text_gender.setText(user.getGender() == 0? "NAM" : "NỮ");
         text_department.setText(departmentses.get(user.getId_department()).getmName());
         ImageUltils iU = ImageUltils.getInstance();
         try {
@@ -864,7 +878,7 @@ public class ManagerFrame extends javax.swing.JFrame implements OnGetUserListene
             text_name.setText(name);
             text_address.setText(address);
             text_birth.setText(date);
-            text_gender.setText(Integer.valueOf(gender) == 0? "NAM" : "NU");
+            text_gender.setText(Integer.valueOf(gender) == 0? "NAM" : "NỮ");
             text_department.setText(departmentses.get(Integer.valueOf(id_department)).getmName());
         }
         }
@@ -930,8 +944,8 @@ public class ManagerFrame extends javax.swing.JFrame implements OnGetUserListene
         
         mRule = r;
         c.setmRule(r);
-        workingTime.setText("GIO LAM VIEC: TU " + r.getmInTime() + " DEN " + r.getmOutTime());
-        workingDay.setText("NGAY LAM VIEC: TU THU " + r.getmInDate()+ " DEN THU " + r.getmOutDate());
+        workingTime.setText("GIỜ LÀM VIỆC: TỪ " + r.getmInTime() + " ĐẾN " + r.getmOutTime());
+        workingDay.setText("NGÀY LÀM VIỆC: TỪ THỨ " + r.getmInDate()+ " ĐẾN THỨ " + r.getmOutDate());
     }
     
     @Override

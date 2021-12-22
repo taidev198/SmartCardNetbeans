@@ -4,7 +4,11 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file://Mac/Home/Downloads/SmartCardNetbeans/src/frame/InfoGUI.java</file>
+            <file>file://Mac/Home/Downloads/SmartCardNetbeans/src/frame/PINGui.java</file>
             <file>file://Mac/Home/Downloads/SmartCardNetbeans/src/examples/utils/ExcelUtils.java</file>
+            <file>file://Mac/Home/Downloads/SmartCardNetbeans/src/examples/utils/AudioUtils.java</file>
+            <file>file://Mac/Home/Downloads/SmartCardNetbeans/src/frame/WelcomeFrame.java</file>
+            <file>file://Mac/Home/Downloads/SmartCardNetbeans/src/frame/RuleFrame.java</file>
             <file>file://Mac/Home/Downloads/SmartCardNetbeans/src/frame/UserFrame.java</file>
             <file>file://Mac/Home/Downloads/SmartCardNetbeans/src/frame/ManagerFrame.java</file>
         </group>

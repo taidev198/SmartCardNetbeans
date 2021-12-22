@@ -22,7 +22,7 @@ public class WelcomeFrame extends javax.swing.JFrame {
      */
     public WelcomeFrame() {
         initComponents();
-        initData();
+        initData();        
       //  getRootPane().setWindowDecorationStyle(JRootPane.NONE);
     }
 

@@ -222,9 +222,8 @@ public class changePINGui extends javax.swing.JFrame {
                 }
               
             }else {
-                     JOptionPane.showMessageDialog(null, "MA PIN MOI TRUNG MA PIN CU, NHAP LAI");
+                     JOptionPane.showMessageDialog(null, "MÃ PIN MỚI KHÔNG ĐƯỢC GIỐNG MÃ PIN CŨ");
                 }
-              
             }
             else if(result.equals("6300")) {
                 JOptionPane.showMessageDialog(null, "SAI MÃ PIN HIỆN TẠI");

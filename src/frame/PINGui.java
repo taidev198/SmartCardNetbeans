@@ -29,6 +29,7 @@ import javax.swing.JOptionPane;
 
 
 public class PINGui extends javax.swing.JFrame {
+    private int tryRemaning = 3;
     private static OnGetPinStatusListener mGetPinStatusListener;
     private String text = "";
     private boolean isConnected = false;
@@ -211,7 +212,8 @@ public class PINGui extends javax.swing.JFrame {
                byte[] digest = md.digest();
                String result = card.Open(digest);
         if(result.equals("9000")){
-               // JOptionPane.showMessageDialog(null, "THANH CONG");
+               JOptionPane.showMessageDialog(this, "XÁC THỰC MÃ PIN THÀNH CÔNG", "", JOptionPane.INFORMATION_MESSAGE);
+
                 this.setVisible(false);
                 
                 mGetPinStatusListener.onGetPinStatusSuccessful();
@@ -219,11 +221,13 @@ public class PINGui extends javax.swing.JFrame {
                 isSuccess = true;
             }
             else if(result.equals("6300")) {
-                JOptionPane.showMessageDialog(null, "THU LAI");
+                tryRemaning--;
+                JOptionPane.showMessageDialog(null, "MÃ PIN SAI, CÒN " + tryRemaning + " LẦN NHẬP SAI CHO PHÉP");
                 isSuccess = false;
                 
             }  else if(result.equals("6303")) {
-                JOptionPane.showMessageDialog(null, "THE BI KHOA DO NHAP SAI QUA 3 LAN");
+                JOptionPane.showMessageDialog(null, "THẺ BỊ KHÓA VÌ NHẬP SAI QUÁ 3 LẦN");
+                PIN.setEnabled(false);
                 isSuccess = false;
             }
           } catch (NoSuchAlgorithmException ex) {
@@ -258,9 +262,10 @@ public class PINGui extends javax.swing.JFrame {
         // TODO add your handling code here:
        
         card.Open(new byte[]{(byte)0x00}, Constants.RESET_PIN);
-        JOptionPane.showMessageDialog(null, "THE DA DUOC MO LAI");
+        JOptionPane.showMessageDialog(null, "THẺ ĐÃ ĐƯỢC MỞ KHÓA!");
         text_input.setText("");
         text = text_input.getText();
+        PIN.setEnabled(true);
     }//GEN-LAST:event_clear_btnActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
