@@ -248,7 +248,7 @@ public class InfoGUI extends javax.swing.JFrame implements OnGetUserListener{
         );
 
         id_lb.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        id_lb.setText("MÃ SINH VIÊN");
+        id_lb.setText("MÃ THẺ");
 
         id_text.setEditable(false);
         id_text.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -258,7 +258,7 @@ public class InfoGUI extends javax.swing.JFrame implements OnGetUserListener{
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap(13, Short.MAX_VALUE)
+                .addContainerGap(22, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel2)
                     .addComponent(jLabel3)
@@ -278,7 +278,7 @@ public class InfoGUI extends javax.swing.JFrame implements OnGetUserListener{
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(avatar, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(browser_img, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 24, Short.MAX_VALUE))
+                .addGap(0, 33, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

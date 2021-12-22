@@ -740,7 +740,7 @@ public class ManagerFrame extends javax.swing.JFrame implements OnGetUserListene
         System.out.println(jYearChooser3.getYear());
         non_data_label4.setVisible(false);
         ChartPanel chartPanel = new ChartPanel(createChart(getDataSet(jMonthChooser.getMonth() + 1, jYearChooser3.getYear())));
-        chartPanel.setPreferredSize(new java.awt.Dimension(200, 200));
+        chartPanel.setPreferredSize(new java.awt.Dimension(250, 300));
         chart_pane3.removeAll();
         chart_pane3.revalidate();
         chart_pane3.setLayout(new java.awt.BorderLayout());
