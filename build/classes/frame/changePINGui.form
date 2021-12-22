@@ -69,7 +69,7 @@
                       <Component id="check_box_3" min="-2" max="-2" attributes="0"/>
                       <Component id="check_box_1" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace pref="75" max="32767" attributes="0"/>
+                  <EmptySpace pref="115" max="32767" attributes="0"/>
               </Group>
               <Group type="102" alignment="1" attributes="0">
                   <EmptySpace max="32767" attributes="0"/>
@@ -162,17 +162,17 @@
         </Component>
         <Component class="javax.swing.JCheckBox" name="check_box_2">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Hi&#xea;&#x323;n PIN"/>
+            <Property name="text" type="java.lang.String" value="Hi&#xea;&#x323;n"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JCheckBox" name="check_box_3">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Hi&#xea;&#x323;n PIN"/>
+            <Property name="text" type="java.lang.String" value="Hi&#xea;&#x323;n"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JCheckBox" name="check_box_1">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Hi&#xea;&#x323;n PIN"/>
+            <Property name="text" type="java.lang.String" value="Hi&#xea;&#x323;n"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="check_box_1ActionPerformed"/>

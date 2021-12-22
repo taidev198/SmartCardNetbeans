@@ -82,11 +82,11 @@ public class changePINGui extends javax.swing.JFrame {
         jLabel4.setText("XÁC NHẬN PIN MỚI");
         jLabel4.setToolTipText("");
 
-        check_box_2.setText("Hiện PIN");
+        check_box_2.setText("Hiện");
 
-        check_box_3.setText("Hiện PIN");
+        check_box_3.setText("Hiện");
 
-        check_box_1.setText("Hiện PIN");
+        check_box_1.setText("Hiện");
         check_box_1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 check_box_1ActionPerformed(evt);
@@ -143,7 +143,7 @@ public class changePINGui extends javax.swing.JFrame {
                     .addComponent(check_box_2)
                     .addComponent(check_box_3)
                     .addComponent(check_box_1))
-                .addContainerGap(75, Short.MAX_VALUE))
+                .addContainerGap(115, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(change_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -222,9 +222,8 @@ public class changePINGui extends javax.swing.JFrame {
                 }
               
             }else {
-                     JOptionPane.showMessageDialog(null, "MA PIN MOI TRUNG MA PIN CU, NHAP LAI");
+                     JOptionPane.showMessageDialog(null, "MÃ PIN MỚI KHÔNG ĐƯỢC GIỐNG MÃ PIN CŨ");
                 }
-              
             }
             else if(result.equals("6300")) {
                 JOptionPane.showMessageDialog(null, "SAI MÃ PIN HIỆN TẠI");

@@ -143,7 +143,7 @@ public abstract class ExcelUtils {
         Calendar cal = Calendar.getInstance();
         cell = row.createCell(1);
         cell.setCellStyle(cellStyle);
-        cell.setCellValue("Báo cáo thống kê các ngày đi muộn trong tháng " + fmt.format(cal.getTime()));
+        cell.setCellValue("Báo cáo thống kê các ngày đi muộn trong tháng " + month + "/" + year);
         
         
         row = sheet.createRow(++rowIndex);

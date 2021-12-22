@@ -10,6 +10,7 @@ import examples.data.Checkin;
 import examples.data.Rule;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -171,6 +172,7 @@ public class RuleFrame extends javax.swing.JFrame {
                                                    String.valueOf(startTimeMin.getSelectedItem())
                                                     ).toString());
         //Checkin c = getCheckin();
+        JOptionPane.showMessageDialog(this, "CÀI ĐẶT LUẬT THÀNH CÔNG", "", JOptionPane.INFORMATION_MESSAGE);
         mListener.onGetRuleSuccess(getCheckin());
         this.setVisible(false);
     }//GEN-LAST:event_saveBtnActionPerformed

@@ -1,2 +1,0 @@
-frame.MyComponent
-frame.Slice

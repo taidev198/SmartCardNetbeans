@@ -77,7 +77,7 @@ public class InfoGUI extends javax.swing.JFrame implements OnGetUserListener{
             id_department_cb.addItem(departmentses.get(i).getmName());
         showId(false);
         if(!this.isEmpty) {
-            if (!validateInfo()) return;
+            if (!validateInfor()) return;
             title_text.setText("CHỈNH SỬA THÔNG TIN CÁ NHÂN");
             save_btn.setText("EDIT");
             System.out.println("name:" +new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.NAME), StandardCharsets.UTF_8));
@@ -111,23 +111,7 @@ public class InfoGUI extends javax.swing.JFrame implements OnGetUserListener{
         id_lb.setVisible(flag);
         id_text.setVisible(flag);   
     }
-    
-    private boolean validateInfo() {
-        
-        if(text_name.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "CHƯA ĐIỀN HỌ TÊN", "THÔNG BÁO", JOptionPane.INFORMATION_MESSAGE);
-            return false;
-        }
-        if(text_address.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "CHƯA ĐIỀN ĐỊA CHỈ", "THÔNG BÁO", JOptionPane.INFORMATION_MESSAGE);
-            return false;
-        }
-        if(avatar == null) {
-            JOptionPane.showMessageDialog(this, "CHƯA CHỌN ẢNH ĐẠI DIỆN", "THÔNG BÁO", JOptionPane.INFORMATION_MESSAGE);
-            return false;
-        }
-        return true;
-    }
+   
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -249,7 +233,7 @@ public class InfoGUI extends javax.swing.JFrame implements OnGetUserListener{
         );
 
         id_lb.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        id_lb.setText("MÃ SINH VIÊN");
+        id_lb.setText("MÃ THẺ");
 
         id_text.setEditable(false);
         id_text.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -259,7 +243,7 @@ public class InfoGUI extends javax.swing.JFrame implements OnGetUserListener{
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap(13, Short.MAX_VALUE)
+                .addContainerGap(22, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel2)
                     .addComponent(jLabel3)
@@ -279,7 +263,7 @@ public class InfoGUI extends javax.swing.JFrame implements OnGetUserListener{
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(avatar, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(browser_img, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 24, Short.MAX_VALUE))
+                .addGap(0, 33, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -375,8 +359,7 @@ public class InfoGUI extends javax.swing.JFrame implements OnGetUserListener{
         }
         String name = text_name.getText().trim();
         String address = text_address.getText().trim();
-        System.out.println(name.getBytes().length);
-        System.out.println(address.getBytes().length + " length");
+        if(!validateInfor()) return;
 //        if(id.length() == 0) {
 //            JOptionPane.showMessageDialog(null, "VUI LÒNG NHẬP IḌ");
 //            return;
@@ -427,16 +410,41 @@ public class InfoGUI extends javax.swing.JFrame implements OnGetUserListener{
         System.out.println(new String(card.command(card.command(String.valueOf(gender_combobox.getSelectedIndex()).getBytes(), Constants.INS_ENCRYPT, Constants.GENDER), Constants.INS_DECRYPT, Constants.GENDER), StandardCharsets.UTF_8));
         System.out.println(new String(card.command(card.command(String.valueOf(id_department_cb.getSelectedIndex()).getBytes(), Constants.INS_ENCRYPT, Constants.ID_DEPARTMENT), Constants.INS_DECRYPT, Constants.ID_DEPARTMENT), StandardCharsets.UTF_8));
 
-     if(isEmpty)
-          dbHelper.insert(user);
+     if(isEmpty) {
+         dbHelper.insert(user);
+         JOptionPane.showMessageDialog(this, "KHỞI TẠO THẺ THÀNH CÔNG", "", JOptionPane.INFORMATION_MESSAGE);
+     }
+          
      else {
          dbHelper.updateUser(user.getId(), user);
+         JOptionPane.showMessageDialog(this, "SỬA THÔNG TIN THẺ THÀNH CÔNG", "", JOptionPane.INFORMATION_MESSAGE);
      }
       mListener.onGetUserSuccess(user);
       this.setVisible(false);
       //  System.out.println(text_id.getText().trim());
     }//GEN-LAST:event_save_btnActionPerformed
 
+    private boolean validateInfor() {
+        
+        if(text_name.getText().isEmpty()) {
+           JOptionPane.showMessageDialog(this, "VUI LÒNG NHẬP HỌ TÊN", "", JOptionPane.INFORMATION_MESSAGE);
+            return false;
+        }
+        
+        if(text_address.getText().isEmpty()) {
+           JOptionPane.showMessageDialog(this, "VUI LÒNG NHẬP ĐỊA CHỈ", "", JOptionPane.INFORMATION_MESSAGE);
+            return false;
+        }
+
+        if(avatar == null) {
+            JOptionPane.showMessageDialog(this, "CHƯA CHỌN ẢNH ĐẠI DIỆN", "THÔNG BÁO", JOptionPane.INFORMATION_MESSAGE);
+            return false;
+        }
+        
+        return true;
+    }
+    
+    
     private void browser_imgActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_browser_imgActionPerformed
         // TODO add your handling code here:
         JFileChooser fc = new JFileChooser();
