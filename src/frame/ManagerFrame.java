@@ -95,22 +95,6 @@ public class ManagerFrame extends javax.swing.JFrame implements OnGetUserListene
         card = new SmartCardWord();
         validate();
         initData();
-        initEvent();
-    }
-
-    private void initEvent() {
-        
-//        ManagerFrame fm = this;
-//      Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-//          for(;;) {
-//              try {
-//                  Thread.sleep(2000);
-//                  System.out.println("nguyen thanh tai");
-//              } catch (InterruptedException ex) {
-//                  Logger.getLogger(ManagerFrame.class.getName()).log(Level.SEVERE, null, ex);
-//              }
-//      }
-//        }));
         
     }
     
@@ -690,7 +674,7 @@ public class ManagerFrame extends javax.swing.JFrame implements OnGetUserListene
     }//GEN-LAST:event_delete_btnActionPerformed
 
     private void hideInformation() {
-        text_id.setText("N/A");
+            text_id.setText("N/A");
             text_name.setText("N/A");
             text_address.setText("N/A");
             System.out.println("N/A");
@@ -741,6 +725,10 @@ public class ManagerFrame extends javax.swing.JFrame implements OnGetUserListene
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
         if(isConnected) {
+            if(text_id.getText().length() > 3 && text_id.getText().length()<10) {
+              JOptionPane.showMessageDialog(this, "THẺ ĐÃ KHỞI TẠO", "", JOptionPane.INFORMATION_MESSAGE);
+                return;
+            }
             PINGui pin =  new PINGui(card, this);
             pin.setVisible(true);
             pin.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -854,8 +842,7 @@ public class ManagerFrame extends javax.swing.JFrame implements OnGetUserListene
             String gender = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.GENDER), StandardCharsets.UTF_8).replaceAll("[^a-zA-Z0-9/]", ""); 
             String id_department = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.ID_DEPARTMENT), StandardCharsets.UTF_8).replaceAll("[^a-zA-Z0-9/]", ""); 
             departmentses = getDepartmentses();
-            
-        if(id.contains("[^a-zA-Z0-9]")) {
+        if(id.length() >3 || id.length() < 10) {
             mUser = dbHelper.findUser(id);
             if(mUser != null) {
                  mDates = getLateDate(mUser);

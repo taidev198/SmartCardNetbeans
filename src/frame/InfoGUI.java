@@ -440,8 +440,8 @@ public class InfoGUI extends javax.swing.JFrame implements OnGetUserListener{
             return false;
         }
 
-        if(avatar == null) {
-            JOptionPane.showMessageDialog(this, "CHƯA CHỌN ẢNH ĐẠI DIỆN", "THÔNG BÁO", JOptionPane.INFORMATION_MESSAGE);
+        if(imgBytes.length == 0) {
+            JOptionPane.showMessageDialog(this, "CHƯA CHỌN ẢNH ĐẠI DIỆN", "", JOptionPane.INFORMATION_MESSAGE);
             return false;
         }
         
