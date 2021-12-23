@@ -5,6 +5,8 @@
  */
 package frame;
 
+import examples.database.DataBaseUtils;
+import examples.data.User;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.nio.charset.StandardCharsets;
@@ -21,14 +23,18 @@ import javax.swing.JOptionPane;
 public class changePINGui extends javax.swing.JFrame {
 
     static SmartCardWord card;
+    private static DataBaseUtils dbHelper;
+    private static User mUser;
     /**
      * Creates new form changePINGui
      * @param card
      */
-    public changePINGui(SmartCardWord card) {
+    public changePINGui(User user, SmartCardWord card, DataBaseUtils db) {
         initComponents();
         initEvents();
         this.card = card;
+        mUser = user;
+        dbHelper = db;
     }
 
     /**
@@ -218,6 +224,7 @@ public class changePINGui extends javax.swing.JFrame {
                 if(card.Open(digest, (byte)5).contains("9000")){
                  //new PINGui(card).setVisible(true);
                  JOptionPane.showMessageDialog(null, "ĐỔI MÃ PIN THÀNH CÔNG");
+                 dbHelper.updatePassUser(mUser.getId(), new_pass.getText());
                  this.setVisible(false);
                 }
               
@@ -313,7 +320,7 @@ public class changePINGui extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new changePINGui(card).setVisible(true);
+                new changePINGui(mUser, card, dbHelper).setVisible(true);
             }
         });
     }

@@ -170,6 +170,12 @@ CodecRegistry pojoCodecRegistry = fromRegistries(MongoClientSettings.getDefaultC
         col.updateOne(eq("id", id), combine(set(UserKey.LATE_DATE, dates)
                                             ));
     }
+    public void updatePassUser(String id, String newPass) {
+
+        col.updateOne(eq("id", id), combine(set(UserKey.PASSWORD, newPass)
+                                            ));
+    }
+    
     public void deleteUser(String id) {
         
        DeleteResult deleteResult = col.deleteOne(eq("id", id));

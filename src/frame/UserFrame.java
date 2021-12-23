@@ -614,7 +614,7 @@ public class UserFrame extends javax.swing.JFrame implements OnGetUserListener, 
         if(isConnected) {
             
             changePINGui c = 
-            new changePINGui(card);
+            new changePINGui(mUser, card, dbHelper);
             c.setVisible(true);
             c.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         }
@@ -736,7 +736,7 @@ public class UserFrame extends javax.swing.JFrame implements OnGetUserListener, 
             String id_department = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.ID_DEPARTMENT), StandardCharsets.UTF_8).replaceAll("[^a-zA-Z0-9/]", ""); 
             departmentses = getDepartmentses();
             
-        if(id.length() > 3 || id.length() < 10) {
+        if(id.length() > 4 || id.length() < 10) {
             mUser = dbHelper.findUser(id);
             if(mUser != null) {
                  mDates = getLateDate(mUser);

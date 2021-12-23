@@ -22,6 +22,7 @@ import examples.utils.ExcelUtils;
 import examples.utils.StringUltils;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.math.BigInteger;
@@ -657,6 +658,10 @@ public class ManagerFrame extends javax.swing.JFrame implements OnGetUserListene
     private void delete_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_delete_btnActionPerformed
         // TODO add your handling code here:
         if(isConnected) {
+            if(text_id.getText().equals("N/A")) {
+              JOptionPane.showMessageDialog(this, "THẺ CHƯA ĐƯỢC KHỞI TẠO", "", JOptionPane.INFORMATION_MESSAGE);
+                return;
+            }
         JOptionPane.showMessageDialog(this, "XÓA THÀNH CÔNG", "", JOptionPane.INFORMATION_MESSAGE);
         avatar.setIcon(null);
         //XOA THONG TIN TREN THE
@@ -677,10 +682,11 @@ public class ManagerFrame extends javax.swing.JFrame implements OnGetUserListene
             text_id.setText("N/A");
             text_name.setText("N/A");
             text_address.setText("N/A");
-            System.out.println("N/A");
             text_birth.setText("N/A");
             text_gender.setText("N/A");
-            text_department.setText("N/A");  
+            text_department.setText("N/A");
+            calendarPanel.setEnabled(false);
+            chart_pane3.setEnabled(false);
     }
     
     private void connect_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_connect_btnActionPerformed
@@ -715,6 +721,10 @@ public class ManagerFrame extends javax.swing.JFrame implements OnGetUserListene
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
         if(isConnected) {
+            if(text_id.getText().equals("N/A")) {
+              JOptionPane.showMessageDialog(this, "THẺ CHƯA ĐƯỢC KHỞI TẠO", "", JOptionPane.INFORMATION_MESSAGE);
+                return;
+            }
             PINGui pin =  new PINGui(card, this);
             pin.setVisible(true);
             pin.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -755,11 +765,28 @@ public class ManagerFrame extends javax.swing.JFrame implements OnGetUserListene
     private void changePinBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changePinBtnActionPerformed
         // TODO add your handling code here:
         if(isConnected) {
-
+            if(text_id.getText().equals("N/A")) {
+              JOptionPane.showMessageDialog(this, "THẺ CHƯA ĐƯỢC KHỞI TẠO", "", JOptionPane.INFORMATION_MESSAGE);
+                return;
+            }
             changePINGui c =
-            new changePINGui(card);
+            new changePINGui(mUser, card, dbHelper);
             c.setVisible(true);
             c.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+//            c.addWindowListener(new WindowAdapter() {
+//        //for closing
+//        @Override
+//        public void windowClosing(WindowEvent e) {
+//            
+//        }
+//        //for closed
+//
+//        @Override
+//        public void windowClosed(WindowEvent e) {
+//            
+//        }
+//    });
+            
         }
     }//GEN-LAST:event_changePinBtnActionPerformed
 
@@ -815,7 +842,7 @@ public class ManagerFrame extends javax.swing.JFrame implements OnGetUserListene
     }
 
     private void initData() {
-        
+        chart_pane3.setEnabled(true);
         ImageIcon imageIcon = new ImageIcon(new ImageIcon(getClass().getResource("/icon/user.png")).getImage().getScaledInstance(120, 120, Image.SCALE_DEFAULT));
         avatar.setIcon(imageIcon);
      // avatar.setIcon(new ImageIcon(getClass().getResource("/icon/user.png")));
@@ -842,12 +869,13 @@ public class ManagerFrame extends javax.swing.JFrame implements OnGetUserListene
             String gender = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.GENDER), StandardCharsets.UTF_8).replaceAll("[^a-zA-Z0-9/]", ""); 
             String id_department = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.ID_DEPARTMENT), StandardCharsets.UTF_8).replaceAll("[^a-zA-Z0-9/]", ""); 
             departmentses = getDepartmentses();
-        if(id.length() >3 || id.length() < 10) {
+        if(id.length() > 4 || id.length() < 10) {
             mUser = dbHelper.findUser(id);
             if(mUser != null) {
                  mDates = getLateDate(mUser);
             }
            
+            calendarPanel.setEnabled(true);
             calendarPanel.setLayout(new java.awt.BorderLayout());
             calendarPanel.add(new CalendarPanel(mDates));
             calendarPanel.revalidate();
