@@ -27,4 +27,5 @@ public @interface UserKey {
    String IS_CHECKIN = "isCheckin";
     String IS_CHECKOUT = "isCheckout";
     String CHECKIN_DATE = "checkin_date";
+    String LIST_CHECKIN_DATE = "list_checkin_date";
 }

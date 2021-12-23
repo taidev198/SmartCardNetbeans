@@ -152,7 +152,6 @@ public class UserFrame extends javax.swing.JFrame implements OnGetUserListener, 
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Antenna");
-        setUndecorated(true);
         setResizable(false);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
@@ -249,7 +248,7 @@ public class UserFrame extends javax.swing.JFrame implements OnGetUserListener, 
                 .addComponent(changePinBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(47, 47, 47)
                 .addComponent(checkinBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(258, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jPanel3.setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -414,9 +413,9 @@ public class UserFrame extends javax.swing.JFrame implements OnGetUserListener, 
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel6Layout.createSequentialGroup()
                 .addComponent(back_btn)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(16, Short.MAX_VALUE))
+                .addContainerGap(27, Short.MAX_VALUE))
         );
 
         jPanel7.setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -534,11 +533,11 @@ public class UserFrame extends javax.swing.JFrame implements OnGetUserListener, 
                 .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addContainerGap())
-                    .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, 653, Short.MAX_VALUE)))
+                    .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, 662, Short.MAX_VALUE)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -579,10 +578,13 @@ public class UserFrame extends javax.swing.JFrame implements OnGetUserListener, 
                 if(mRule.getmFines() - num == 0) {
                     result =  "Bạn đã bị phạt vì đi muộn lần quá " + num ;
                 } else result = result + ": Bạn chỉ còn " + (mRule.getmFines() - num) + " lần";
-                 dbHelper.updateCheckinUser(text_id.getText(), LocalDate.now());
+                 dbHelper.updateLateDateUser(text_id.getText(), LocalDate.now());
             }
 
             JOptionPane.showMessageDialog(null, result, "THÔNG BÁO", JOptionPane.INFORMATION_MESSAGE);
+            if(result.equals(Constants.ON_TIME)) {
+                dbHelper.updateCheckinUser(text_id.getText(), LocalDate.now());
+            }
             
         } else {
             
@@ -600,7 +602,7 @@ public class UserFrame extends javax.swing.JFrame implements OnGetUserListener, 
 
     
     // System.out.println(c.doCjheckin(LocalDate.now(), LocalTime.now()));
-    //  dbHelper.updateCheckinUser("abcd", LocalDate.now());
+    //  dbHelper.updateLateDateUser("abcd", LocalDate.now());
 //      User u = dbHelper.findUser("abcd");
 //      List<LocalDate> dates = u.getLate_date();
             
@@ -653,7 +655,8 @@ public class UserFrame extends javax.swing.JFrame implements OnGetUserListener, 
         text_id.setText("N/A");
             text_name.setText("N/A");
             text_address.setText("N/A");
-            System.out.println("N/A");
+            avatar.setIcon(loadDefaultAvatar());
+            calendarPanel.setEnabled(false);
             text_birth.setText("N/A");
             text_gender.setText("N/A");
             text_department.setText("N/A");  
@@ -709,11 +712,13 @@ public class UserFrame extends javax.swing.JFrame implements OnGetUserListener, 
             }
     }
 
+     private ImageIcon loadDefaultAvatar() {
+      return new ImageIcon(new ImageIcon(getClass().getResource("/icon/user.png")).getImage().getScaledInstance(120, 120, Image.SCALE_DEFAULT));
+    }
+    
     private void initData() {
         
-        ImageIcon imageIcon = new ImageIcon(new ImageIcon(getClass().getResource("/icon/user.png")).getImage().getScaledInstance(120, 120, Image.SCALE_DEFAULT));
-        avatar.setIcon(imageIcon);
-     // avatar.setIcon(new ImageIcon(getClass().getResource("/icon/user.png")));
+        avatar.setIcon(loadDefaultAvatar());
 
         try {
             Rule r = JsonParser.jsonToRule(db.getRule().toJson());
@@ -736,12 +741,12 @@ public class UserFrame extends javax.swing.JFrame implements OnGetUserListener, 
             String id_department = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.ID_DEPARTMENT), StandardCharsets.UTF_8).replaceAll("[^a-zA-Z0-9/]", ""); 
             departmentses = getDepartmentses();
             
-        if(id.length() > 4 || id.length() < 10) {
+        if(id.length() > 4 && id.length() < 10) {
             mUser = dbHelper.findUser(id);
             if(mUser != null) {
                  mDates = getLateDate(mUser);
             }
-           
+            calendarPanel.setEnabled(true);
             calendarPanel.setLayout(new java.awt.BorderLayout());
             calendarPanel.add(new CalendarPanel(mDates));
             calendarPanel.revalidate();

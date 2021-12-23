@@ -94,7 +94,6 @@ public class ManagerFrame extends javax.swing.JFrame implements OnGetUserListene
         dbHelper.getCol("users");
         db.setRuleCol("rules");
         card = new SmartCardWord();
-        validate();
         initData();
         
     }
@@ -685,6 +684,7 @@ public class ManagerFrame extends javax.swing.JFrame implements OnGetUserListene
             text_birth.setText("N/A");
             text_gender.setText("N/A");
             text_department.setText("N/A");
+            avatar.setIcon(loadDefaultAvatar());            
             calendarPanel.setEnabled(false);
             chart_pane3.setEnabled(false);
     }
@@ -841,10 +841,14 @@ public class ManagerFrame extends javax.swing.JFrame implements OnGetUserListene
             }
     }
 
+    private ImageIcon loadDefaultAvatar() {
+      return new ImageIcon(new ImageIcon(getClass().getResource("/icon/user.png")).getImage().getScaledInstance(120, 120, Image.SCALE_DEFAULT));
+    }
+    
     private void initData() {
         chart_pane3.setEnabled(true);
-        ImageIcon imageIcon = new ImageIcon(new ImageIcon(getClass().getResource("/icon/user.png")).getImage().getScaledInstance(120, 120, Image.SCALE_DEFAULT));
-        avatar.setIcon(imageIcon);
+        
+        avatar.setIcon(loadDefaultAvatar());
      // avatar.setIcon(new ImageIcon(getClass().getResource("/icon/user.png")));
 
         try {
@@ -869,7 +873,7 @@ public class ManagerFrame extends javax.swing.JFrame implements OnGetUserListene
             String gender = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.GENDER), StandardCharsets.UTF_8).replaceAll("[^a-zA-Z0-9/]", ""); 
             String id_department = new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.ID_DEPARTMENT), StandardCharsets.UTF_8).replaceAll("[^a-zA-Z0-9/]", ""); 
             departmentses = getDepartmentses();
-        if(id.length() > 4 || id.length() < 10) {
+        if(id.length() > 4 && id.length() < 10) {
             mUser = dbHelper.findUser(id);
             if(mUser != null) {
                  mDates = getLateDate(mUser);

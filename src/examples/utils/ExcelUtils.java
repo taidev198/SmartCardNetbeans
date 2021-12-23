@@ -223,6 +223,10 @@ public abstract class ExcelUtils {
         cell = row.createCell(COLUMN_INDEX_PRICE);
         cell.setCellStyle(cellStyle);
         cell.setCellValue("Số lần đi muộn");
+        
+        cell = row.createCell(3);
+        cell.setCellStyle(cellStyle);
+        cell.setCellValue("Số ngày nghỉ");
  
         writeDateInHeader(cell, row, cellStyle);
     }
@@ -237,7 +241,7 @@ public abstract class ExcelUtils {
         int daysInMonth = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
         for (int i = 0; i < daysInMonth; i++) {
             System.out.println(fmt.format(cal.getTime()));
-        cell = row.createCell(3+i);
+        cell = row.createCell(4+i);
         cell.setCellStyle(cellStyle);
         cell.setCellValue(fmt.format(cal.getTime()));
             cal.add(Calendar.DAY_OF_MONTH, 1);
@@ -295,20 +299,35 @@ public abstract class ExcelUtils {
         int i = 3;
         boolean hasLateDay = false;
         int numOfLateDate = 0;
+        int numOfCheckinDate = 0;
         for (Date date : datesOfMonth) {
             LocalDate in = date.toInstant()
                                             .atZone(ZoneId.systemDefault())
                                             .toLocalDate();
             List<LocalDate> lateDate = user.getLate_date();
-            System.out.println(user.getFullname()+ "==============");
+            List<LocalDate> checkinDate = user.getList_checkin_date();
+           
             for (LocalDate ld : lateDate) {
               //  System.out.println(date.getMonth() + " :" + ld.getMonthValue());
                 if(ld.getMonthValue() == in.getMonthValue() && ld.getDayOfMonth()== in.getDayOfMonth()) {
                     System.out.println(ld.toString() + ":" + in.toString());
                      cell = row.createCell(i);
-                     cell.setCellValue("X");
+                     cell.setCellValue("M");
                      numOfLateDate++;
                      hasLateDay = true;
+                }
+            }
+            
+            for (LocalDate ld : checkinDate) {
+              //  System.out.println(date.getMonth() + " :" + ld.getMonthValue());
+                if(ld.getMonthValue() == in.getMonthValue() && ld.getDayOfMonth()== in.getDayOfMonth()) {
+                    System.out.println(ld.toString() + ":" + in.toString());
+                     cell = row.getCell(i);
+                     if(cell == null) {
+                         cell = row.createCell(i);
+                         cell.setCellValue("Đ");
+                         numOfCheckinDate++;
+                     }
                 }
             }
             i++;
@@ -316,6 +335,8 @@ public abstract class ExcelUtils {
         if(hasLateDay) numberOfLate++;
         cell = row.getCell(2);
         cell.setCellValue(String.valueOf(numOfLateDate));
+        cell = row.createCell(3);
+        cell.setCellValue(String.valueOf(datesOfMonth.size() - numOfLateDate - numOfCheckinDate));
     }
     
     // Create CellStyle for header

@@ -405,6 +405,7 @@ public class InfoGUI extends javax.swing.JFrame implements OnGetUserListener{
         user.setIsCheckin(false);
         user.setIsCheckout(false);
         user.setCheckinDate(LocalDate.now());
+        user.setList_checkin_date(new ArrayList<>());
         System.out.println(new String(card.command(card.command(id.getBytes(), Constants.INS_ENCRYPT, Constants.ID), Constants.INS_DECRYPT, Constants.ID), StandardCharsets.UTF_8));
         System.out.println(new String(card.command(card.command(name.trim().getBytes(), Constants.INS_ENCRYPT, Constants.NAME), Constants.INS_DECRYPT, Constants.NAME), StandardCharsets.UTF_8));
         System.out.println(new String(card.command(card.command(DateUtils.dateToString(birthday.getCalendar().getTime()).getBytes(), Constants.INS_ENCRYPT, Constants.DATE), Constants.INS_DECRYPT, Constants.DATE), StandardCharsets.UTF_8));

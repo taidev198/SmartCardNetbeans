@@ -29,6 +29,7 @@ public class User {
     @BsonProperty("password") String password;
     @BsonProperty("pub_key") byte[] pub_key;
     @BsonProperty("checkin_date") LocalDate checkinDate;
+    @BsonProperty("list_checkin_date") List<LocalDate> list_checkin_date;
     
     public String getId() {
         return id;
@@ -133,7 +134,15 @@ public class User {
     public void setCheckinDate(LocalDate checkinDate) {
         this.checkinDate = checkinDate;
     }
-    
-    
+
+    public List<LocalDate> getList_checkin_date() {
+        return list_checkin_date;
+    }
+
+    public void setList_checkin_date(List<LocalDate> list_checkin_date) {
+        this.list_checkin_date = list_checkin_date;
+    }
+
+   
     
 }

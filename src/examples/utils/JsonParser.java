@@ -67,6 +67,20 @@ public class JsonParser {
         lateDate.add(LocalDate.parse(dateFormatted));
     }
       user.setLate_date(lateDate);
+      
+      jsonarray = obj.getJSONArray(UserKey.LIST_CHECKIN_DATE);
+        ArrayList<LocalDate> checkinDate = new ArrayList<>();
+      for (int i = 0; i < jsonarray.length(); i++) {
+       // String late_date = jsonarray.getJSONObject(i).toString();
+        Timestamp stamp = new Timestamp(jsonarray.getJSONObject(i).getLong("$date"));
+        Date date = new Date(stamp.getTime());
+        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        String dateFormatted = formatter.format(date);
+        //new Date(late_date);
+        //lateDate.add(LocalDate.parse(late_date));
+        checkinDate.add(LocalDate.parse(dateFormatted));
+    }
+      user.setList_checkin_date(checkinDate);
         System.out.println(user.getId());
         return user;
         

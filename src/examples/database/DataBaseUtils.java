@@ -159,7 +159,7 @@ CodecRegistry pojoCodecRegistry = fromRegistries(MongoClientSettings.getDefaultC
         return user;
     }
     
-    public void updateCheckinUser(String id, LocalDate now) {
+    public void updateLateDateUser(String id, LocalDate now) {
         User user = findUser(id);
         List<LocalDate> dates = user.getLate_date();
         if (dates == null)
@@ -170,6 +170,19 @@ CodecRegistry pojoCodecRegistry = fromRegistries(MongoClientSettings.getDefaultC
         col.updateOne(eq("id", id), combine(set(UserKey.LATE_DATE, dates)
                                             ));
     }
+    
+    public void updateCheckinUser(String id, LocalDate now) {
+        User user = findUser(id);
+        List<LocalDate> dates = user.getList_checkin_date();
+        if (dates == null)
+            dates = new ArrayList<>();
+        else {
+            dates.add(now);
+        }
+        col.updateOne(eq("id", id), combine(set(UserKey.LIST_CHECKIN_DATE, dates)
+                                            ));
+    }
+    
     public void updatePassUser(String id, String newPass) {
 
         col.updateOne(eq("id", id), combine(set(UserKey.PASSWORD, newPass)
