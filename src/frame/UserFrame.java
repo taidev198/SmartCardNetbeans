@@ -100,9 +100,7 @@ public class UserFrame extends javax.swing.JFrame implements OnGetUserListener, 
         dbHelper.getCol("users");
         db.setRuleCol("rule");
         card = new SmartCardWord();
-        validate();
         initData();
-        System.out.println(StringUltils.generateId(StringUltils.reducingString("Hello World")));
         
     }
     
@@ -457,9 +455,9 @@ public class UserFrame extends javax.swing.JFrame implements OnGetUserListener, 
         jPanel11Layout.setHorizontalGroup(
             jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel11Layout.createSequentialGroup()
-                .addContainerGap(138, Short.MAX_VALUE)
+                .addContainerGap(137, Short.MAX_VALUE)
                 .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(124, 124, 124))
+                .addGap(125, 125, 125))
         );
         jPanel11Layout.setVerticalGroup(
             jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -614,7 +612,10 @@ public class UserFrame extends javax.swing.JFrame implements OnGetUserListener, 
     private void changePinBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changePinBtnActionPerformed
         // TODO add your handling code here:
         if(isConnected) {
-            
+            if(text_id.getText().equals("N/A")) {
+              JOptionPane.showMessageDialog(this, "THẺ CHƯA ĐƯỢC KHỞI TẠO", "", JOptionPane.INFORMATION_MESSAGE);
+                return;
+            }
             changePINGui c = 
             new changePINGui(mUser, card, dbHelper);
             c.setVisible(true);

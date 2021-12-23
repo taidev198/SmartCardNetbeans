@@ -170,6 +170,24 @@ public abstract class ExcelUtils {
         cell = row.createCell(1);
         cell.setCellStyle(cellStyle);
         cell.setCellValue(String.valueOf(numberOfLate));
+        
+        cell = row.createCell(2);
+        cell.setCellStyle(cellStyle);
+        cell.setCellValue("Đ");
+        cell = row.createCell(3);
+        //cell.setCellStyle(cellStyle);
+        cell.setCellValue("Đúng giờ");
+        
+        cell = row.createCell(4);
+        cell.setCellStyle(cellStyle);
+        cell.setCellValue("M");
+        cell = row.createCell(5);
+        //cell.setCellStyle(cellStyle);
+        cell.setCellValue("Muộn");
+        
+        cell = row.createCell(7);
+        //cell.setCellStyle(cellStyle);
+        cell.setCellValue("Nghỉ");
         numberOfLate = 0;
         
         

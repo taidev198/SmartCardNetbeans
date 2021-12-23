@@ -213,9 +213,9 @@ public  class CalendarPanel extends JPanel {
                 
       if (YearMonth.from(value).equals(YearMonth.from(getCurrentLocalDate()))) {
         DayOfWeek dow = value.getDayOfWeek();
-        if (value.isEqual(realLocalDate)) {
-          fgc = new Color(0x64_FF_64);
-        } 
+//        if (value.isEqual(realLocalDate)) {
+//          fgc = new Color(0x64_FF_64);
+//        } 
       } else {
         fgc = Color.GRAY;
       }

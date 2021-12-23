@@ -42,7 +42,7 @@ public class Checkin {
         int dayOfWeekNow = date.getDayOfWeek().getValue() +1 ;
         System.out.println("day of week " + dayOfWeekNow);
        if(dayOfWeekNow >= inDate && dayOfWeekNow <= outDate) {
-            if(time.isBefore(startTime)) {
+            if(time.isBefore(startTime) && !user.isIsCheckin()) {
                 setIsCheckin(true);
                 user.setIsCheckin(isCheckin);
                 dbHelper.updateUser(user.getId(), user);
