@@ -988,7 +988,7 @@ public class ManagerFrame extends javax.swing.JFrame implements OnGetUserListene
 //        }
        
         if(isInitInforClicked) {
-             InfoGUI infoGUI = new InfoGUI(card, mUser, departmentses, true, this);
+        InfoGUI infoGUI = new InfoGUI(card, mUser, departmentses, true, this);
         infoGUI.setVisible(true);
         //infoGUI.dispatchEvent(new WindowEvent(infoGUI, WindowEvent.WINDOW_CLOSING));
         infoGUI.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);

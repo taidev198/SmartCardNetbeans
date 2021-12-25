@@ -98,7 +98,7 @@ public class UserFrame extends javax.swing.JFrame implements OnGetUserListener, 
     public UserFrame() {
         initComponents();
         dbHelper.getCol("users");
-        db.setRuleCol("rule");
+        db.setRuleCol("rules");
         card = new SmartCardWord();
         initData();
         

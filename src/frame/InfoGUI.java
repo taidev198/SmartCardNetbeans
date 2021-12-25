@@ -23,6 +23,7 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.logging.Level;
@@ -78,7 +79,7 @@ public class InfoGUI extends javax.swing.JFrame implements OnGetUserListener{
             id_department_cb.addItem(departmentses.get(i).getmName());
         showId(false);
         if(!this.isEmpty) {
-            if (!validateInfor()) return;
+            
             title_text.setText("CHỈNH SỬA THÔNG TIN CÁ NHÂN");
             save_btn.setText("EDIT");
             System.out.println("name:" +new String(card.command(new byte[]{0x00}, Constants.INS_DECRYPT, Constants.NAME), StandardCharsets.UTF_8));
@@ -351,7 +352,6 @@ public class InfoGUI extends javax.swing.JFrame implements OnGetUserListener{
         User user = new User();
         if(isEmpty) {
          id  = StringUltils.generateId(StringUltils.reducingString(id_department_cb.getSelectedItem().toString()));
-         user.setAvatar(imgBytes);
           user.setPub_key(card.pubkeyRsa());
         }
         else {
@@ -392,8 +392,10 @@ public class InfoGUI extends javax.swing.JFrame implements OnGetUserListener{
 //          }
 //          
         Date selectedValue =  birthday.getCalendar().getTime();
-        System.out.println(DateUtils.dateToString(selectedValue));  
         
+        if(!Arrays.equals(imgBytes, user.getAvatar())) {
+            user.setAvatar(imgBytes);
+        }
         user.setId(id);
         user.setFullname(name);
         user.setGender(gender_combobox.getSelectedIndex());

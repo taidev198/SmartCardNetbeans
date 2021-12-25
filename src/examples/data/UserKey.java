@@ -17,6 +17,7 @@ import java.lang.annotation.RetentionPolicy;
 public @interface UserKey {
      String ID = "id";
     String FULLNAME = "fullname";
+    String AVATARs = "avatar";
     String BIRTH = "birth";
     String ADDRESS = "address";
     String ID_DEPARTMENT = "id_department";
