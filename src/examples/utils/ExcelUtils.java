@@ -30,6 +30,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.BorderStyle;
@@ -69,6 +70,7 @@ public abstract class ExcelUtils {
     private static String excelFilePath = "C:/demo/BaoCao1.xlsx";
     private static ArrayList<Departments> departmentses;
     private static int numberOfLate = 0;
+    private static boolean isShowNotif = false;
     
     public static void exportData(ArrayList<User> datas, DataBaseUtils dataBaseUtils, RuleDbHelper ruleDbHelper, int month, int year) {
         ExcelUtils.month = month;
@@ -128,6 +130,11 @@ public abstract class ExcelUtils {
         // Create file excel
         createOutputFile(workbook, excelFilePath);
         System.out.println("Done!!!");
+        if(!isShowNotif){
+            JOptionPane.showMessageDialog(null, "XUẤT DỮ LIỆU THÀNH CÔNG", "", JOptionPane.INFORMATION_MESSAGE);
+            isShowNotif = true;
+        }
+
     }
 
     private static void writeTitle(Sheet sheet, int rowIndex, ArrayList<User> users) {

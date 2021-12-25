@@ -1,0 +1,2 @@
+frame.MyComponent
+frame.Slice
