@@ -101,6 +101,7 @@ public class InfoGUI extends javax.swing.JFrame implements OnGetUserListener{
                    id_text.setText(id);
             getImage(person.getAvatar());
             ImageUltils iU = ImageUltils.getInstance();
+            imgBytes = mUser.getAvatar();
             try {
                 avatar.setIcon(iU.bufferImageToII(iU.byteToBufferImage(mUser.getAvatar()), avatar));
             } catch (IOException ex) {
@@ -349,6 +350,7 @@ public class InfoGUI extends javax.swing.JFrame implements OnGetUserListener{
     private void save_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_save_btnActionPerformed
         // TODO add your handling code here:
         String id;
+        if(!validateInfor()) return;
         User user = new User();
         if(isEmpty) {
          id  = StringUltils.generateId(StringUltils.reducingString(id_department_cb.getSelectedItem().toString()));
@@ -361,7 +363,7 @@ public class InfoGUI extends javax.swing.JFrame implements OnGetUserListener{
         }
         String name = text_name.getText().trim();
         String address = text_address.getText().trim();
-        if(!validateInfor()) return;
+        
 //        if(id.length() == 0) {
 //            JOptionPane.showMessageDialog(null, "VUI LÒNG NHẬP IḌ");
 //            return;

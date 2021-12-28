@@ -80,6 +80,7 @@ public abstract class ExcelUtils {
         ExcelUtils.dbHelper = dataBaseUtils;
          departmentses = getDepartmentses();
         File file = new File(excelFilePath);
+        isShowNotif = false;
         creatNewFile();
         //writeExcel( excelFilePath, "TỔNG QUAN", mUsers);
         getAnalysicOfDepartment();

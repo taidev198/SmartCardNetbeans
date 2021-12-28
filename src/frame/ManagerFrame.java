@@ -662,7 +662,7 @@ public class ManagerFrame extends javax.swing.JFrame implements OnGetUserListene
                 return;
             }
         JOptionPane.showMessageDialog(this, "XÓA THÀNH CÔNG", "", JOptionPane.INFORMATION_MESSAGE);
-        avatar.setIcon(null);
+   
         //XOA THONG TIN TREN THE
         System.out.println(new String(card.command(card.command("N/A".getBytes(), Constants.INS_ENCRYPT, Constants.ID), Constants.INS_DECRYPT, Constants.ID), StandardCharsets.UTF_8));
         System.out.println(new String(card.command(card.command("N/A".getBytes(), Constants.INS_ENCRYPT, Constants.NAME), Constants.INS_DECRYPT, Constants.NAME), StandardCharsets.UTF_8));
@@ -672,7 +672,6 @@ public class ManagerFrame extends javax.swing.JFrame implements OnGetUserListene
         System.out.println(new String(card.command(card.command(" ".getBytes(), Constants.INS_ENCRYPT, Constants.ID_DEPARTMENT), Constants.INS_DECRYPT, Constants.ID_DEPARTMENT), StandardCharsets.UTF_8));
         //xoa thong tin tren db
         dbHelper.deleteUser(text_id.getText());
-        System.out.println(text_id.getText());
         hideInformation();
         }
     }//GEN-LAST:event_delete_btnActionPerformed
